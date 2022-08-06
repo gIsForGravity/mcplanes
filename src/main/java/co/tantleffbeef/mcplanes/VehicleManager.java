@@ -74,7 +74,7 @@ public class VehicleManager implements Runnable {
                 return;
             }
 
-            vehicle.tick(entity);
+            vehicle.tick();
         });
     }
 }
