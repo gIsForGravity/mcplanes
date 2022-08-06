@@ -2,6 +2,7 @@ package co.tantleffbeef.mcplanes;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -24,6 +25,7 @@ public class VehicleManager implements Runnable {
     }
 
     private final Map<UUID, JVehicle> activeVehicles = new HashMap<>();
+    private final Map<UUID, JVehicleRider> riders = new HashMap<>();
 
     public boolean checkIfVehicle(Entity vehicle) {
         var data = vehicle.getPersistentDataContainer();
@@ -37,11 +39,24 @@ public class VehicleManager implements Runnable {
     }
 
     public void activateVehicle(Entity vehicle) {
-
+        // TODO
     }
 
     public void activateVehicle() {
+        // TODO
+    }
 
+    public boolean checkIfRider(UUID player) {
+        return riders.containsKey(player);
+    }
+
+    public JVehicleRider getAsRider(UUID player) {
+        return riders.get(player);
+    }
+
+    public void riderInput(Player player, Input input) {
+        var rider = riders.get(player.getUniqueId());
+        rider.update(input, player);
     }
 
     // runs every tick
