@@ -14,17 +14,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Plugin extends JavaPlugin {
     private ProtocolManager manager;
-    private NamespacedKey isVehicle;
-
+    private VehicleManager vehicleManager;
 
     public ProtocolManager getManager() {
         return manager;
     }
 
+    public VehicleManager getVehicleManager() {
+        return vehicleManager;
+    }
+
     @Override
     public void onEnable() {
         manager = ProtocolLibrary.getProtocolManager();
-        isVehicle = new NamespacedKey(this, "isVehicle");
+
 
         // ProtocolLib listeners
         manager.addPacketListener(new ServerboundPlayerInputListener(this, ListenerPriority.MONITOR));
@@ -36,11 +39,5 @@ public class Plugin extends JavaPlugin {
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
-    }
-
-    public boolean checkIfVehicle(PersistentDataContainer data) {
-        //noinspection ConstantConditions
-        return data.has(isVehicle, PersistentDataType.BYTE) &&
-                data.get(isVehicle, PersistentDataType.BYTE) == 1;
     }
 }

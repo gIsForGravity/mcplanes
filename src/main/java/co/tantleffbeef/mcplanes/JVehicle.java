@@ -1,4 +1,10 @@
 package co.tantleffbeef.mcplanes;
 
-public class JVehicle {
+import org.bukkit.entity.Entity;
+
+import java.util.UUID;
+
+public interface JVehicle {
+    void tick(Entity vehicle);
+    UUID getUUID();
 }

@@ -14,7 +14,7 @@ public class VehicleEnterListener extends AbstractListener {
         var vehicle = event.getVehicle();
         var data = vehicle.getPersistentDataContainer();
 
-        if (!plugin.checkIfVehicle(data))
+        if (!plugin.getVehicleManager().checkIfVehicle(vehicle))
             return;
 
     }

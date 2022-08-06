@@ -13,9 +13,8 @@ public class VehicleExitListener extends AbstractListener {
     @EventHandler
     public void onVehicleExit(VehicleExitEvent event) {
         var vehicle = event.getVehicle();
-        var data = vehicle.getPersistentDataContainer();
 
-        if (!plugin.checkIfVehicle(data))
+        if (!plugin.getVehicleManager().checkIfVehicle(vehicle))
             return;
 
 
