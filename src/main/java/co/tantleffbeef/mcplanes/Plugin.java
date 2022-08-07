@@ -6,38 +6,56 @@ import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListene
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.util.jar.JarFile;
+
 public class Plugin extends JavaPlugin {
-    private ProtocolManager manager;
+    private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
+    private ResourceManager resourceManager;
 
-    public ProtocolManager getManager() {
-        return manager;
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
     }
-
     public VehicleManager getVehicleManager() {
         return vehicleManager;
+    }
+    public ResourceManager getResourceManager() {
+        return resourceManager;
     }
 
     @Override
     public void onEnable() {
-        manager = ProtocolLibrary.getProtocolManager();
+        protocolManager = ProtocolLibrary.getProtocolManager();
+        vehicleManager = new VehicleManager(this);
+        resourceManager = new ResourceManager(this);
 
+        // # Listener time!!!!
 
         // ProtocolLib listeners
-        manager.addPacketListener(new ServerboundPlayerInputListener(this, ListenerPriority.MONITOR));
+        protocolManager.addPacketListener(new ServerboundPlayerInputListener(this));
 
         // Bukkit Listeners
         registerListener(new VehicleEnterListener(this));
         registerListener(new VehicleExitListener(this));
+
+        // Maybe setup resources would've been a better name but maybe I'm lazy - gavint
+        setupTextures();
     }
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    private void setupTextures() {
+        // Adds all the textures and models in the resources folder to the resource pack
+        try (JarFile jar = new JarFile(getFile())) {
+            resourceManager.addAssetsFolder(jar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

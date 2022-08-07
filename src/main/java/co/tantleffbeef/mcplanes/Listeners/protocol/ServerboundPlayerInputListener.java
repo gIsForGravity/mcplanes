@@ -9,12 +9,14 @@ import com.comphenix.protocol.events.PacketEvent;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
 
 public class ServerboundPlayerInputListener extends PacketAdapter {
-    public ServerboundPlayerInputListener(Plugin plugin, ListenerPriority listenerPriority) {
+    public ServerboundPlayerInputListener(Plugin plugin) {
         // Use plugin and listener priority given by constructor and listen to STEER_VEHICLE packet
         // also known as ServerboundPlayerInputListener in mojang mappings
         super(plugin, listenerPriority, PacketType.Play.Client.STEER_VEHICLE);
     }
 
+    // you can change this if you want i guess
+    private static final ListenerPriority listenerPriority = ListenerPriority.MONITOR;
     @Override
     public void onPacketReceiving(PacketEvent event) {
         // cast packet as ServerboundPlayerInputPacket

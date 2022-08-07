@@ -56,7 +56,7 @@ public class VehicleManager implements Runnable {
 
     public void riderInput(Player player, Input input) {
         var rider = riders.get(player.getUniqueId());
-        rider.update(input, player);
+        //rider.update(input, player); TODO
     }
 
     // runs every tick

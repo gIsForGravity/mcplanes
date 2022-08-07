@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public abstract class AbstractRider implements JVehicleRider {
     @Override
-    public void update(Input input, Player player) {
+    public void update(Input input) {
 
     }
 }

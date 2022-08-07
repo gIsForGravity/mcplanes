@@ -16,5 +16,9 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+# plugin stuff
+src/main/resources/assets
+
 # Intellij IDEA
 .idea/
+mcplanes.iml
