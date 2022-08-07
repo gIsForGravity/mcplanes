@@ -1,18 +1,28 @@
 package co.tantleffbeef.mcplanes;
 
-import org.bukkit.Bukkit;
+import co.tantleffbeef.mcplanes.Custom.item.CustomItem;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
 import java.util.Enumeration;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-public class ResourceManager {
+import static co.tantleffbeef.mcplanes.Tool.clearFolder;
+
+public class ResourceManager implements Listener {
     private final Plugin plugin;
     private File tempFolder;
     private File webserverFolder;
+    private final Map<NamespacedKey, ItemStack> customItems = new HashMap<>();
+    private final Map<Material, Integer> newestCustomModel = new HashMap<>();
+    //private final Map<>
 
     public ResourceManager(Plugin plugin) {
         this.plugin = plugin;
@@ -44,18 +54,6 @@ public class ResourceManager {
         webserverFolder.mkdirs();
     }
 
-    private static void clearFolder(File folder) {
-        if (folder.isFile())
-            return;
-
-        for (File f : Objects.requireNonNull(folder.listFiles())) {
-            // if f is a subdirectory we need to clear it first too
-            if (f.isDirectory())
-                clearFolder(f);
-            f.delete();
-        }
-    }
-
     public void addAssetsFolder(JarFile jar) {
         // only get assets inside of assets folder
         final var directory = "assets";
@@ -76,6 +74,10 @@ public class ResourceManager {
 
             saveFile(resourceLocation, jar, zipEntry);
         }
+    }
+
+    public void registerItem(CustomItem item) {
+        //item.
     }
 
     private void saveFile(String path, JarFile jar, ZipEntry zipFile) {
