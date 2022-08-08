@@ -101,11 +101,10 @@ public class Plugin extends JavaPlugin {
 
         final var versionList =
                 downloadJsonFile(new URL("https://launchermeta.mojang.com/mc/game/version_manifest.json"))
-                        .getAsJsonObject("versions");
+                        .getAsJsonArray("versions");
 
         // Loop through list of versions and try to find the one the server is running on
-        for (var versionEntry : versionList.entrySet()) {
-            final var version = versionEntry.getValue();
+        for (var version : versionList) {
 
             if (!version.isJsonObject())
                 continue;
