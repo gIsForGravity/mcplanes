@@ -24,8 +24,9 @@ public class ResourceManager implements Listener {
     private final Map<Material, Integer> newestCustomModel = new HashMap<>();
     //private final Map<>
 
-    public ResourceManager(Plugin plugin) {
+    public ResourceManager(Plugin plugin, File webserverFolder) {
         this.plugin = plugin;
+        this.webserverFolder = webserverFolder;
         setupResources();
     }
 

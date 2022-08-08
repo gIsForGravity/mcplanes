@@ -11,13 +11,13 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.JarFile;
 
@@ -39,9 +39,12 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Location that webserver will host files at
+        final File webserverFolder = new File(getDataFolder(), "www");
+
         protocolManager = ProtocolLibrary.getProtocolManager();
         vehicleManager = new VehicleManager(this);
-        resourceManager = new ResourceManager(this);
+        resourceManager = new ResourceManager(this, webserverFolder);
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
 
         // // Listeners!!!
@@ -91,8 +94,75 @@ public class Plugin extends JavaPlugin {
     }
 
     private void downloadClientJar() throws IOException {
-        getLogger().info("Streaming from url...");
+        String versionUrl = null;
+        String jarUrl;
 
+        getLogger().info("Locating jar with version \"" + mcVersion + "\".");
+
+        final var versionList =
+                downloadJsonFile(new URL("https://launchermeta.mojang.com/mc/game/version_manifest.json"))
+                        .getAsJsonObject("versions");
+
+        // Loop through list of versions and try to find the one the server is running on
+        for (var versionEntry : versionList.entrySet()) {
+            final var version = versionEntry.getValue();
+
+            if (!version.isJsonObject())
+                continue;
+            final var versionNumber = version.getAsJsonObject().get("id").getAsString();
+            if (!versionNumber.equals(mcVersion))
+                continue;
+
+            versionUrl = version.getAsJsonObject().get("url").getAsString();
+        }
+
+
+        assert versionUrl != null;
+        final var versionJson = downloadJsonFile(new URL(versionUrl));
+
+        // get jar url
+        jarUrl = versionJson.getAsJsonObject("client").get("url").getAsString();
+
+        // Download jar
+        getLogger().info("Jar located. Downloading.");
+        final URL jar = new URL(jarUrl);
+        HttpURLConnection connection = (HttpURLConnection) jar.openConnection();
+
+        // current size / total size = progress
+        final double totalSize = connection.getContentLength();
+
+        final File versionsFolder = new File(getDataFolder(), "versions");
+        final File jarFileLocation = new File(versionsFolder, "client-" + mcVersion + ".jar");
+
+        versionsFolder.mkdirs();
+
+        final byte[] data = new byte[4096];
+        double lastPercent = 0f;
+        int currentSize = 0;
+
+        try ( var in = new BufferedInputStream(connection.getInputStream());
+            var fos = new FileOutputStream(jarFileLocation) ) {
+            var out = new BufferedOutputStream(fos);
+
+            int x = 0;
+            while ((x = in.read(data)) >= 0) {
+                currentSize += x;
+                final double percentage = (float) currentSize / totalSize * 100;
+
+                // Every time it goes up 10% tell the user
+                if (lastPercent % 10 > percentage % 10)
+                    getLogger().info("Downloading " + ChatColor.GOLD + "client-" + mcVersion + ".jar" + ChatColor.RESET + " (" + percentage + "%)");
+
+                lastPercent = percentage;
+
+                // don't forget to save downloaded data
+                out.write(data, 0, x);
+            }
+
+            out.flush();
+        }
+
+        getLogger().info("Download complete!");
     }
 
     private static JsonObject downloadJsonFile(URL url) throws IOException {
