@@ -113,14 +113,14 @@ public class Plugin extends JavaPlugin {
                 continue;
 
             versionUrl = version.getAsJsonObject().get("url").getAsString();
+            break;
         }
-
-
+        
         assert versionUrl != null;
         final var versionJson = downloadJsonFile(new URL(versionUrl));
 
         // get jar url
-        jarUrl = versionJson.getAsJsonObject("client").get("url").getAsString();
+        jarUrl = versionJson.getAsJsonObject("downloads").getAsJsonObject("client").get("url").getAsString();
 
         // Download jar
         getLogger().info("Jar located. Downloading.");
@@ -150,7 +150,7 @@ public class Plugin extends JavaPlugin {
 
                 // Every time it goes up 10% tell the user
                 if (lastPercent % 10 > percentage % 10)
-                    getLogger().info("Downloading " + ChatColor.GOLD + "client-" + mcVersion + ".jar" + ChatColor.RESET + " (" + percentage + "%)");
+                    getLogger().info("Downloading client-" + mcVersion + ".jar (" + String.valueOf(percentage).split("\\.")[0] + "%)");
 
                 lastPercent = percentage;
 
@@ -167,7 +167,7 @@ public class Plugin extends JavaPlugin {
     private static JsonObject downloadJsonFile(URL url) throws IOException {
         JsonObject json;
 
-        try (InputStream is = new URL("https://piston-meta.mojang.com/v1/packages/92e6f1eba1748a43b8e215d0859a42bce4f999d2/1.19.json").openStream()) {
+        try (InputStream is = url.openStream()) {
             json = JsonParser.parseReader(new InputStreamReader(is, StandardCharsets.UTF_8)).getAsJsonObject();
         }
 
