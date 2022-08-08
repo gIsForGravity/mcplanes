@@ -15,10 +15,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.JarFile;
 
 public class Plugin extends JavaPlugin {
@@ -115,7 +111,7 @@ public class Plugin extends JavaPlugin {
             versionUrl = version.getAsJsonObject().get("url").getAsString();
             break;
         }
-        
+
         assert versionUrl != null;
         final var versionJson = downloadJsonFile(new URL(versionUrl));
 
