@@ -11,10 +11,14 @@ import org.bukkit.plugin.Plugin;
 public class SimpleItem implements CustomItem {
     private final NamespacedKey id;
     private final Plugin plugin;
+    private final boolean customModel;
+    private final String name;
 
-    public SimpleItem(Plugin namespace, String id) {
+    public SimpleItem(Plugin namespace, String id, boolean customModel, String name) {
         this.plugin = namespace;
         this.id = new NamespacedKey(namespace, id);
+        this.customModel = customModel;
+        this.name = name;
     }
 
     @Override
@@ -29,6 +33,11 @@ public class SimpleItem implements CustomItem {
 
     @Override
     public NamespacedKey model() {
-        return new NamespacedKey(plugin, "item/" + id.getKey());
+        return customModel ? new NamespacedKey(plugin, "item/" + id.getKey()) : null;
+    }
+
+    @Override
+    public String name() {
+        return name;
     }
 }

@@ -5,11 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.*;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -21,8 +21,7 @@ public class ResourceManager implements Listener {
     private File tempFolder;
     private File webserverFolder;
     private final Map<NamespacedKey, ItemStack> customItems = new HashMap<>();
-    private final Map<Material, Integer> newestCustomModel = new HashMap<>();
-    //private final Map<>
+    private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
 
     public ResourceManager(Plugin plugin, File webserverFolder) {
         this.plugin = plugin;
@@ -78,7 +77,33 @@ public class ResourceManager implements Listener {
     }
 
     public void registerItem(CustomItem item) {
-        //item.
+        ItemStack customItemStack = new ItemStack(item.baseMaterial());
+        ItemMeta meta = customItemStack.getItemMeta();
+
+        meta.setDisplayName(item.name());
+
+        if (item.model() != null) {
+            // If there isn't already an entry in the custom model list for this material, make one
+            if (!customModels.containsKey(item.baseMaterial()))
+                customModels.put(item.baseMaterial(), new ArrayList<>());
+
+            // Add custom model data to item and add model to array
+            List<NamespacedKey> modelList = customModels.get(item.baseMaterial());
+            modelList.add(item.model());
+            meta.setCustomModelData(modelList.size());
+        }
+
+        // add custom item to persistent data
+        final var data = meta.getPersistentDataContainer();
+        final var id = item.id();
+        data.set(new NamespacedKey(plugin, "customItem"), PersistentDataType.STRING, id.getNamespace() + ':' +
+                id.getKey());
+
+        // put all changes back into custom item stack
+        customItemStack.setItemMeta(meta);
+
+        // finally add custom item stack into list of custom items
+        customItems.put(id, customItemStack);
     }
 
     private void saveFile(String path, JarFile jar, ZipEntry zipFile) {

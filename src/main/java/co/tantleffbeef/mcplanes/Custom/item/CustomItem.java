@@ -7,4 +7,5 @@ public interface CustomItem {
     Material baseMaterial();
     NamespacedKey id();
     NamespacedKey model();
+    String name();
 }
