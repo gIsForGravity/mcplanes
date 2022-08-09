@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes;
 
+import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Listeners.VehicleEnterListener;
 import co.tantleffbeef.mcplanes.Listeners.VehicleExitListener;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
@@ -40,7 +41,6 @@ public class Plugin extends JavaPlugin {
 
         protocolManager = ProtocolLibrary.getProtocolManager();
         vehicleManager = new VehicleManager(this);
-        resourceManager = new ResourceManager(this, webserverFolder);
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
 
         // // Listeners!!!
@@ -72,8 +72,19 @@ public class Plugin extends JavaPlugin {
             }
         }
 
+        // initialize resource manager now that client jar has been downloaded
+        resourceManager = new ResourceManager(this, webserverFolder, clientJar);
+
         // Maybe setup resources would've been a better name, but maybe I'm lazy - gavint
         setupTextures();
+
+        registerItems();
+
+        try {
+            resourceManager.compileResources();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void registerListener(Listener listener) {
@@ -87,6 +98,11 @@ public class Plugin extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void registerItems() {
+        resourceManager.registerItem(new SimpleItem(this, "glue", true, "Glue"));
+        resourceManager.registerItem(new SimpleItem(this, "battery", true, "Battery"));
     }
 
     private void downloadClientJar() throws IOException {
