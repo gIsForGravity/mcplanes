@@ -1,5 +1,8 @@
 package co.tantleffbeef.mcplanes;
 
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+
 import java.io.File;
 import java.util.Objects;
 
@@ -19,5 +22,21 @@ public final class Tool {
                 clearFolder(f);
             f.delete();
         }
+    }
+
+    /**
+     * Gets the plugin with said namespace
+     * @param namespace namespace of plugin
+     * @return Plugin if exists and loaded, otherwise null
+     */
+    public static org.bukkit.plugin.Plugin getNamespacePlugin(String namespace) {
+        var plugins = Bukkit.getPluginManager().getPlugins();
+
+        for (org.bukkit.plugin.Plugin plugin : plugins) {
+            if (plugin.getName().toLowerCase().strip().equals(namespace))
+                return plugin;
+        }
+
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes;
 
+import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Listeners.VehicleEnterListener;
 import co.tantleffbeef.mcplanes.Listeners.VehicleExitListener;
@@ -9,13 +10,16 @@ import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.jar.JarFile;
 
 public class Plugin extends JavaPlugin {
@@ -36,6 +40,8 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
         // Location that webserver will host files at
         final File webserverFolder = new File(getDataFolder(), "www");
 
@@ -75,10 +81,14 @@ public class Plugin extends JavaPlugin {
         // initialize resource manager now that client jar has been downloaded
         resourceManager = new ResourceManager(this, webserverFolder, clientJar);
 
+        // Commands!
+        registerCommands();
+
         // Maybe setup resources would've been a better name, but maybe I'm lazy - gavint
         setupTextures();
 
         registerItems();
+        registerRecipes();
 
         try {
             resourceManager.compileResources();
@@ -100,9 +110,41 @@ public class Plugin extends JavaPlugin {
         }
     }
 
+    /**
+     * Registers items with the resourceManager
+     */
     private void registerItems() {
-        resourceManager.registerItem(new SimpleItem(this, "glue", true, "Glue"));
         resourceManager.registerItem(new SimpleItem(this, "battery", true, "Battery"));
+        resourceManager.registerItem(new SimpleItem(this, "blowtorch", true, "Blowtorch"));
+        resourceManager.registerItem(new SimpleItem(this, "crude_oil", true, "Crude Oil"));
+        resourceManager.registerItem(new SimpleItem(this, "engine", true, "Engine"));
+        resourceManager.registerItem(new SimpleItem(this, "fuel", true, "Fuel"));
+        resourceManager.registerItem(new SimpleItem(this, "fuselage", true, "Fuselage"));
+        resourceManager.registerItem(new SimpleItem(this, "glue", true, "Glue"));
+        resourceManager.registerItem(new SimpleItem(this, "powertool", true, "Power Tool"));
+        resourceManager.registerItem(new SimpleItem(this, "rudder", true, "Rudder"));
+        resourceManager.registerItem(new SimpleItem(this, "wing", true, "Wing"));
+        resourceManager.registerItem(new SimpleItem(this, "wrench", true, "Wrench"));
+    }
+
+    /**
+     * Creates CommandExecutors and attaches them to PluginCommands
+     */
+    private void registerCommands() {
+        new ResourceGiveCommand(getCommandRNN("resourcegive"), resourceManager);
+    }
+
+    private void registerRecipes() {
+        
+    }
+
+    /**
+     * surrounds getCommand() with Objects.requireNonNull
+     * @param name the name of the command as defined in plugin.yml
+     * @return the command
+     */
+    public PluginCommand getCommandRNN(String name) {
+        return Objects.requireNonNull(getCommand(name));
     }
 
     private void downloadClientJar() throws IOException {

@@ -5,6 +5,20 @@ api-version: 1.19
 
 depend: [ProtocolLib]
 
+permissions:
+  mcplanes.resourcegive:
+    default: op
+
 commands:
-  horsetest:
-    description: "horsetest"
+  resourcegive:
+    description: "gives a custom item"
+    aliases:
+      - rg
+      - planegive
+      - pgive
+      - rgive
+    usage: "Usage: /resourcegive <player> <item id>"
+    permission: mcplanes.resourcegive
+
+#libraries:
+#  - me.lucko:commodore:2.2

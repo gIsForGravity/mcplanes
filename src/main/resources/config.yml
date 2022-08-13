@@ -1,0 +1,5 @@
+# MCPlanes config
+
+# The web address that points to the embedded web server
+webserver-address: "127.0.0.1"
+webserver-port: 8467
