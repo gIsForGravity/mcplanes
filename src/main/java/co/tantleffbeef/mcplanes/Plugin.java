@@ -161,6 +161,48 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('i', Material.IRON_INGOT)
                 .setIngredient('m', Material.FIRE_CHARGE);
         getServer().addRecipe(blowtorch);
+
+        final var engineKey = new NamespacedKey(this, "engine");
+        final var engine = new ShapedRecipe(engineKey, resourceManager.getCustomItem(engineKey))
+                .shape(
+                        "ggg",
+                        "ini",
+                        "rrr")
+                .setIngredient('g', Material.GOLD_INGOT)
+                .setIngredient('i', Material.IRON_INGOT)
+                .setIngredient('r', Material.REDSTONE_BLOCK)
+                .setIngredient('n', Material.NETHERITE_INGOT);
+        getServer().addRecipe(engine);
+
+        final var tailKey = new NamespacedKey(this, "tail");
+        final var tail = new ShapedRecipe(tailKey, resourceManager.getCustomItem(tailKey))
+                .shape(
+                        "   ",
+                        "  i",
+                        " pi")
+                .setIngredient('p', Material.PHANTOM_MEMBRANE)
+                .setIngredient('i', Material.IRON_INGOT);
+        getServer().addRecipe(tail);
+
+        final var wingKey = new NamespacedKey(this, "wing");
+        final var wing = new ShapedRecipe(wingKey, resourceManager.getCustomItem(wingKey))
+                .shape(
+                        "  i",
+                        " pp",
+                        "iii")
+                .setIngredient('p', Material.PHANTOM_MEMBRANE)
+                .setIngredient('i', Material.IRON_INGOT);
+        getServer().addRecipe(wing);
+
+        final var fuselageKey = new NamespacedKey(this, "fuselage");
+        final var fuselage = new ShapedRecipe(fuselageKey, resourceManager.getCustomItem(fuselageKey))
+                .shape(
+                        "   ",
+                        "  i",
+                        " pi")
+                .setIngredient('I', Material.IRON_BLOCK)
+                .setIngredient('i', Material.IRON_INGOT);
+        getServer().addRecipe(fuselage);
     }
 
     /**
