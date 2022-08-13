@@ -10,6 +10,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ShapedRecipe;
@@ -135,7 +137,17 @@ public class Plugin extends JavaPlugin {
     }
 
     private void registerRecipes() {
-        
+        var batteryKey = new NamespacedKey(this, "battery");
+        var battery = new ShapedRecipe(batteryKey, resourceManager.getCustomItem(batteryKey))
+                .shape(
+                        "cic",
+                        "rgr",
+                        "cgc")
+                .setIngredient('c', Material.COPPER_INGOT)
+                .setIngredient('g', Material.GOLD_INGOT)
+                .setIngredient('r', Material.REDSTONE_BLOCK)
+                .setIngredient('i', Material.IRON_BLOCK);
+        getServer().addRecipe(battery);
     }
 
     /**
