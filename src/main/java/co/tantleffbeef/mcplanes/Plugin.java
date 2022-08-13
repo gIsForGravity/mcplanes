@@ -2,6 +2,7 @@ package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
+import co.tantleffbeef.mcplanes.Listeners.EntityPickupItemListener;
 import co.tantleffbeef.mcplanes.Listeners.VehicleEnterListener;
 import co.tantleffbeef.mcplanes.Listeners.VehicleExitListener;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
@@ -58,6 +59,7 @@ public class Plugin extends JavaPlugin {
         // Bukkit Listeners
         registerListener(new VehicleEnterListener(this));
         registerListener(new VehicleExitListener(this));
+        registerListener(new EntityPickupItemListener(this));
 
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
@@ -148,6 +150,8 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('r', Material.REDSTONE_BLOCK)
                 .setIngredient('i', Material.IRON_BLOCK);
         getServer().addRecipe(battery);
+
+        var blowtorchKey = new NamespacedKey(this, "blowtorch");
     }
 
     /**
