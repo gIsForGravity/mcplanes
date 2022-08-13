@@ -139,8 +139,8 @@ public class Plugin extends JavaPlugin {
     }
 
     private void registerRecipes() {
-        var batteryKey = new NamespacedKey(this, "battery");
-        var battery = new ShapedRecipe(batteryKey, resourceManager.getCustomItem(batteryKey))
+        final var batteryKey = new NamespacedKey(this, "battery");
+        final var battery = new ShapedRecipe(batteryKey, resourceManager.getCustomItem(batteryKey))
                 .shape(
                         "cic",
                         "rgr",
@@ -151,7 +151,16 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('i', Material.IRON_BLOCK);
         getServer().addRecipe(battery);
 
-        var blowtorchKey = new NamespacedKey(this, "blowtorch");
+        final var blowtorchKey = new NamespacedKey(this, "blowtorch");
+        final var blowtorch = new ShapedRecipe(blowtorchKey, resourceManager.getCustomItem(blowtorchKey))
+                .shape(
+                        " f ",
+                        "imi",
+                        "iii")
+                .setIngredient('f', Material.FLINT_AND_STEEL)
+                .setIngredient('i', Material.IRON_INGOT)
+                .setIngredient('m', Material.FIRE_CHARGE);
+        getServer().addRecipe(blowtorch);
     }
 
     /**
@@ -232,6 +241,9 @@ public class Plugin extends JavaPlugin {
         }
 
         getLogger().info("Download complete!");
+
+        getLogger().info("Running garbage collector");
+        System.gc();
     }
 
     private static JsonObject downloadJsonFile(URL url) throws IOException {

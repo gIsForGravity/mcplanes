@@ -44,7 +44,13 @@ public class EntityPickupItemListener extends AbstractListener {
             case "minecraft:copper_ingot":
             case "minecraft:gold_ingot":
             case "minecraft:redstone_block":
+            case "minecraft:iron_block":
                 player.discoverRecipe(new NamespacedKey(plugin, "battery"));
+                break;
+            case "minecraft:iron_ingot":
+            case "minecraft:fire_charge":
+            case "minecraft:flint_and_steel":
+                player.discoverRecipe(new NamespacedKey(plugin, "blowtorch"));
                 break;
         }
     }
