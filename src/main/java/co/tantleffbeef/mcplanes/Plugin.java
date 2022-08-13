@@ -15,6 +15,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.BlastingRecipe;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -161,6 +163,13 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('i', Material.IRON_INGOT)
                 .setIngredient('m', Material.FIRE_CHARGE);
         getServer().addRecipe(blowtorch);
+
+        final var crudeOilKey = new NamespacedKey(this, "crude_oil");
+        var crudeOil = new BlastingRecipe(crudeOilKey,
+                resourceManager.getCustomItem(crudeOilKey),
+                new RecipeChoice.MaterialChoice(Material.COAL, Material.CHARCOAL),
+                1f, 200);
+        getServer().addRecipe(crudeOil);
     }
 
     /**
