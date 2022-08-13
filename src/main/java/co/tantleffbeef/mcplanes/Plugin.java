@@ -128,7 +128,7 @@ public class Plugin extends JavaPlugin {
         resourceManager.registerItem(new SimpleItem(this, "fuselage", true, "Fuselage"));
         resourceManager.registerItem(new SimpleItem(this, "glue", true, "Glue"));
         resourceManager.registerItem(new SimpleItem(this, "powertool", true, "Power Tool"));
-        resourceManager.registerItem(new SimpleItem(this, "rudder", true, "Rudder"));
+        resourceManager.registerItem(new SimpleItem(this, "tail", true, "Tail"));
         resourceManager.registerItem(new SimpleItem(this, "wing", true, "Wing"));
         resourceManager.registerItem(new SimpleItem(this, "wrench", true, "Wrench"));
     }
@@ -186,9 +186,8 @@ public class Plugin extends JavaPlugin {
         final var tailKey = new NamespacedKey(this, "tail");
         final var tail = new ShapedRecipe(tailKey, resourceManager.getCustomItem(tailKey))
                 .shape(
-                        "   ",
-                        "  i",
-                        " pi")
+                        " i",
+                        "pi")
                 .setIngredient('p', Material.PHANTOM_MEMBRANE)
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(tail);
@@ -206,9 +205,9 @@ public class Plugin extends JavaPlugin {
         final var fuselageKey = new NamespacedKey(this, "fuselage");
         final var fuselage = new ShapedRecipe(fuselageKey, resourceManager.getCustomItem(fuselageKey))
                 .shape(
-                        "   ",
-                        "  i",
-                        " pi")
+                        "iii",
+                        "III",
+                        "iii")
                 .setIngredient('I', Material.IRON_BLOCK)
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(fuselage);
