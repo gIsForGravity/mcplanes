@@ -1,13 +1,10 @@
 package co.tantleffbeef.mcplanes.Listeners;
 
 import co.tantleffbeef.mcplanes.Plugin;
-import co.tantleffbeef.mcplanes.RecipeBookTools;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -36,36 +33,47 @@ public class RecipeEventListeners extends AbstractListener {
 
         player.sendMessage("itemId: ", itemId);
 
-        if (Objects.requireNonNull(itemId).equals("minecraft:gold_ingot")) {
+        if (Objects.requireNonNull(itemId).equals("minecraft:gold_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:copper_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:redstone_block") ||
+                Objects.requireNonNull(itemId).equals("minecraft:iron_block")) {
             player.discoverRecipe(new NamespacedKey(plugin, "battery"));
+        }
+
+        if (Objects.requireNonNull(itemId).equals("minecraft:iron_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:fire_charge") ||
+                Objects.requireNonNull(itemId).equals("minecraft:flint_and_steel"))
+            player.discoverRecipe(new NamespacedKey(plugin, "blowtorch"));
+
+        if (Objects.requireNonNull(itemId).equals("minecraft:coal") ||
+                Objects.requireNonNull(itemId).equals("minecraft:charcoal"))
+            player.discoverRecipe(new NamespacedKey(plugin, "crude_oil"));
+
+        if (Objects.requireNonNull(itemId).equals("minecraft:gold_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:iron_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:redstone_block") ||
+                Objects.requireNonNull(itemId).equals("minecraft:netherite_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:ancient_debris"))
             player.discoverRecipe(new NamespacedKey(plugin, "engine"));
+
+        if (Objects.requireNonNull(itemId).equals("minecraft:phantom_membrane") ||
+                Objects.requireNonNull(itemId).equals("minecraft:iron_ingot")) {
+            player.discoverRecipe(new NamespacedKey(plugin, "tail"));
+            player.discoverRecipe(new NamespacedKey(plugin, "wing"));
         }
 
-        switch (Objects.requireNonNull(itemId)) {
-            default:
-                return;
-            case "minecraft:gold_ingot":
-                player.discoverRecipe(new NamespacedKey(plugin, "battery"));
-                player.discoverRecipe(new NamespacedKey(plugin, "engine"));
-                break;
-            case "minecraft:iron_ingot":
-                player.discoverRecipe(new NamespacedKey(plugin, "blowtorch"));
+        if (Objects.requireNonNull(itemId).equals("minecraft:iron_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:iron_block"))
+            player.discoverRecipe(new NamespacedKey(plugin, "fuselage"));
 
-                break;
-            case "minecraft:copper_ingot":
-            case "minecraft:redstone_block":
-            case "minecraft:iron_block":
-                player.discoverRecipe(new NamespacedKey(plugin, "battery"));
-                break;
-            case "minecraft:fire_charge":
-            case "minecraft:flint_and_steel":
-                player.discoverRecipe(new NamespacedKey(plugin, "blowtorch"));
-                break;
-            case "minecraft:coal":
-            case "minecraft:charcoal":
-                player.discoverRecipe(new NamespacedKey(plugin, "crude_oil"));
-                break;
-        }
+        if (Objects.requireNonNull(itemId).equals("minecraft:iron_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:gold_ingot") ||
+                Objects.requireNonNull(itemId).equals("minecraft:redstone") ||
+                Objects.requireNonNull(itemId).equals("minecraft:diamond"))
+            player.discoverRecipe(new NamespacedKey(plugin, "powertool"));
+
+        if (Objects.requireNonNull(itemId).equals("minecraft:iron_ingot"))
+            player.discoverRecipe(new NamespacedKey(plugin, "wrench"));
     }
 
     @EventHandler

@@ -214,12 +214,12 @@ public class Plugin extends JavaPlugin {
         final var powertoolKey = new NamespacedKey(this, "powertool");
         final var powertool = new ShapedRecipe(powertoolKey, resourceManager.getCustomItem(powertoolKey))
                 .shape(
-                        "rgg",
+                        "dgg",
                         " ir")
-
                 .setIngredient('g', Material.GOLD_INGOT)
                 .setIngredient('i', Material.IRON_INGOT)
-                .setIngredient('r', Material.REDSTONE);
+                .setIngredient('r', Material.REDSTONE)
+                .setIngredient('d', Material.DIAMOND);;
         getServer().addRecipe(powertool);
 
         final var wrenchKey = new NamespacedKey(this, "wrench");
@@ -241,7 +241,7 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('s', Material.SLIME_BALL);
         getServer().addRecipe(glue);
 
-        final var aircrafterKey = new NamespacedKey(this, "aircrafter");
+        /*final var aircrafterKey = new NamespacedKey(this, "aircrafter");
         final var aircrafter = new ShapedRecipe(aircrafterKey, resourceManager.getCustomItem(aircrafterKey))
                 .shape(
                         "iii",
@@ -255,7 +255,7 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('c', Material.CRAFTING_TABLE)
                 .setIngredient('d', Material.DIAMOND)
                 .setIngredient('i', Material.IRON_BLOCK);
-        getServer().addRecipe(aircrafter);
+        getServer().addRecipe(aircrafter);*/
     }
 
     /**
