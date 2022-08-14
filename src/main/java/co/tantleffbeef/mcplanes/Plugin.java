@@ -211,6 +211,51 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('I', Material.IRON_BLOCK)
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(fuselage);
+        final var powertoolKey = new NamespacedKey(this, "powertool");
+        final var powertool = new ShapedRecipe(powertoolKey, resourceManager.getCustomItem(powertoolKey))
+                .shape(
+                        "rgg",
+                        " ir")
+
+                .setIngredient('g', Material.GOLD_INGOT)
+                .setIngredient('i', Material.IRON_INGOT)
+                .setIngredient('r', Material.REDSTONE);
+        getServer().addRecipe(powertool);
+
+        final var wrenchKey = new NamespacedKey(this, "wrench");
+        final var wrench = new ShapedRecipe(wrenchKey, resourceManager.getCustomItem(wrenchKey))
+                .shape(
+                        " i ",
+                        "ii ",
+                        "  i")
+                .setIngredient('i', Material.IRON_INGOT);
+        getServer().addRecipe(wrench);
+
+        final var glueKey = new NamespacedKey(this, "glue");
+        final var glue = new ShapedRecipe(glueKey, resourceManager.getCustomItem(glueKey))
+                .shape(
+                        "lsl",
+                        "lsl",
+                        " l ")
+                .setIngredient('l', Material.LEATHER)
+                .setIngredient('s', Material.SLIME_BALL);
+        getServer().addRecipe(glue);
+
+        final var aircrafterKey = new NamespacedKey(this, "aircrafter");
+        final var aircrafter = new ShapedRecipe(aircrafterKey, resourceManager.getCustomItem(aircrafterKey))
+                .shape(
+                        "iii",
+                        "III",
+                        "iii")
+                .setIngredient('w', Material.IRON_BLOCK)
+                .setIngredient('g', Material.DIRT)
+                .setIngredient('b', Material.BEEF)
+                .setIngredient('p', Material.DIRT)
+                .setIngredient('t', Material.IRON_INGOT)
+                .setIngredient('c', Material.CRAFTING_TABLE)
+                .setIngredient('d', Material.DIAMOND)
+                .setIngredient('i', Material.IRON_BLOCK);
+        getServer().addRecipe(aircrafter);
     }
 
     /**
