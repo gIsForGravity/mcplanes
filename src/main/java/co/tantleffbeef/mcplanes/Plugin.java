@@ -147,6 +147,7 @@ public class Plugin extends JavaPlugin {
     }
 
     private void registerRecipes() {
+        // register battery recipe
         final var batteryKey = new NamespacedKey(this, "battery");
         final var battery = new ShapedRecipe(batteryKey, resourceManager.getCustomItem(batteryKey))
                 .shape(
@@ -158,7 +159,13 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('r', Material.REDSTONE_BLOCK)
                 .setIngredient('i', Material.IRON_BLOCK);
         getServer().addRecipe(battery);
+        recipeManager.registerUnlockableRecipe(batteryKey,
+                Material.COPPER_INGOT,
+                Material.GOLD_INGOT,
+                Material.REDSTONE_BLOCK,
+                Material.IRON_BLOCK);
 
+        // register blowtorch recipe
         final var blowtorchKey = new NamespacedKey(this, "blowtorch");
         final var blowtorch = new ShapedRecipe(blowtorchKey, resourceManager.getCustomItem(blowtorchKey))
                 .shape(
@@ -169,14 +176,23 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('i', Material.IRON_INGOT)
                 .setIngredient('m', Material.FIRE_CHARGE);
         getServer().addRecipe(blowtorch);
+        recipeManager.registerUnlockableRecipe(blowtorchKey,
+                Material.FLINT_AND_STEEL,
+                Material.IRON_INGOT,
+                Material.FIRE_CHARGE);
 
+        // register crude oil recipe
         final var crudeOilKey = new NamespacedKey(this, "crude_oil");
         var crudeOil = new BlastingRecipe(crudeOilKey,
                 resourceManager.getCustomItem(crudeOilKey),
                 new RecipeChoice.MaterialChoice(Material.COAL, Material.CHARCOAL),
                 1f, 200);
         getServer().addRecipe(crudeOil);
+        recipeManager.registerUnlockableRecipe(crudeOilKey,
+                Material.COAL,
+                Material.CHARCOAL);
 
+        // register engine recipe
         final var engineKey = new NamespacedKey(this, "engine");
         final var engine = new ShapedRecipe(engineKey, resourceManager.getCustomItem(engineKey))
                 .shape(
@@ -188,7 +204,13 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('r', Material.REDSTONE_BLOCK)
                 .setIngredient('n', Material.NETHERITE_INGOT);
         getServer().addRecipe(engine);
+        recipeManager.registerUnlockableRecipe(engineKey,
+                Material.GOLD_INGOT,
+                Material.IRON_INGOT,
+                Material.REDSTONE_BLOCK,
+                Material.NETHERITE_INGOT);
 
+        // register tail recipe
         final var tailKey = new NamespacedKey(this, "tail");
         final var tail = new ShapedRecipe(tailKey, resourceManager.getCustomItem(tailKey))
                 .shape(
@@ -197,7 +219,11 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('p', Material.PHANTOM_MEMBRANE)
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(tail);
+        recipeManager.registerUnlockableRecipe(tailKey,
+                Material.PHANTOM_MEMBRANE,
+                Material.IRON_INGOT);
 
+        // register wing recipe
         final var wingKey = new NamespacedKey(this, "wing");
         final var wing = new ShapedRecipe(wingKey, resourceManager.getCustomItem(wingKey))
                 .shape(
@@ -207,7 +233,11 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('p', Material.PHANTOM_MEMBRANE)
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(wing);
+        recipeManager.registerUnlockableRecipe(wingKey,
+                Material.PHANTOM_MEMBRANE,
+                Material.IRON_INGOT);
 
+        // register fuselage recipe
         final var fuselageKey = new NamespacedKey(this, "fuselage");
         final var fuselage = new ShapedRecipe(fuselageKey, resourceManager.getCustomItem(fuselageKey))
                 .shape(
@@ -217,6 +247,11 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('I', Material.IRON_BLOCK)
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(fuselage);
+        recipeManager.registerUnlockableRecipe(fuselageKey,
+                Material.IRON_BLOCK,
+                Material.IRON_INGOT);
+
+        // register powertool recipe
         final var powertoolKey = new NamespacedKey(this, "powertool");
         final var powertool = new ShapedRecipe(powertoolKey, resourceManager.getCustomItem(powertoolKey))
                 .shape(
@@ -227,7 +262,13 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('r', Material.REDSTONE)
                 .setIngredient('d', Material.DIAMOND);;
         getServer().addRecipe(powertool);
+        recipeManager.registerUnlockableRecipe(powertoolKey,
+                Material.GOLD_INGOT,
+                Material.IRON_INGOT,
+                Material.REDSTONE,
+                Material.DIAMOND);
 
+        // register wrench recipe
         final var wrenchKey = new NamespacedKey(this, "wrench");
         final var wrench = new ShapedRecipe(wrenchKey, resourceManager.getCustomItem(wrenchKey))
                 .shape(
@@ -236,7 +277,10 @@ public class Plugin extends JavaPlugin {
                         "  i")
                 .setIngredient('i', Material.IRON_INGOT);
         getServer().addRecipe(wrench);
+        recipeManager.registerUnlockableRecipe(wrenchKey,
+                Material.IRON_INGOT);
 
+        // register glue recipe
         final var glueKey = new NamespacedKey(this, "glue");
         final var glue = new ShapedRecipe(glueKey, resourceManager.getCustomItem(glueKey))
                 .shape(
@@ -246,6 +290,9 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('l', Material.LEATHER)
                 .setIngredient('s', Material.SLIME_BALL);
         getServer().addRecipe(glue);
+        recipeManager.registerUnlockableRecipe(glueKey,
+                Material.LEATHER,
+                Material.SLIME_BALL);
 
         /*final var aircrafterKey = new NamespacedKey(this, "aircrafter");
         final var aircrafter = new ShapedRecipe(aircrafterKey, resourceManager.getCustomItem(aircrafterKey))
