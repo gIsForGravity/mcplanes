@@ -2,7 +2,8 @@ package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
-import co.tantleffbeef.mcplanes.Listeners.RecipeEventListeners;
+import co.tantleffbeef.mcplanes.Listeners.EntityPickupItemListener;
+import co.tantleffbeef.mcplanes.Listeners.InventoryMoveItemListener;
 import co.tantleffbeef.mcplanes.Listeners.VehicleEnterListener;
 import co.tantleffbeef.mcplanes.Listeners.VehicleExitListener;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
@@ -16,6 +17,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,7 +66,8 @@ public class Plugin extends JavaPlugin {
         // Bukkit Listeners
         registerListener(new VehicleEnterListener(this));
         registerListener(new VehicleExitListener(this));
-        registerListener(new RecipeEventListeners(this, recipeManager));
+        registerListener(new EntityPickupItemListener(this, recipeManager));
+        registerListener(new InventoryMoveItemListener(this, recipeManager));
 
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
