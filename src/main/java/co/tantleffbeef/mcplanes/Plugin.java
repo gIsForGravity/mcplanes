@@ -31,6 +31,7 @@ public class Plugin extends JavaPlugin {
     private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
+    private RecipeManager recipeManager;
     private String mcVersion;
 
     public ProtocolManager getProtocolManager() {
@@ -45,13 +46,15 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        recipeManager = new RecipeManager(this);
+        vehicleManager = new VehicleManager(this);
+
         saveDefaultConfig();
 
         // Location that webserver will host files at
         final File webserverFolder = new File(getDataFolder(), "www");
 
         protocolManager = ProtocolLibrary.getProtocolManager();
-        vehicleManager = new VehicleManager(this);
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
 
         // // Listeners!!!
@@ -61,7 +64,7 @@ public class Plugin extends JavaPlugin {
         // Bukkit Listeners
         registerListener(new VehicleEnterListener(this));
         registerListener(new VehicleExitListener(this));
-        registerListener(new RecipeEventListeners(this));
+        registerListener(new RecipeEventListeners(this, recipeManager));
 
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
