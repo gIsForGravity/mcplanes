@@ -114,6 +114,9 @@ public class Plugin extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
+        getLogger().info("Running garbage collector");
+        System.gc();
+
         webServer.start();
     }
 
@@ -418,9 +421,6 @@ public class Plugin extends JavaPlugin {
         }
 
         getLogger().info("Download complete!");
-
-        getLogger().info("Running garbage collector");
-        System.gc();
     }
 
     private static JsonObject downloadJsonFile(URL url) throws IOException {
