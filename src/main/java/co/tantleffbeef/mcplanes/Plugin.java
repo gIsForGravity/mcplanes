@@ -335,6 +335,7 @@ public class Plugin extends JavaPlugin {
         getConfig().addDefault("webserver-bind", "0.0.0.0");
         getConfig().addDefault("webserver-url", "127.0.0.1");
         getConfig().addDefault("webserver-port", 8467);
+        
         getConfig().addDefault("crafting.allow-crafting", true);
         getConfig().addDefault("crafting.unlock-recipes", true);
 
