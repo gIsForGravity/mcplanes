@@ -3,6 +3,8 @@ version: 0.0.0
 main: co.tantleffbeef.mcplanes.Plugin
 api-version: 1.19
 
+authors: [gIsForGravity, Finnerex, SniperNerd]
+
 depend: [ProtocolLib]
 
 permissions:
@@ -20,5 +22,6 @@ commands:
     usage: "Usage: /resourcegive <player> <item id>"
     permission: mcplanes.resourcegive
 
-#libraries:
+libraries:
 #  - me.lucko:commodore:2.2
+  - org.eclipse.jetty:jetty-server:11.0.11

@@ -80,7 +80,7 @@ public class Plugin extends JavaPlugin {
         final var clientJar = new File(versionsFolder, "client-" + mcVersion + ".jar");
         if (clientJar.exists() &&
                 clientJar.isFile()) {
-            getLogger().info("Jarfile with version " + mcVersion + "found.");
+            getLogger().info("Jarfile with version " + mcVersion + " found.");
         } else {
             getLogger().info("No jarfile found with version " + mcVersion + ". Attempting to download.");
             try {
@@ -114,7 +114,12 @@ public class Plugin extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
-        webServer.startup();
+        webServer.start();
+    }
+
+    @Override
+    public void onDisable() {
+        webServer.stop();
     }
 
     public void registerListener(Listener listener) {
@@ -335,9 +340,11 @@ public class Plugin extends JavaPlugin {
         getConfig().addDefault("webserver-bind", "0.0.0.0");
         getConfig().addDefault("webserver-url", "127.0.0.1");
         getConfig().addDefault("webserver-port", 8467);
-        
+
         getConfig().addDefault("crafting.allow-crafting", true);
         getConfig().addDefault("crafting.unlock-recipes", true);
+
+        getConfig().options().copyDefaults(true);
 
         saveConfig();
     }
