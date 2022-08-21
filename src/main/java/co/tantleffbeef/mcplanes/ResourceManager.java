@@ -152,6 +152,8 @@ public class ResourceManager implements Listener {
     }
 
     public void compileResources() throws IOException {
+        plugin.getLogger().info("Building resources");
+
         // create pack.mcmeta file
         JsonObject mcMeta = new JsonObject();
         JsonObject pack = new JsonObject();
@@ -231,7 +233,7 @@ public class ResourceManager implements Listener {
         final List<String> fileNames = new ArrayList<>();
         addFilesToList(fileNames, inputFolder, "");
 
-        plugin.getLogger().info("writing zip file");
+        plugin.getLogger().info("Saving resource pack to zip file");
         // make zip file
         try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(outputFile))) {
             final byte[] buffer = new byte[4096];

@@ -38,7 +38,7 @@ public class WebServer {
         server = new Server(new InetSocketAddress(bind, port));
 
         ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirAllowed(true);
+        resourceHandler.setDirAllowed(false);
         resourceHandler.setResourceBase(webserverDirectory.getAbsolutePath());
 
         server.setHandler(resourceHandler);
