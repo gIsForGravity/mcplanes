@@ -13,10 +13,14 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static co.tantleffbeef.mcplanes.Tool.clearFolder;
 
@@ -214,6 +218,70 @@ public class ResourceManager implements Listener {
             try (Writer writer = new PrintWriter(new FileOutputStream(modelFile))) {
                 writer.write(gson.toJson(modelJson));
             }
+        }
+
+        saveResourcesToZip(tempFolder, new File(webserverFolder, "resources.zip"));
+    }
+
+    private void saveResourcesToZip(File inputFolder, File outputFile) {
+        if (outputFile.exists())
+            outputFile.delete();
+
+        // Create a list to store the names of all the files that'll go in the zip
+        final List<String> fileNames = new ArrayList<>();
+        addFilesToList(fileNames, inputFolder, "");
+
+        plugin.getLogger().info("writing zip file");
+        // make zip file
+        try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(outputFile))) {
+            final byte[] buffer = new byte[4096];
+
+            // loop through all the files in the folder
+            for (String fileName : fileNames) {
+                plugin.getLogger().info("writing " + fileName);
+
+                // Add new zip entry to the stream
+                zip.putNextEntry(new ZipEntry(fileName));
+
+                // write file into zip file
+                try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(inputFolder,
+                        fileName)))) {
+                    // read bytes from file
+                    int bytesRead;
+                    while ((bytesRead = in.read(buffer)) > 0) {
+                        // and copy bytes into zip
+                        zip.write(buffer, 0, bytesRead);
+                    }
+                }
+
+                // prepare to write the next zip entry
+                zip.closeEntry();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void addFilesToList(List<String> files, File directory, String parent) {
+        if (!directory.exists() && !directory.isDirectory())
+            return;
+
+        final String prefix;
+
+        if (parent.equals(""))
+            prefix = "";
+        else
+            prefix = parent + "/";
+
+        for (File f : Objects.requireNonNull(directory.listFiles())) {
+            // if it's a directory then run this in the subdirectory
+            if (f.isDirectory()) {
+                addFilesToList(files, f, prefix + f.getName());
+                continue;
+            }
+
+            // otherwise just add the filename to the list
+            files.add(prefix + f.getName());
         }
     }
 }
