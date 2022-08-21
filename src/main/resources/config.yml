@@ -1,5 +1,12 @@
 # MCPlanes config
 
-# The web address that points to the embedded web server
-webserver-address: "127.0.0.1"
+# The web address to bind to
+webserver-bind: "0.0.0.0"
+# The web address clients actual connect to
+webserver-url: "127.0.0.1"
+
 webserver-port: 8467
+
+crafting:
+  allow-crafting: true
+  unlock-recipes: true

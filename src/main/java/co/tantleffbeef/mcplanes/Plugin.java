@@ -34,6 +34,7 @@ public class Plugin extends JavaPlugin {
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
+    private WebServer webServer;
     private String mcVersion;
 
     public ProtocolManager getProtocolManager() {
@@ -52,9 +53,12 @@ public class Plugin extends JavaPlugin {
         vehicleManager = new VehicleManager(this);
 
         saveDefaultConfig();
+        saveDefaultsToConfig();
 
         // Location that webserver will host files at
         final File webserverFolder = new File(getDataFolder(), "www");
+        webServer = new WebServer(webserverFolder, getConfig().getString("webserver-bind"),
+                getConfig().getInt("webserver-port"));
 
         protocolManager = ProtocolLibrary.getProtocolManager();
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
@@ -66,8 +70,10 @@ public class Plugin extends JavaPlugin {
         // Bukkit Listeners
         registerListener(new VehicleEnterListener(this));
         registerListener(new VehicleExitListener(this));
-        registerListener(new EntityPickupItemListener(this, recipeManager));
-        registerListener(new InventoryMoveItemListener(this, recipeManager));
+        if (getConfig().getBoolean("crafting.unlock-recipes")) {
+            registerListener(new EntityPickupItemListener(this, recipeManager));
+            registerListener(new InventoryMoveItemListener(this, recipeManager));
+        }
 
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
@@ -107,6 +113,8 @@ public class Plugin extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        webServer.startup();
     }
 
     public void registerListener(Listener listener) {
@@ -318,6 +326,19 @@ public class Plugin extends JavaPlugin {
      */
     public PluginCommand getCommandRNN(String name) {
         return Objects.requireNonNull(getCommand(name));
+    }
+
+    /**
+     * Adds default values to config in case they're missing for some reason
+     */
+    private void saveDefaultsToConfig() {
+        getConfig().addDefault("webserver-bind", "0.0.0.0");
+        getConfig().addDefault("webserver-url", "127.0.0.1");
+        getConfig().addDefault("webserver-port", 8467);
+        getConfig().addDefault("crafting.allow-crafting", true);
+        getConfig().addDefault("crafting.allow-crafting", true);
+
+        saveConfig();
     }
 
     private void downloadClientJar() throws IOException {
