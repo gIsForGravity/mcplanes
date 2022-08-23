@@ -394,17 +394,17 @@ public class Plugin extends JavaPlugin {
 
         versionsFolder.mkdirs();
 
-        final byte[] data = new byte[4096];
+        final byte[] memoryBuffer = new byte[Tools.FILE_BUFFER_SIZE];
         double lastPercent = 0f;
         int currentSize = 0;
 
-        try ( var in = new BufferedInputStream(connection.getInputStream());
-            var fos = new FileOutputStream(jarFileLocation) ) {
-            var out = new BufferedOutputStream(fos);
+        // buffered input from the web, buffered output to hard drive
+        try (var in = new BufferedInputStream(connection.getInputStream());
+            var out = new BufferedOutputStream(new FileOutputStream(jarFileLocation)) ) {
 
-            int x = 0;
-            while ((x = in.read(data)) >= 0) {
-                currentSize += x;
+            int readBytes = 0;
+            while ((readBytes = in.read(memoryBuffer)) > 0) {
+                currentSize += readBytes;
                 final double percentage = (float) currentSize / totalSize * 100;
 
                 // Every time it goes up 10% tell the user
@@ -414,7 +414,7 @@ public class Plugin extends JavaPlugin {
                 lastPercent = percentage;
 
                 // don't forget to save downloaded data
-                out.write(data, 0, x);
+                out.write(memoryBuffer, 0, readBytes);
             }
 
             out.flush();

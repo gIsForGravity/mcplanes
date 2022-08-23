@@ -1,8 +1,7 @@
 package co.tantleffbeef.mcplanes.Commands;
 
-import co.tantleffbeef.mcplanes.Plugin;
 import co.tantleffbeef.mcplanes.ResourceManager;
-import co.tantleffbeef.mcplanes.Tool;
+import co.tantleffbeef.mcplanes.Tools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -14,8 +13,6 @@ import org.bukkit.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static co.tantleffbeef.mcplanes.Tool.getNamespacePlugin;
 
 public class ResourceGiveCommand implements CommandExecutor, TabCompleter {
     private final ResourceManager resourceManager;
@@ -52,7 +49,7 @@ public class ResourceGiveCommand implements CommandExecutor, TabCompleter {
         final String namespace = namespacedKeyStringParts[0];
         final String value = namespacedKeyStringParts[1];
 
-        var itemPlugin = Tool.getNamespacePlugin(namespace);
+        var itemPlugin = Tools.getNamespacePlugin(namespace);
 
         if (itemPlugin == null) {
             commandSender.sendMessage(ChatColor.RED + "Invalid item Id");

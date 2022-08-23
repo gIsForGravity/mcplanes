@@ -1,16 +1,22 @@
 package co.tantleffbeef.mcplanes;
 
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
-public final class Tool {
-    private Tool() {
+public final class Tools {
+    private Tools() {
         // STATIC ONLY!!!! NO INSTANCES!!!!
         throw new UnsupportedOperationException();
     }
+
+    public static final int FILE_BUFFER_SIZE = 8192;
 
     public static void clearFolder(File folder) {
         if (folder.isFile())
@@ -38,5 +44,26 @@ public final class Tool {
         }
 
         return null;
+    }
+
+    public static byte[] createSha1(File file) {
+        try {
+            // will create a sha-1 hash
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+
+            // read file and send it into digest to be hashed
+            try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
+                byte[] buffer = new byte[4096];
+                int n;
+                while ((n = in.read(buffer)) > 0) {
+                    digest.update(buffer, 0, n);
+                }
+            }
+
+            // finally hash now that whole file is loaded
+            return digest.digest();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

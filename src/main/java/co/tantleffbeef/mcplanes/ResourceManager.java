@@ -3,7 +3,6 @@ package co.tantleffbeef.mcplanes;
 import co.tantleffbeef.mcplanes.Custom.item.CustomItem;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
@@ -13,16 +12,13 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static co.tantleffbeef.mcplanes.Tool.clearFolder;
+import static co.tantleffbeef.mcplanes.Tools.clearFolder;
 
 public class ResourceManager implements Listener {
     private final Plugin plugin;
@@ -32,6 +28,7 @@ public class ResourceManager implements Listener {
     private final File clientJar;
     private final Map<NamespacedKey, ItemStack> customItems = new HashMap<>();
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
+    private byte[] resourcePackHash;
 
     public ResourceManager(Plugin plugin, File webserverFolder, File clientJar) {
         this.plugin = plugin;
@@ -127,9 +124,12 @@ public class ResourceManager implements Listener {
         // Stream in from jar file and out to actual file
         try (var out = new BufferedOutputStream(new FileOutputStream(javaFile))) {
             try (var in = new BufferedInputStream(jar.getInputStream(zipFile))) {
-                byte[] buffer = new byte[4096];
-                int nBytes;
+                // Buffer used to hold data in memory as its transfered from jar to file
+                byte[] buffer = new byte[Tools.FILE_BUFFER_SIZE];
+
+                int nBytes; // how much (uncompressed) data is read from the jar
                 while ((nBytes = in.read(buffer)) > 0) {
+                    // Read FILE_BUFFER_SIZE bytes from jar and write them into the file
                     out.write(buffer, 0, nBytes);
                 }
 
@@ -185,7 +185,7 @@ public class ResourceManager implements Listener {
                 modelFile = saveFile(tempFolder, path, jar, jarEntry);
             }
 
-            // create a json object which will store the model's current data TODO: fix
+            // create a json object which will store the model's current data
             JsonObject modelJson;
 
             // load model's current data into json object
@@ -222,10 +222,24 @@ public class ResourceManager implements Listener {
             }
         }
 
-        saveResourcesToZip(tempFolder, new File(webserverFolder, "resources.zip"));
+        // The file that the resource pack is to be saved to
+        File resourcePackFile = new File(webserverFolder, "resources.zip");
+
+        // save resource pack to a zip file so it can be sent to players
+        saveResourcesToZip(tempFolder, resourcePackFile, true);
+
+        //   hash resource pack so clients can know if the resource pack has
+        // changed since the last time they joined the server
+        hashResourcePack(resourcePackFile);
     }
 
-    private void saveResourcesToZip(File inputFolder, File outputFile) {
+    /**
+     * Takes a resource pack folder (or really any folder) and saves it all to a zip file
+     * @param inputFolder the folder to be compressed
+     * @param outputFile the file to output said folder to
+     * @param compressZip whether to compress the zip file or not
+     */
+    private void saveResourcesToZip(File inputFolder, File outputFile, boolean compressZip) {
         if (outputFile.exists())
             outputFile.delete();
 
@@ -236,11 +250,19 @@ public class ResourceManager implements Listener {
         plugin.getLogger().info("Saving resource pack to zip file");
         // make zip file
         try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(outputFile))) {
-            final byte[] buffer = new byte[4096];
+            if (compressZip)
+                // Tell zip stream to deflate (compress) zip file
+                zip.setMethod(ZipOutputStream.DEFLATED);
+            else
+                // Tell zip stream to just store files as is
+                zip.setMethod(ZipOutputStream.STORED);
+
+            // Buffer to hold data as it's transferred from file to zip file
+            final byte[] buffer = new byte[Tools.FILE_BUFFER_SIZE];
 
             // loop through all the files in the folder
             for (String fileName : fileNames) {
-                plugin.getLogger().info("writing " + fileName);
+                plugin.getLogger().info("Writing " + fileName);
 
                 // Add new zip entry to the stream
                 zip.putNextEntry(new ZipEntry(fileName));
@@ -265,9 +287,17 @@ public class ResourceManager implements Listener {
     }
 
     private void addFilesToList(List<String> files, File directory, String parent) {
-        if (!directory.exists() && !directory.isDirectory())
+        // if the directory doesn't exist or if the file isn't a directory then just leave
+        // we should never get here but just ignore
+        if (!directory.exists() || !directory.isDirectory())
             return;
 
+        // create a prefix that goes on the beginning
+        // if this is the very first directory in the list (for example "assets") then
+        // we don't want it to have a / at the beginning (/assets/minecraft/models is
+        // not right).
+        // instead we want the very first directory to have nothing before it:
+        // "assets/minecraft/models" instead of "/assets/minecraft/models"
         final String prefix;
 
         if (parent.equals(""))
@@ -276,7 +306,7 @@ public class ResourceManager implements Listener {
             prefix = parent + "/";
 
         for (File f : Objects.requireNonNull(directory.listFiles())) {
-            // if it's a directory then run this in the subdirectory
+            // if it's a directory then run the same function in the subdirectory
             if (f.isDirectory()) {
                 addFilesToList(files, f, prefix + f.getName());
                 continue;
@@ -285,5 +315,15 @@ public class ResourceManager implements Listener {
             // otherwise just add the filename to the list
             files.add(prefix + f.getName());
         }
+    }
+
+    private void hashResourcePack(File resourcePackFile) {
+        // sets local variable resourcePackHash to the hash of the resources.zip which
+        // will then be passed to the player upon login
+        resourcePackHash = Tools.createSha1(resourcePackFile).clone();
+    }
+
+    public byte[] getResourcePackHash() {
+        return resourcePackHash;
     }
 }
