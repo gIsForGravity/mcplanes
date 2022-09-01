@@ -17,7 +17,6 @@ buildNumber.properties
 .classpath
 
 # plugin stuff
-src/main/resources/assets
 
 # Intellij IDEA
 .idea/

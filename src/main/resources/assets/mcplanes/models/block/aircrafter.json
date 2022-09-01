@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "mcplanes:block/aircrafter_bottom",
+    "east": "mcplanes:block/aircrafter_side",
+    "north": "mcplanes:block/aircrafter_front",
+    "particle": "mcplanes:block/aircrafter_top",
+    "south": "mcplanes:block/aircrafter_side",
+    "up": "mcplanes:block/aircrafter_top",
+    "west": "mcplanes:block/aircrafter_front"
+  }
+}
