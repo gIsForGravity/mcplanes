@@ -142,6 +142,10 @@ public class ResourceManager implements Listener {
         return javaFile;
     }
 
+    public String getResourcePackFilename() {
+        return "resources.zip";
+    }
+
     // return list of custom item ids
     public Set<NamespacedKey> getItemIdList() {
         return customItems.keySet();

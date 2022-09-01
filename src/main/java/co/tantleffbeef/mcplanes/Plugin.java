@@ -2,10 +2,7 @@ package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
-import co.tantleffbeef.mcplanes.Listeners.EntityPickupItemListener;
-import co.tantleffbeef.mcplanes.Listeners.InventoryMoveItemListener;
-import co.tantleffbeef.mcplanes.Listeners.VehicleEnterListener;
-import co.tantleffbeef.mcplanes.Listeners.VehicleExitListener;
+import co.tantleffbeef.mcplanes.Listeners.*;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -17,7 +14,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,7 +49,7 @@ public class Plugin extends JavaPlugin {
         vehicleManager = new VehicleManager(this);
 
         saveDefaultConfig();
-        saveDefaultsToConfig();
+        addDefaultsToConfig();
 
         // Location that webserver will host files at
         final File webserverFolder = new File(getDataFolder(), "www");
@@ -66,14 +62,6 @@ public class Plugin extends JavaPlugin {
         // // Listeners!!!
         // ProtocolLib listeners
         protocolManager.addPacketListener(new ServerboundPlayerInputListener(this));
-
-        // Bukkit Listeners
-        registerListener(new VehicleEnterListener(this));
-        registerListener(new VehicleExitListener(this));
-        if (getConfig().getBoolean("crafting.unlock-recipes")) {
-            registerListener(new EntityPickupItemListener(this, recipeManager));
-            registerListener(new InventoryMoveItemListener(this, recipeManager));
-        }
 
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
@@ -98,6 +86,16 @@ public class Plugin extends JavaPlugin {
 
         // initialize resource manager now that client jar has been downloaded
         resourceManager = new ResourceManager(this, webserverFolder, clientJar);
+
+        // Bukkit Listeners
+        registerListener(new VehicleEnterListener(this));
+        registerListener(new VehicleExitListener(this));
+        registerListener(new PlayerJoinListener(this,
+                getConfig().getString("webserver-url"), resourceManager));
+        if (getConfig().getBoolean("crafting.unlock-recipes")) {
+            registerListener(new EntityPickupItemListener(this, recipeManager));
+            registerListener(new InventoryMoveItemListener(this, recipeManager));
+        }
 
         // Commands!
         registerCommands();
@@ -339,7 +337,7 @@ public class Plugin extends JavaPlugin {
     /**
      * Adds default values to config in case they're missing for some reason
      */
-    private void saveDefaultsToConfig() {
+    private void addDefaultsToConfig() {
         getConfig().addDefault("webserver-bind", "0.0.0.0");
         getConfig().addDefault("webserver-url", "127.0.0.1");
         getConfig().addDefault("webserver-port", 8467);
