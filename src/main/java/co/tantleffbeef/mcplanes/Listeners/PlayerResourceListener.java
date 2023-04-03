@@ -1,19 +1,20 @@
 package co.tantleffbeef.mcplanes.Listeners;
 
-import co.tantleffbeef.mcplanes.Plugin;
 import co.tantleffbeef.mcplanes.ResourceManager;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Objects;
 
-public class PlayerJoinListener extends AbstractListener {
+public class PlayerResourceListener implements Listener {
+    private final Plugin plugin;
     private final String webserverUrl;
     private final ResourceManager resourceManager;
 
-    public PlayerJoinListener(Plugin plugin, String webserverUrl, ResourceManager resourceManager) {
-        super(plugin);
-
+    public PlayerResourceListener(Plugin plugin, String webserverUrl, ResourceManager resourceManager) {
+        this.plugin = plugin;
         this.webserverUrl = webserverUrl;
         this.resourceManager = resourceManager;
     }

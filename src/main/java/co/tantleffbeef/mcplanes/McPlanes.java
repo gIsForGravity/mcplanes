@@ -3,7 +3,7 @@ package co.tantleffbeef.mcplanes;
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
-import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
+//import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
@@ -17,6 +17,7 @@ import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -25,28 +26,22 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.jar.JarFile;
 
-public class Plugin extends JavaPlugin {
+public class McPlanes extends JavaPlugin {
     private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
     private WebServer webServer;
+    private KeyManager<PluginKey> persistentDataKeyManager;
     private String mcVersion;
-
-    public ProtocolManager getProtocolManager() {
-        return protocolManager;
-    }
-    public VehicleManager getVehicleManager() {
-        return vehicleManager;
-    }
-    public ResourceManager getResourceManager() {
-        return resourceManager;
-    }
 
     @Override
     public void onEnable() {
         recipeManager = new RecipeManager(this);
         vehicleManager = new VehicleManager(this);
+
+        persistentDataKeyManager = new KeyManager<>(this);
+        PluginKey.registerKeys(persistentDataKeyManager);
 
         saveDefaultConfig();
         addDefaultsToConfig();
@@ -61,7 +56,7 @@ public class Plugin extends JavaPlugin {
 
         // // Listeners!!!
         // ProtocolLib listeners
-        protocolManager.addPacketListener(new ServerboundPlayerInputListener(this));
+        //protocolManager.addPacketListener(new ServerboundPlayerInputListener(this));
 
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
@@ -88,13 +83,13 @@ public class Plugin extends JavaPlugin {
         resourceManager = new ResourceManager(this, webserverFolder, clientJar);
 
         // Bukkit Listeners
-        registerListener(new VehicleEnterListener(this));
-        registerListener(new VehicleExitListener(this));
-        registerListener(new PlayerJoinListener(this,
-                getConfig().getString("webserver-url"), resourceManager));
+        registerListener(new CustomVehicleEnterExitListener(vehicleManager));
+        registerListener(new PlayerResourceListener(this,
+                getConfig().getString("webserver-url"),
+                resourceManager));
         if (getConfig().getBoolean("crafting.unlock-recipes")) {
-            registerListener(new EntityPickupItemListener(this, recipeManager));
-            registerListener(new InventoryMoveItemListener(this, recipeManager));
+            registerListener(new EntityPickupItemListener(recipeManager));
+            registerListener(new InventoryMoveItemListener(recipeManager));
         }
 
         // Commands!
@@ -274,7 +269,7 @@ public class Plugin extends JavaPlugin {
                 .setIngredient('g', Material.GOLD_INGOT)
                 .setIngredient('i', Material.IRON_INGOT)
                 .setIngredient('r', Material.REDSTONE)
-                .setIngredient('d', Material.DIAMOND);;
+                .setIngredient('d', Material.DIAMOND);
         getServer().addRecipe(powertool);
         recipeManager.registerUnlockableRecipe(powertoolKey,
                 Material.GOLD_INGOT,
@@ -330,7 +325,7 @@ public class Plugin extends JavaPlugin {
      * @param name the name of the command as defined in plugin.yml
      * @return the command
      */
-    public PluginCommand getCommandRNN(String name) {
+    public @NotNull PluginCommand getCommandRNN(String name) {
         return Objects.requireNonNull(getCommand(name));
     }
 
@@ -400,7 +395,7 @@ public class Plugin extends JavaPlugin {
         try (var in = new BufferedInputStream(connection.getInputStream());
             var out = new BufferedOutputStream(new FileOutputStream(jarFileLocation)) ) {
 
-            int readBytes = 0;
+            int readBytes;
             while ((readBytes = in.read(memoryBuffer)) > 0) {
                 currentSize += readBytes;
                 final double percentage = (float) currentSize / totalSize * 100;

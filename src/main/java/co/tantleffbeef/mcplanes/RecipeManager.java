@@ -4,10 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
@@ -21,7 +18,7 @@ public class RecipeManager {
     private final Map<NamespacedKey, List<RecipeIngredient>> recipes = new HashMap<>();
     private final NamespacedKey customItemKey;
 
-    public RecipeManager(Plugin plugin) {
+    public RecipeManager(McPlanes plugin) {
         //this.plugin = plugin;
 
         customItemKey = new NamespacedKey(plugin, "customItem");

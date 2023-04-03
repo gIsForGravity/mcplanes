@@ -1,22 +1,21 @@
 package co.tantleffbeef.mcplanes.Vehicles;
 
 import co.tantleffbeef.mcplanes.JVehicle;
-import co.tantleffbeef.mcplanes.Plugin;
+import co.tantleffbeef.mcplanes.McPlanes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-import java.util.List;
 import java.util.UUID;
 
 public abstract class AbstractVehicle implements JVehicle {
     protected Vector velocity = new Vector();
     protected final UUID uuid;
-    protected final Plugin plugin;
+    protected final McPlanes mcPlanes;
 
-    public AbstractVehicle(UUID uuid, Plugin plugin) {
+    public AbstractVehicle(UUID uuid, McPlanes mcPlanes) {
         this.uuid = uuid;
-        this.plugin = plugin;
+        this.mcPlanes = mcPlanes;
     }
 
     @Override

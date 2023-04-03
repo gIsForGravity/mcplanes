@@ -1,17 +1,15 @@
 package co.tantleffbeef.mcplanes.Listeners;
 
-import co.tantleffbeef.mcplanes.Plugin;
 import co.tantleffbeef.mcplanes.RecipeManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
-public class InventoryMoveItemListener extends AbstractListener {
+public class InventoryMoveItemListener implements Listener {
     private final RecipeManager manager;
 
-    public InventoryMoveItemListener(Plugin plugin, RecipeManager manager) {
-        super(plugin);
-
+    public InventoryMoveItemListener(RecipeManager manager) {
         this.manager = manager;
     }
 

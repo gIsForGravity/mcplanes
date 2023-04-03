@@ -1,6 +1,6 @@
 name: MCPlanes
 version: 0.0.0
-main: co.tantleffbeef.mcplanes.Plugin
+main: co.tantleffbeef.mcplanes.McPlanes
 api-version: 1.19
 
 authors: [gIsForGravity, Finnerex, SniperNerd]

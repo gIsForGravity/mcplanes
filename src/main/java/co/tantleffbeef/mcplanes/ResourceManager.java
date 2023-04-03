@@ -21,7 +21,7 @@ import java.util.zip.ZipOutputStream;
 import static co.tantleffbeef.mcplanes.Tools.clearFolder;
 
 public class ResourceManager implements Listener {
-    private final Plugin plugin;
+    private final McPlanes plugin;
     private final File tempFolder;
     private final File webserverFolder;
     private final Gson gson;
@@ -30,7 +30,7 @@ public class ResourceManager implements Listener {
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
     private byte[] resourcePackHash;
 
-    public ResourceManager(Plugin plugin, File webserverFolder, File clientJar) {
+    public ResourceManager(McPlanes plugin, File webserverFolder, File clientJar) {
         this.plugin = plugin;
         this.webserverFolder = webserverFolder;
         this.clientJar = clientJar;

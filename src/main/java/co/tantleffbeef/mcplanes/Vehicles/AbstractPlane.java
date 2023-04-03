@@ -1,12 +1,12 @@
 package co.tantleffbeef.mcplanes.Vehicles;
 
-import co.tantleffbeef.mcplanes.Plugin;
+import co.tantleffbeef.mcplanes.McPlanes;
 
 import java.util.UUID;
 
 public abstract class AbstractPlane extends AbstractVehicle {
-    public AbstractPlane(UUID uuid, Plugin plugin) {
-        super(uuid, plugin);
+    public AbstractPlane(UUID uuid, McPlanes mcPlanes) {
+        super(uuid, mcPlanes);
     }
 
     public abstract void pushRoll(float amount);

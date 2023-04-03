@@ -3,25 +3,23 @@ package co.tantleffbeef.mcplanes;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
 public class VehicleManager implements Runnable {
-    private final Plugin plugin;
+    private final McPlanes mcPlanes;
     private final NamespacedKey isVehicle;
     private final NamespacedKey vehicleType;
     private final NamespacedKey vehicleModel;
 
-    public VehicleManager(Plugin plugin) {
-        this.plugin = plugin;
-        isVehicle = new NamespacedKey(plugin, "isVehicle");
-        vehicleType = new NamespacedKey(plugin, "vehicleType");
-        vehicleModel = new NamespacedKey(plugin, "vehicleModel");
+    public VehicleManager(McPlanes mcPlanes) {
+        this.mcPlanes = mcPlanes;
+        isVehicle = new NamespacedKey(mcPlanes, "isVehicle");
+        vehicleType = new NamespacedKey(mcPlanes, "vehicleType");
+        vehicleModel = new NamespacedKey(mcPlanes, "vehicleModel");
 
-        plugin.getServer().getScheduler().runTaskTimer(plugin, this, 1, 1);
+        mcPlanes.getServer().getScheduler().runTaskTimer(mcPlanes, this, 1, 1);
     }
 
     private final Map<UUID, JVehicle> activeVehicles = new HashMap<>();
@@ -64,7 +62,7 @@ public class VehicleManager implements Runnable {
         if (activeVehicles.isEmpty())
             return;
 
-        final var server = plugin.getServer();
+        final var server = mcPlanes.getServer();
 
         activeVehicles.forEach((uuid, vehicle) -> {
             final Entity entity = server.getEntity(uuid);
