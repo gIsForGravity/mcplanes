@@ -4,8 +4,8 @@ import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
 //import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+//import com.comphenix.protocol.ProtocolLibrary;
+//import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.md_5.bungee.api.ChatColor;
@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.jar.JarFile;
 
 public class McPlanes extends JavaPlugin {
-    private ProtocolManager protocolManager;
+    //private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
@@ -51,7 +51,7 @@ public class McPlanes extends JavaPlugin {
         webServer = new WebServer(webserverFolder, getConfig().getString("webserver-bind"),
                 getConfig().getInt("webserver-port"));
 
-        protocolManager = ProtocolLibrary.getProtocolManager();
+        //protocolManager = ProtocolLibrary.getProtocolManager();
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
 
         // // Listeners!!!
