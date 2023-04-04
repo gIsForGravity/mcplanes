@@ -3,12 +3,8 @@ package co.tantleffbeef.mcplanes;
 import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -16,11 +12,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class BlockManager {
-    private final KeyManager<PluginKey> keyManager;
+    private final KeyManager<CustomItemNbtKey> keyManager;
     private final ResourceManager resourceManager;
     private final Map<Location, UUID> displayEntities;
 
-    public BlockManager(KeyManager<PluginKey> keyManager, ResourceManager resourceManager) {
+    public BlockManager(KeyManager<CustomItemNbtKey> keyManager, ResourceManager resourceManager) {
         this.keyManager = keyManager;
         this.resourceManager = resourceManager;
         this.displayEntities = new HashMap<>();
@@ -64,10 +60,10 @@ public class BlockManager {
         block.setType(item.baseMaterial());
         final var display = (ItemDisplay) world.spawnEntity(block.getLocation(), EntityType.ITEM_DISPLAY);
 
-        final var displayItem = resourceManager.getCustomItem(item.id());
+        final var displayItem = resourceManager.getCustomItemStack(item.id());
 
         display.setItemStack(displayItem);
-        display.setItemDisplayTransform(item.displayPosition());
+        display.setItemDisplayTransform(item.displayType());
 
         displayEntities.put(block.getLocation(), display.getUniqueId());
     }

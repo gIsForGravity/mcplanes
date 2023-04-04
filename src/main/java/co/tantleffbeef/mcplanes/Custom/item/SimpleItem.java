@@ -1,11 +1,10 @@
 package co.tantleffbeef.mcplanes.Custom.item;
 
+import co.tantleffbeef.mcplanes.CustomItemNbtKey;
+import co.tantleffbeef.mcplanes.KeyManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 
 public class SimpleItem implements CustomItem {
@@ -34,6 +33,11 @@ public class SimpleItem implements CustomItem {
     @Override
     public NamespacedKey model() {
         return customModel ? new NamespacedKey(plugin, "item/" + id.getKey()) : null;
+    }
+
+    @Override
+    public void setAdditionalItemData(KeyManager<CustomItemNbtKey> keyManager, PersistentDataContainer customitemContainer) {
+        return;
     }
 
     @Override

@@ -1,8 +1,12 @@
 package co.tantleffbeef.mcplanes.Custom.item;
 
+import co.tantleffbeef.mcplanes.CustomItemNbtKey;
+import co.tantleffbeef.mcplanes.KeyManager;
+import co.tantleffbeef.mcplanes.ResourceManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 
 public class SimplePlaceableItem implements PlaceableItem {
@@ -39,7 +43,17 @@ public class SimplePlaceableItem implements PlaceableItem {
     }
 
     @Override
-    public ItemDisplay.ItemDisplayTransform displayPosition() {
+    public void setAdditionalItemData(KeyManager<CustomItemNbtKey> keyManager, PersistentDataContainer customitemContainer) {
+
+    }
+
+    @Override
+    public ItemDisplay.ItemDisplayTransform displayType() {
         return ItemDisplay.ItemDisplayTransform.HEAD;
+    }
+
+    @Override
+    public void setAdditionalBlockData(KeyManager<CustomItemNbtKey> keyManager, PersistentDataContainer customitemContainer) {
+
     }
 }

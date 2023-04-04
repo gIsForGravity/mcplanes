@@ -22,16 +22,19 @@ import static co.tantleffbeef.mcplanes.Tools.clearFolder;
 
 public class ResourceManager implements Listener {
     private final McPlanes plugin;
+    private final KeyManager<CustomItemNbtKey> nbtKeyManager;
     private final File tempFolder;
     private final File webserverFolder;
     private final Gson gson;
     private final File clientJar;
-    private final Map<NamespacedKey, ItemStack> customItems = new HashMap<>();
+    private final Map<NamespacedKey, CustomItem> customItems = new HashMap<>();
+    private final Map<NamespacedKey, ItemStack> customItemStacks = new HashMap<>();
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
     private byte[] resourcePackHash;
 
-    public ResourceManager(McPlanes plugin, File webserverFolder, File clientJar) {
+    public ResourceManager(McPlanes plugin, KeyManager<CustomItemNbtKey> nbtKeyManager, File webserverFolder, File clientJar) {
         this.plugin = plugin;
+        this.nbtKeyManager = nbtKeyManager;
         this.webserverFolder = webserverFolder;
         this.clientJar = clientJar;
 
@@ -112,7 +115,8 @@ public class ResourceManager implements Listener {
         customItemStack.setItemMeta(meta);
 
         // finally add custom item stack into list of custom items
-        customItems.put(id, customItemStack);
+        customItemStacks.put(id, customItemStack);
+        customItems.put(id, item);
     }
 
     private File saveFile(File folder, String path, JarFile jar, ZipEntry zipFile) {
@@ -148,11 +152,15 @@ public class ResourceManager implements Listener {
 
     // return list of custom item ids
     public Set<NamespacedKey> getItemIdList() {
-        return customItems.keySet();
+        return customItemStacks.keySet();
     }
 
-    public ItemStack getCustomItem(NamespacedKey key) {
-        return new ItemStack(Objects.requireNonNull(customItems.get(key)));
+    public ItemStack getCustomItemStack(NamespacedKey key) {
+        return new ItemStack(Objects.requireNonNull(customItemStacks.get(key)));
+    }
+
+    public CustomItem getCustomItem(NamespacedKey key) {
+        return Objects.requireNonNull(customItems.get(key));
     }
 
     public void compileResources() throws IOException {

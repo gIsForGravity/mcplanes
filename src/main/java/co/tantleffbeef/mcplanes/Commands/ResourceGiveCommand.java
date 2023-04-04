@@ -60,7 +60,7 @@ public class ResourceGiveCommand implements CommandExecutor, TabCompleter {
         ItemStack item;
 
         try {
-            item = resourceManager.getCustomItem(itemKey);
+            item = resourceManager.getCustomItemStack(itemKey);
         } catch (NullPointerException e) {
             commandSender.sendMessage(ChatColor.RED + "Invalid item Id");
             return false;

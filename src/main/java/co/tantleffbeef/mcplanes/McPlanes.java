@@ -33,7 +33,8 @@ public class McPlanes extends JavaPlugin {
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
     private WebServer webServer;
-    private KeyManager<PluginKey> persistentDataKeyManager;
+    private BlockManager blockManager;
+    private KeyManager<CustomItemNbtKey> persistentDataKeyManager;
     private String mcVersion;
 
     @Override
@@ -42,7 +43,7 @@ public class McPlanes extends JavaPlugin {
         vehicleManager = new VehicleManager(this);
 
         persistentDataKeyManager = new KeyManager<>(this);
-        PluginKey.registerKeys(persistentDataKeyManager);
+        CustomItemNbtKey.registerKeys(persistentDataKeyManager);
 
         saveDefaultConfig();
         addDefaultsToConfig();
@@ -81,13 +82,15 @@ public class McPlanes extends JavaPlugin {
         }
 
         // initialize resource manager now that client jar has been downloaded
-        resourceManager = new ResourceManager(this, webserverFolder, clientJar);
+        resourceManager = new ResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
+        blockManager = new BlockManager(persistentDataKeyManager, resourceManager);
 
         // Bukkit Listeners
         registerListener(new CustomVehicleEnterExitListener(vehicleManager));
         registerListener(new PlayerResourceListener(this,
                 getConfig().getString("webserver-url"),
                 resourceManager));
+        registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager, persistentDataKeyManager));
         if (getConfig().getBoolean("crafting.unlock-recipes")) {
             registerListener(new EntityPickupItemListener(recipeManager));
             registerListener(new InventoryMoveItemListener(recipeManager));
@@ -163,7 +166,7 @@ public class McPlanes extends JavaPlugin {
     private void registerRecipes() {
         // register battery recipe
         final var batteryKey = new NamespacedKey(this, "battery");
-        final var battery = new ShapedRecipe(batteryKey, resourceManager.getCustomItem(batteryKey))
+        final var battery = new ShapedRecipe(batteryKey, resourceManager.getCustomItemStack(batteryKey))
                 .shape(
                         "cic",
                         "rgr",
@@ -181,7 +184,7 @@ public class McPlanes extends JavaPlugin {
 
         // register blowtorch recipe
         final var blowtorchKey = new NamespacedKey(this, "blowtorch");
-        final var blowtorch = new ShapedRecipe(blowtorchKey, resourceManager.getCustomItem(blowtorchKey))
+        final var blowtorch = new ShapedRecipe(blowtorchKey, resourceManager.getCustomItemStack(blowtorchKey))
                 .shape(
                         " f ",
                         "imi",
@@ -198,7 +201,7 @@ public class McPlanes extends JavaPlugin {
         // register crude oil recipe
         final var crudeOilKey = new NamespacedKey(this, "crude_oil");
         var crudeOil = new BlastingRecipe(crudeOilKey,
-                resourceManager.getCustomItem(crudeOilKey),
+                resourceManager.getCustomItemStack(crudeOilKey),
                 new RecipeChoice.MaterialChoice(Material.COAL, Material.CHARCOAL),
                 1f, 200);
         getServer().addRecipe(crudeOil);
@@ -208,7 +211,7 @@ public class McPlanes extends JavaPlugin {
 
         // register engine recipe
         final var engineKey = new NamespacedKey(this, "engine");
-        final var engine = new ShapedRecipe(engineKey, resourceManager.getCustomItem(engineKey))
+        final var engine = new ShapedRecipe(engineKey, resourceManager.getCustomItemStack(engineKey))
                 .shape(
                         "ggg",
                         "ini",
@@ -226,7 +229,7 @@ public class McPlanes extends JavaPlugin {
 
         // register tail recipe
         final var tailKey = new NamespacedKey(this, "tail");
-        final var tail = new ShapedRecipe(tailKey, resourceManager.getCustomItem(tailKey))
+        final var tail = new ShapedRecipe(tailKey, resourceManager.getCustomItemStack(tailKey))
                 .shape(
                         " i",
                         "pi")
@@ -239,7 +242,7 @@ public class McPlanes extends JavaPlugin {
 
         // register wing recipe
         final var wingKey = new NamespacedKey(this, "wing");
-        final var wing = new ShapedRecipe(wingKey, resourceManager.getCustomItem(wingKey))
+        final var wing = new ShapedRecipe(wingKey, resourceManager.getCustomItemStack(wingKey))
                 .shape(
                         "  i",
                         " pp",
@@ -253,7 +256,7 @@ public class McPlanes extends JavaPlugin {
 
         // register fuselage recipe
         final var fuselageKey = new NamespacedKey(this, "fuselage");
-        final var fuselage = new ShapedRecipe(fuselageKey, resourceManager.getCustomItem(fuselageKey))
+        final var fuselage = new ShapedRecipe(fuselageKey, resourceManager.getCustomItemStack(fuselageKey))
                 .shape(
                         "iii",
                         "III",
@@ -267,7 +270,7 @@ public class McPlanes extends JavaPlugin {
 
         // register powertool recipe
         final var powertoolKey = new NamespacedKey(this, "powertool");
-        final var powertool = new ShapedRecipe(powertoolKey, resourceManager.getCustomItem(powertoolKey))
+        final var powertool = new ShapedRecipe(powertoolKey, resourceManager.getCustomItemStack(powertoolKey))
                 .shape(
                         "dgg",
                         " ir")
@@ -284,7 +287,7 @@ public class McPlanes extends JavaPlugin {
 
         // register wrench recipe
         final var wrenchKey = new NamespacedKey(this, "wrench");
-        final var wrench = new ShapedRecipe(wrenchKey, resourceManager.getCustomItem(wrenchKey))
+        final var wrench = new ShapedRecipe(wrenchKey, resourceManager.getCustomItemStack(wrenchKey))
                 .shape(
                         " i ",
                         "ii ",
@@ -296,7 +299,7 @@ public class McPlanes extends JavaPlugin {
 
         // register glue recipe
         final var glueKey = new NamespacedKey(this, "glue");
-        final var glue = new ShapedRecipe(glueKey, resourceManager.getCustomItem(glueKey))
+        final var glue = new ShapedRecipe(glueKey, resourceManager.getCustomItemStack(glueKey))
                 .shape(
                         "lsl",
                         "lsl",
