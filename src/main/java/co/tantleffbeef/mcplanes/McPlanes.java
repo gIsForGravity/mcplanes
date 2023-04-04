@@ -2,6 +2,7 @@ package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
+import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
 //import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
 //import com.comphenix.protocol.ProtocolLibrary;
@@ -135,6 +136,7 @@ public class McPlanes extends JavaPlugin {
      * Registers items with the resourceManager
      */
     private void registerItems() {
+        // Items
         resourceManager.registerItem(new SimpleItem(this, "battery", true, "Battery"));
         resourceManager.registerItem(new SimpleItem(this, "blowtorch", true, "Blowtorch"));
         resourceManager.registerItem(new SimpleItem(this, "crude_oil", true, "Crude Oil"));
@@ -146,6 +148,9 @@ public class McPlanes extends JavaPlugin {
         resourceManager.registerItem(new SimpleItem(this, "tail", true, "Tail"));
         resourceManager.registerItem(new SimpleItem(this, "wing", true, "Wing"));
         resourceManager.registerItem(new SimpleItem(this, "wrench", true, "Wrench"));
+
+        // Blocks
+        resourceManager.registerItem(new SimplePlaceableItem(this, "aircrafter", true, "Aircrafter"));
     }
 
     /**
