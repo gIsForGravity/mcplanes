@@ -61,7 +61,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
 
         // now check if its a custom item
         final var data = meta.getPersistentDataContainer();
-        if (CustomItemNbt.hasCustomItemNbt(data, keyManager))
+        if (!CustomItemNbt.hasCustomItemNbt(data, keyManager))
             return;
 
         Bukkit.broadcastMessage("has custom item nbt");
