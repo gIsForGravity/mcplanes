@@ -1,6 +1,7 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -53,6 +54,8 @@ public class BlockManager {
      * @param location where the block will be placed
      */
     public void placeBlock(@NotNull PlaceableItem item, @NotNull Location location) {
+        Bukkit.broadcastMessage("placing block");
+
         final var block = location.getBlock();
         final var world = location.getWorld();
         assert world != null;

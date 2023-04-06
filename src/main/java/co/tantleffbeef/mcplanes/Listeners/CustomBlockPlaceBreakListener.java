@@ -45,6 +45,8 @@ public class CustomBlockPlaceBreakListener implements Listener {
         if (event.isCancelled())
             return;
 
+        Bukkit.broadcastMessage("event not cancelled");
+
         // Basically, we need to get the item that the player is holding
         // and find out if it's a custom block
         // if it is then we will place it
@@ -55,10 +57,14 @@ public class CustomBlockPlaceBreakListener implements Listener {
         if (meta == null)
             return;
 
+        Bukkit.broadcastMessage("meta not null");
+
         // now check if its a custom item
         final var data = meta.getPersistentDataContainer();
         if (CustomItemNbt.hasCustomItemNbt(data, keyManager))
             return;
+
+        Bukkit.broadcastMessage("has custom item nbt");
 
         // grab the custom item data
         final var itemNbt = CustomItemNbt.fromPersistentDataContainer(data, keyManager);
@@ -66,6 +72,8 @@ public class CustomBlockPlaceBreakListener implements Listener {
         // figure out if its placeable
         if (!itemNbt.placeable())
             return;
+
+        Bukkit.broadcastMessage("is placeable");
 
         // finally get the custom item and place it
         final var customItem = resourceManager.getCustomItem(itemNbt.id());
