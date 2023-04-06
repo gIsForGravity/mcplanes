@@ -18,14 +18,14 @@ public record CustomItemNbt(NamespacedKey id, boolean placeable) {
                 PersistentDataType.TAG_CONTAINER);
         assert customItemData != null;
 
-        final var idString = container.get(keys.keyFor(CustomItemNbtKey.ID), PersistentDataType.STRING);
+        final var idString = customItemData.get(keys.keyFor(CustomItemNbtKey.ID), PersistentDataType.STRING);
         assert idString != null;
 
         Bukkit.broadcastMessage("idString: " + idString);
 
         final var id = NamespacedKey.fromString(idString);
 
-        final var placeableByte = container.get(keys.keyFor(CustomItemNbtKey.PLACEABLE), PersistentDataType.BYTE);
+        final var placeableByte = customItemData.get(keys.keyFor(CustomItemNbtKey.PLACEABLE), PersistentDataType.BYTE);
         assert placeableByte != null && (placeableByte.equals((byte) 1) || placeableByte.equals((byte) 0));
 
         final var placeable = placeableByte.equals((byte) 1);
