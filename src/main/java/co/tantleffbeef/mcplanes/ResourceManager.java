@@ -1,6 +1,7 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Custom.item.CustomItem;
+import co.tantleffbeef.mcplanes.struct.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -8,7 +9,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -92,6 +92,7 @@ public class ResourceManager implements Listener {
     public void registerItem(CustomItem item) {
         ItemStack customItemStack = new ItemStack(item.baseMaterial());
         ItemMeta meta = customItemStack.getItemMeta();
+        assert meta != null;
 
         meta.setDisplayName(ChatColor.RESET + item.name());
 
@@ -108,15 +109,17 @@ public class ResourceManager implements Listener {
 
         // add custom item to persistent data
         final var data = meta.getPersistentDataContainer();
-        final var id = item.id();
-        data.set(new NamespacedKey(plugin, "customItem"), PersistentDataType.STRING, id.toString());
+        var nbt = new CustomItemNbt(item.id(), false);
+        nbt = item.addAdditionalNbtItemData(nbt);
+        nbt.saveToPersistentDataContainer(data, nbtKeyManager);
+
 
         // put all changes back into custom item stack
         customItemStack.setItemMeta(meta);
 
         // finally add custom item stack into list of custom items
-        customItemStacks.put(id, customItemStack);
-        customItems.put(id, item);
+        customItemStacks.put(item.id(), customItemStack);
+        customItems.put(item.id(), item);
     }
 
     private File saveFile(File folder, String path, JarFile jar, ZipEntry zipFile) {

@@ -2,12 +2,13 @@ package co.tantleffbeef.mcplanes.Custom.item;
 
 import co.tantleffbeef.mcplanes.CustomItemNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;
-import co.tantleffbeef.mcplanes.ResourceManager;
+import co.tantleffbeef.mcplanes.struct.CustomItemNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class SimplePlaceableItem implements PlaceableItem {
     private final NamespacedKey id;
@@ -42,9 +43,10 @@ public class SimplePlaceableItem implements PlaceableItem {
         return name;
     }
 
+    @NotNull
     @Override
-    public void setAdditionalItemData(KeyManager<CustomItemNbtKey> keyManager, PersistentDataContainer customitemContainer) {
-
+    public CustomItemNbt addAdditionalNbtItemData(@NotNull CustomItemNbt nbtData) {
+        return new CustomItemNbt(nbtData.id(), true);
     }
 
     @Override

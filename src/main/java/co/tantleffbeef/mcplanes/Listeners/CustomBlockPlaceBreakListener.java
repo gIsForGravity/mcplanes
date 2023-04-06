@@ -2,13 +2,13 @@ package co.tantleffbeef.mcplanes.Listeners;
 
 import co.tantleffbeef.mcplanes.*;
 import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
-import org.bukkit.NamespacedKey;
+import co.tantleffbeef.mcplanes.struct.CustomItemNbt;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
     private final BlockManager blockManager;
     private final ResourceManager resourceManager;
     private final KeyManager<CustomItemNbtKey> keyManager;
-    private final Map<UUID, BlockBreakProgress> playerBlockProgress;
+    private final Map<UUID, BlockBreakProgress> playerBlockProgress; // TODO: block breaking progress
 
     public CustomBlockPlaceBreakListener(BlockManager blockManager, ResourceManager resourceManager, KeyManager<CustomItemNbtKey> keyManager) {
         this.blockManager = blockManager;
@@ -40,6 +40,8 @@ public class CustomBlockPlaceBreakListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
+        Bukkit.broadcastMessage("block place event");
+
         if (event.isCancelled())
             return;
 
@@ -55,27 +57,18 @@ public class CustomBlockPlaceBreakListener implements Listener {
 
         // now check if its a custom item
         final var data = meta.getPersistentDataContainer();
-        if (!data.has(keyManager.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER))
+        if (CustomItemNbt.hasCustomItemNbt(data, keyManager))
             return;
 
         // grab the custom item data
-        final var cItemData = data.get(keyManager.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER);
-        assert cItemData != null;
+        final var itemNbt = CustomItemNbt.fromPersistentDataContainer(data, keyManager);
 
         // figure out if its placeable
-        final byte placeable = cItemData.getOrDefault(keyManager.keyFor(CustomItemNbtKey.PLACEABLE), PersistentDataType.BYTE, (byte) 0);
-        assert placeable == 1 || placeable == 0;
-
-        if (placeable != 1)
+        if (!itemNbt.placeable())
             return;
 
-        // get the id of the item
-        final var itemIdString = cItemData.get(keyManager.keyFor(CustomItemNbtKey.ID), PersistentDataType.STRING);
-        assert itemIdString != null;
-        final var itemId = NamespacedKey.fromString(itemIdString);
-
         // finally get the custom item and place it
-        final var customItem = resourceManager.getCustomItem(itemId);
+        final var customItem = resourceManager.getCustomItem(itemNbt.id());
         blockManager.placeBlock((PlaceableItem) customItem, event.getBlockPlaced().getLocation());
     }
 

@@ -5,13 +5,14 @@ import co.tantleffbeef.mcplanes.KeyManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public record CustomItemNbt(NamespacedKey id, boolean placeable) {
     public static boolean hasCustomItemNbt(PersistentDataContainer container, KeyManager<CustomItemNbtKey> keys) {
         return container.has(keys.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER);
     }
-    public static CustomItemNbt fromPersistentDataContainer(PersistentDataContainer container,
-                                                            KeyManager<CustomItemNbtKey> keys) {
+    public static @NotNull CustomItemNbt fromPersistentDataContainer(@NotNull PersistentDataContainer container,
+                                                                     @NotNull KeyManager<CustomItemNbtKey> keys) {
         final var customItemData = container.get(keys.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA),
                 PersistentDataType.TAG_CONTAINER);
         assert customItemData != null;
@@ -29,8 +30,8 @@ public record CustomItemNbt(NamespacedKey id, boolean placeable) {
         return new CustomItemNbt(id, placeable);
     }
 
-    public void saveToPersistentDataContainer(PersistentDataContainer rootContainer,
-                                              KeyManager<CustomItemNbtKey> keys) {
+    public void saveToPersistentDataContainer(@NotNull PersistentDataContainer rootContainer,
+                                              @NotNull KeyManager<CustomItemNbtKey> keys) {
         // Create container to represent the custom_item_data
         final var customItemContainer = rootContainer.getAdapterContext().newPersistentDataContainer();
         // Serialize id to the container
