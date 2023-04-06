@@ -6,6 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -57,18 +58,24 @@ public class BlockManager {
         Bukkit.broadcastMessage("placing block");
 
         final var block = location.getBlock();
+        block.setType(item.baseMaterial());
+
+        createDisplay(item, location);
+    }
+
+    private void createDisplay(@NotNull PlaceableItem item, @NotNull Location location) {
         final var world = location.getWorld();
         assert world != null;
 
-        block.setType(item.baseMaterial());
-        final var display = (ItemDisplay) world.spawnEntity(block.getLocation(), EntityType.ITEM_DISPLAY);
+        final var displayLocation = location.getBlock().getLocation().add(new Vector(0.5, 0.5, 0.5));
+        final var display = (ItemDisplay) world.spawnEntity(displayLocation, EntityType.ITEM_DISPLAY);
 
         final var displayItem = resourceManager.getCustomItemStack(item.id());
 
         display.setItemStack(displayItem);
         display.setItemDisplayTransform(item.displayType());
 
-        displayEntities.put(block.getLocation(), display.getUniqueId());
+        displayEntities.put(location.getBlock().getLocation(), display.getUniqueId());
     }
 
     /**
