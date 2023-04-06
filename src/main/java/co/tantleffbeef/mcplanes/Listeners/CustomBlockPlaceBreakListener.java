@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -33,6 +34,13 @@ public class CustomBlockPlaceBreakListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Bukkit.broadcastMessage(event.getAction().toString());
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Bukkit.broadcastMessage("block break event");
+        Bukkit.broadcastMessage("cancelled? " + event.isCancelled());
+        Bukkit.broadcastMessage("");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
