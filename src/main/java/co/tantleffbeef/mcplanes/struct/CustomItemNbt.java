@@ -2,6 +2,7 @@ package co.tantleffbeef.mcplanes.struct;
 
 import co.tantleffbeef.mcplanes.CustomItemNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -19,6 +20,8 @@ public record CustomItemNbt(NamespacedKey id, boolean placeable) {
 
         final var idString = container.get(keys.keyFor(CustomItemNbtKey.ID), PersistentDataType.STRING);
         assert idString != null;
+
+        Bukkit.broadcastMessage("idString: " + idString);
 
         final var id = NamespacedKey.fromString(idString);
 
