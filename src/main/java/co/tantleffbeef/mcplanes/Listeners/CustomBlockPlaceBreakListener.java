@@ -30,13 +30,10 @@ public class CustomBlockPlaceBreakListener implements Listener {
         this.playerBlockProgress = new HashMap<>();
     }
 
-    /*@EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK)
-            tryBreakBlock(event);
-        else if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-            tryPlaceBlock(event);
-    }*/
+        Bukkit.broadcastMessage(event.getAction().toString());
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
