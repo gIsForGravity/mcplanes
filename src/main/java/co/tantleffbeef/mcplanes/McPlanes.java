@@ -4,9 +4,9 @@ import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
-//import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
-//import com.comphenix.protocol.ProtocolLibrary;
-//import com.comphenix.protocol.ProtocolManager;
+import co.tantleffbeef.mcplanes.Listeners.protocol.CustomBlockDigListener;
+import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
+import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.md_5.bungee.api.ChatColor;
@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.jar.JarFile;
 
 public class McPlanes extends JavaPlugin {
-    //private ProtocolManager protocolManager;
+    private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
@@ -56,10 +56,6 @@ public class McPlanes extends JavaPlugin {
         //protocolManager = ProtocolLibrary.getProtocolManager();
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
 
-        // // Listeners!!!
-        // ProtocolLib listeners
-        //protocolManager.addPacketListener(new ServerboundPlayerInputListener(this));
-
         // Check if there is a client jar with this version downloaded and if not download a new one
         final var versionsFolder = new File(getDataFolder(), "versions");
         final var clientJar = new File(versionsFolder, "client-" + mcVersion + ".jar");
@@ -85,12 +81,18 @@ public class McPlanes extends JavaPlugin {
         resourceManager = new ResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
         blockManager = new BlockManager(persistentDataKeyManager, resourceManager);
 
+        // // Listeners!!!
+
+        // ProtocolLib listeners
+        protocolManager.addPacketListener(new ServerboundPlayerInputListener(this, vehicleManager));
+        protocolManager.addPacketListener(new CustomBlockDigListener(this));
+
         // Bukkit Listeners
         registerListener(new CustomVehicleEnterExitListener(vehicleManager));
         registerListener(new PlayerResourceListener(this,
                 getConfig().getString("webserver-url"),
                 resourceManager));
-        registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager, persistentDataKeyManager));
+        registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager, getServer().getPluginManager(), persistentDataKeyManager));
         if (getConfig().getBoolean("crafting.unlock-recipes")) {
             registerListener(new EntityPickupItemListener(recipeManager));
             registerListener(new InventoryMoveItemListener(recipeManager));
