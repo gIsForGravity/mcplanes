@@ -6,6 +6,7 @@ import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
 import co.tantleffbeef.mcplanes.Listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
+import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -53,7 +54,7 @@ public class McPlanes extends JavaPlugin {
         webServer = new WebServer(webserverFolder, getConfig().getString("webserver-bind"),
                 getConfig().getInt("webserver-port"));
 
-        //protocolManager = ProtocolLibrary.getProtocolManager();
+        protocolManager = ProtocolLibrary.getProtocolManager();
         mcVersion = getServer().getBukkitVersion().split("-", 2)[0];
 
         // Check if there is a client jar with this version downloaded and if not download a new one
