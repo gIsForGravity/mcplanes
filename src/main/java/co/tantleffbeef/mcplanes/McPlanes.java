@@ -1,10 +1,10 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
-import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
-import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
-import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItem;
-import co.tantleffbeef.mcplanes.Custom.item.VehicleItem;
+import co.tantleffbeef.mcplanes.Custom.item.PlaceableItemType;
+import co.tantleffbeef.mcplanes.Custom.item.SimpleItemType;
+import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItemType;
+import co.tantleffbeef.mcplanes.Custom.item.VehicleItemType;
 import co.tantleffbeef.mcplanes.Listeners.*;
 import co.tantleffbeef.mcplanes.Listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
@@ -145,24 +145,24 @@ public class McPlanes extends JavaPlugin {
      */
     private void registerItems() {
         // Items
-        resourceManager.registerItem(new SimpleItem(this, "battery", true, "Battery"));
-        resourceManager.registerItem(new SimpleItem(this, "blowtorch", true, "Blowtorch"));
-        resourceManager.registerItem(new SimpleItem(this, "crude_oil", true, "Crude Oil"));
-        resourceManager.registerItem(new SimpleItem(this, "engine", true, "Engine"));
-        resourceManager.registerItem(new SimpleItem(this, "fuel", true, "Fuel"));
-        resourceManager.registerItem(new SimpleItem(this, "fuselage", true, "Fuselage"));
-        resourceManager.registerItem(new SimpleItem(this, "glue", true, "Glue"));
-        resourceManager.registerItem(new SimpleItem(this, "powertool", true, "Power Tool"));
-        resourceManager.registerItem(new SimpleItem(this, "tail", true, "Tail"));
-        resourceManager.registerItem(new SimpleItem(this, "wing", true, "Wing"));
-        resourceManager.registerItem(new SimpleItem(this, "wrench", true, "Wrench"));
-        resourceManager.registerItem(new VehicleItem(this, "p_51", true, "P-51"));
+        resourceManager.registerItem(new SimpleItemType(this, "battery", true, "Battery"));
+        resourceManager.registerItem(new SimpleItemType(this, "blowtorch", true, "Blowtorch"));
+        resourceManager.registerItem(new SimpleItemType(this, "crude_oil", true, "Crude Oil"));
+        resourceManager.registerItem(new SimpleItemType(this, "engine", true, "Engine"));
+        resourceManager.registerItem(new SimpleItemType(this, "fuel", true, "Fuel"));
+        resourceManager.registerItem(new SimpleItemType(this, "fuselage", true, "Fuselage"));
+        resourceManager.registerItem(new SimpleItemType(this, "glue", true, "Glue"));
+        resourceManager.registerItem(new SimpleItemType(this, "powertool", true, "Power Tool"));
+        resourceManager.registerItem(new SimpleItemType(this, "tail", true, "Tail"));
+        resourceManager.registerItem(new SimpleItemType(this, "wing", true, "Wing"));
+        resourceManager.registerItem(new SimpleItemType(this, "wrench", true, "Wrench"));
+        resourceManager.registerItem(new VehicleItemType(this, "p_51", true, "P-51"));
 
         // Blocks
-        registerItemAndBlock(new SimplePlaceableItem(this, "aircrafter", true, "Aircrafter"));
+        registerItemAndBlock(new SimplePlaceableItemType(this, "aircrafter", true, "Aircrafter"));
     }
 
-    private void registerItemAndBlock(PlaceableItem item) {
+    private void registerItemAndBlock(PlaceableItemType item) {
         resourceManager.registerItem(item);
         blockManager.registerBlock(item.asBlock());
     }

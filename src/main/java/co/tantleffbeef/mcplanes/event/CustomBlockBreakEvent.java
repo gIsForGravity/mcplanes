@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes.event;
 
+import co.tantleffbeef.mcplanes.Custom.block.CustomBlockType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -11,14 +12,21 @@ import org.jetbrains.annotations.NotNull;
 public class CustomBlockBreakEvent extends BlockEvent implements Cancellable {
     private final HandlerList handlers = new HandlerList();
     private final Player player;
+    private final CustomBlockType type;
     private boolean dropItems;
     private boolean cancel;
 
-    public CustomBlockBreakEvent(@NotNull Block theBlock, Player player, boolean dropItems, boolean cancelled) {
+    public CustomBlockBreakEvent(@NotNull Block theBlock, @NotNull CustomBlockType type, @NotNull Player player, boolean dropItems, boolean cancelled) {
         super(theBlock);
         this.player = player;
         this.dropItems = dropItems;
         this.cancel = cancelled;
+        this.type = type;
+    }
+
+    @NotNull
+    public CustomBlockType getType() {
+        return type;
     }
 
     /**

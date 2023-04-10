@@ -1,7 +1,7 @@
 package co.tantleffbeef.mcplanes.Listeners;
 
 import co.tantleffbeef.mcplanes.*;
-import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
+import co.tantleffbeef.mcplanes.Custom.item.PlaceableItemType;
 import co.tantleffbeef.mcplanes.event.CustomBlockPlaceEvent;
 import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
 import org.bukkit.Bukkit;
@@ -35,19 +35,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
         this.playerBlockProgress = new HashMap<>();
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        Bukkit.broadcastMessage(event.getAction().toString());
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        Bukkit.broadcastMessage("block break event");
-        Bukkit.broadcastMessage("cancelled? " + event.isCancelled());
-        Bukkit.broadcastMessage("");
-    }
-
-    private PlaceableItem getItemForPlaceEvent(BlockPlaceEvent event) {
+    private PlaceableItemType getItemForPlaceEvent(BlockPlaceEvent event) {
         // Basically, we need to get the item that the player is holding
         // and find out if it's a custom block
         // if it is then we will place it
@@ -71,7 +59,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
             return null;
 
         // finally get the custom item and place it
-        return (PlaceableItem) resourceManager.getCustomItem(itemNbt.id);
+        return (PlaceableItemType) resourceManager.getCustomItem(itemNbt.id);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

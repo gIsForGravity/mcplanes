@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes.event;
 
-import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
+import co.tantleffbeef.mcplanes.Custom.item.PlaceableItemType;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -15,11 +15,11 @@ public class CustomBlockPlaceEvent extends BlockEvent implements Cancellable {
     protected boolean cancel;
     protected boolean canBuild;
     protected Block placedAgainst;
-    protected PlaceableItem itemInHand;
+    protected PlaceableItemType itemInHand;
     protected Player player;
     protected EquipmentSlot hand;
 
-    public CustomBlockPlaceEvent(@NotNull BlockPlaceEvent originalEvent, @NotNull PlaceableItem itemInHand) {
+    public CustomBlockPlaceEvent(@NotNull BlockPlaceEvent originalEvent, @NotNull PlaceableItemType itemInHand) {
         super(originalEvent.getBlock());
         cancel = originalEvent.isCancelled();
         canBuild = originalEvent.canBuild();
@@ -66,7 +66,7 @@ public class CustomBlockPlaceEvent extends BlockEvent implements Cancellable {
      *     placed the block
      */
     @NotNull
-    public PlaceableItem getItemInHand() {
+    public PlaceableItemType getItemInHand() {
         return itemInHand;
     }
 

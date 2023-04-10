@@ -4,13 +4,13 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 
-public class VehicleItem implements CustomItem {
+public class VehicleItemType implements CustomItemType {
     private final NamespacedKey id;
     private final Plugin plugin;
     private final boolean customModel;
     private final String name;
 
-    public VehicleItem(Plugin namespace, String id, boolean customModel, String name) {
+    public VehicleItemType(Plugin namespace, String id, boolean customModel, String name) {
         this.plugin = namespace;
         this.id = new NamespacedKey(namespace, id);
         this.customModel = customModel;

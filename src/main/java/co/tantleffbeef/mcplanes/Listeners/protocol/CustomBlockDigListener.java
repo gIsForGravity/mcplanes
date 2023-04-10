@@ -49,8 +49,6 @@ public class CustomBlockDigListener extends PacketAdapter {
 
     private void onBlockDig(Player player, Block block) {
         // TODO: block breaking progress
-        Bukkit.broadcastMessage("block dig");
-
         if (blockManager.isCustomBlock(block.getLocation()))
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> blockManager.deleteCustomBlock(block.getLocation()), 0);
     }

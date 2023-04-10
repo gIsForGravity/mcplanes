@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
-public interface CustomItem {
+public interface CustomItemType {
     Material baseMaterial();
     NamespacedKey id();
     NamespacedKey model();

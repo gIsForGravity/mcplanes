@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes;
 
-import co.tantleffbeef.mcplanes.Custom.item.CustomItem;
+import co.tantleffbeef.mcplanes.Custom.item.CustomItemType;
 import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
@@ -27,7 +27,7 @@ public class ResourceManager implements Listener {
     private final File webserverFolder;
     private final Gson gson;
     private final File clientJar;
-    private final Map<NamespacedKey, CustomItem> customItems = new HashMap<>();
+    private final Map<NamespacedKey, CustomItemType> customItems = new HashMap<>();
     private final Map<NamespacedKey, ItemStack> customItemStacks = new HashMap<>();
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
     private byte[] resourcePackHash;
@@ -89,7 +89,7 @@ public class ResourceManager implements Listener {
         }
     }
 
-    public void registerItem(CustomItem item) {
+    public void registerItem(CustomItemType item) {
         ItemStack customItemStack = new ItemStack(item.baseMaterial());
         ItemMeta meta = customItemStack.getItemMeta();
         assert meta != null;
@@ -162,7 +162,7 @@ public class ResourceManager implements Listener {
         return new ItemStack(Objects.requireNonNull(customItemStacks.get(key)));
     }
 
-    public CustomItem getCustomItem(NamespacedKey key) {
+    public CustomItemType getCustomItem(NamespacedKey key) {
         return Objects.requireNonNull(customItems.get(key));
     }
 

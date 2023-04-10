@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes.Custom.item;
 
-import co.tantleffbeef.mcplanes.Custom.block.CustomBlock;
+import co.tantleffbeef.mcplanes.Custom.block.CustomBlockType;
 import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -8,13 +8,13 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class SimplePlaceableItem implements PlaceableItem, CustomBlock {
+public class SimplePlaceableItemType implements PlaceableItemType, CustomBlockType {
     private final NamespacedKey id;
     private final Plugin plugin;
     private final boolean customModel;
     private final String name;
 
-    public SimplePlaceableItem(Plugin namespace, String id, boolean customModel, String name) {
+    public SimplePlaceableItemType(Plugin namespace, String id, boolean customModel, String name) {
         this.plugin = namespace;
         this.id = new NamespacedKey(namespace, id);
         this.customModel = customModel;
@@ -52,7 +52,7 @@ public class SimplePlaceableItem implements PlaceableItem, CustomBlock {
     }
 
     @Override
-    public @NotNull CustomItem displayItem() {
+    public @NotNull CustomItemType displayItem() {
         return this;
     }
 
@@ -62,7 +62,7 @@ public class SimplePlaceableItem implements PlaceableItem, CustomBlock {
     }
 
     @Override
-    public @NotNull CustomBlock asBlock() {
+    public @NotNull CustomBlockType asBlock() {
         return this;
     }
 }

@@ -1,11 +1,8 @@
 package co.tantleffbeef.mcplanes;
 
-import co.tantleffbeef.mcplanes.Custom.block.CustomBlock;
-import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
+import co.tantleffbeef.mcplanes.Custom.block.CustomBlockType;
 import co.tantleffbeef.mcplanes.serialize.CustomBlockNbt;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -17,14 +14,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 public class BlockManager {
     private final KeyManager<CustomItemNbtKey> keyManager;
     private final Server server;
     private final ResourceManager resourceManager;
     private final Map<Location, UUID> displayEntities;
-    private final Map<NamespacedKey, CustomBlock> blockKeys;
+    private final Map<NamespacedKey, CustomBlockType> blockKeys;
 
     public BlockManager(KeyManager<CustomItemNbtKey> keyManager, Server server, ResourceManager resourceManager) {
         this.keyManager = keyManager;
@@ -34,7 +30,7 @@ public class BlockManager {
         this.blockKeys = new HashMap<>();
     }
 
-    public void registerBlock(@NotNull CustomBlock block) {
+    public void registerBlock(@NotNull CustomBlockType block) {
         blockKeys.put(block.id(), block);
     }
 
@@ -68,9 +64,7 @@ public class BlockManager {
      * @param block the custom block to be placed
      * @param location where the block will be placed
      */
-    public void placeBlock(@NotNull CustomBlock block, @NotNull Location location) {
-        Bukkit.broadcastMessage("placing block");
-
+    public void placeBlock(@NotNull CustomBlockType block, @NotNull Location location) {
         final var mcBlock = location.getBlock();
         mcBlock.setType(block.blockMaterial());
 
@@ -78,7 +72,7 @@ public class BlockManager {
         saveBlockToChunk(block, location);
     }
 
-    private void saveBlockToChunk(@NotNull CustomBlock block, @NotNull Location location) {
+    private void saveBlockToChunk(@NotNull CustomBlockType block, @NotNull Location location) {
         final var blockNbt = new CustomBlockNbt(block.id());
         block.addAdditionalNbtBlockData(blockNbt);
 
@@ -302,7 +296,7 @@ public class BlockManager {
      * @return a custom block which is the type found at that location
      * @see BlockManager#isCustomBlock(Location)
      */
-    private @NotNull CustomBlock getCustomBlockAtLocation(@NotNull Location location) {
+    private @NotNull CustomBlockType getCustomBlockAtLocation(@NotNull Location location) {
         assert isCustomBlock(location);
 
         final var chunk = location.getChunk();
@@ -336,7 +330,7 @@ public class BlockManager {
         throw new AssertionError("not a custom block");
     }
 
-    private void createDisplay(@NotNull CustomBlock block, @NotNull Location location) {
+    private void createDisplay(@NotNull CustomBlockType block, @NotNull Location location) {
         final var world = location.getWorld();
         assert world != null;
 
@@ -357,20 +351,15 @@ public class BlockManager {
      * @param blockLocation the block to replace with air
      */
     public void deleteCustomBlock(Location blockLocation) {
-        Bukkit.broadcastMessage("deleting block data from chunk");
-
         deleteBlockDataFromChunk(blockLocation);
         blockLocation.getBlock().setType(Material.AIR);
 
-        Bukkit.broadcastMessage("trying to remove entity");
         final var entityId = displayEntities.remove(blockLocation);
         final var entity = Bukkit.getEntity(entityId);
         if (entity == null) {
-            Bukkit.broadcastMessage("entity is null");
             return;
         }
 
-        Bukkit.broadcastMessage("removing");
         entity.remove();
     }
 
