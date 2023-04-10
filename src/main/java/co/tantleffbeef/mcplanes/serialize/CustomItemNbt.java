@@ -1,4 +1,4 @@
-package co.tantleffbeef.mcplanes.struct;
+package co.tantleffbeef.mcplanes.serialize;
 
 import co.tantleffbeef.mcplanes.CustomItemNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;
@@ -8,7 +8,17 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public record CustomItemNbt(NamespacedKey id, boolean placeable) {
+public class CustomItemNbt {
+    public NamespacedKey id;
+    public boolean placeable;
+    /*public CustomItemNbt(NamespacedKey id) {
+        this(id, false);
+    }*/
+    public CustomItemNbt(NamespacedKey id, boolean placeable) {
+        this.id = id;
+        this.placeable = placeable;
+    }
+
     public static boolean hasCustomItemNbt(PersistentDataContainer container, KeyManager<CustomItemNbtKey> keys) {
         return container.has(keys.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER);
     }

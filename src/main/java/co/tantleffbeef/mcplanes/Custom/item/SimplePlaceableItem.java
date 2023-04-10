@@ -1,16 +1,14 @@
 package co.tantleffbeef.mcplanes.Custom.item;
 
-import co.tantleffbeef.mcplanes.CustomItemNbtKey;
-import co.tantleffbeef.mcplanes.KeyManager;
-import co.tantleffbeef.mcplanes.struct.CustomItemNbt;
+import co.tantleffbeef.mcplanes.Custom.block.CustomBlock;
+import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class SimplePlaceableItem implements PlaceableItem {
+public class SimplePlaceableItem implements PlaceableItem, CustomBlock {
     private final NamespacedKey id;
     private final Plugin plugin;
     private final boolean customModel;
@@ -29,7 +27,7 @@ public class SimplePlaceableItem implements PlaceableItem {
     }
 
     @Override
-    public NamespacedKey id() {
+    public @NotNull NamespacedKey id() {
         return id;
     }
 
@@ -43,19 +41,28 @@ public class SimplePlaceableItem implements PlaceableItem {
         return name;
     }
 
-    @NotNull
     @Override
-    public CustomItemNbt addAdditionalNbtItemData(@NotNull CustomItemNbt nbtData) {
-        return new CustomItemNbt(nbtData.id(), true);
+    public void addAdditionalNbtItemData(@NotNull CustomItemNbt nbtData) {
+        nbtData.placeable = true;
     }
 
     @Override
-    public ItemDisplay.ItemDisplayTransform displayType() {
+    public @NotNull Material blockMaterial() {
+        return baseMaterial();
+    }
+
+    @Override
+    public @NotNull CustomItem displayItem() {
+        return this;
+    }
+
+    @Override
+    public ItemDisplay.@NotNull ItemDisplayTransform displayTransform() {
         return ItemDisplay.ItemDisplayTransform.HEAD;
     }
 
     @Override
-    public void setAdditionalBlockData(KeyManager<CustomItemNbtKey> keyManager, PersistentDataContainer customitemContainer) {
-
+    public @NotNull CustomBlock asBlock() {
+        return this;
     }
 }

@@ -3,7 +3,7 @@ package co.tantleffbeef.mcplanes.Listeners;
 import co.tantleffbeef.mcplanes.*;
 import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
 import co.tantleffbeef.mcplanes.event.CustomBlockPlaceEvent;
-import co.tantleffbeef.mcplanes.struct.CustomItemNbt;
+import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -67,11 +67,11 @@ public class CustomBlockPlaceBreakListener implements Listener {
         final var itemNbt = CustomItemNbt.fromPersistentDataContainer(data, keyManager);
 
         // figure out if its placeable
-        if (!itemNbt.placeable())
+        if (!itemNbt.placeable)
             return null;
 
         // finally get the custom item and place it
-        return (PlaceableItem) resourceManager.getCustomItem(itemNbt.id());
+        return (PlaceableItem) resourceManager.getCustomItem(itemNbt.id);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -99,7 +99,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
         if (cItem == null)
             return;
 
-        blockManager.placeBlock(cItem, event.getBlockPlaced().getLocation());
+        blockManager.placeBlock(cItem.asBlock(), event.getBlockPlaced().getLocation());
     }
 
     private void tryBreakBlock(PlayerInteractEvent event) {

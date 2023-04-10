@@ -1,7 +1,7 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Custom.item.CustomItem;
-import co.tantleffbeef.mcplanes.struct.CustomItemNbt;
+import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -110,7 +110,7 @@ public class ResourceManager implements Listener {
         // add custom item to persistent data
         final var data = meta.getPersistentDataContainer();
         var nbt = new CustomItemNbt(item.id(), false);
-        nbt = item.addAdditionalNbtItemData(nbt);
+        item.addAdditionalNbtItemData(nbt);
         nbt.saveToPersistentDataContainer(data, nbtKeyManager);
 
 

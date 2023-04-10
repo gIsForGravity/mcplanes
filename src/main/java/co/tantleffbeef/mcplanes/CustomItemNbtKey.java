@@ -3,6 +3,9 @@ package co.tantleffbeef.mcplanes;
 public enum CustomItemNbtKey {
     CUSTOM_BLOCK_DATA("custom_block_data"),
     CUSTOM_ITEM_DATA("custom_item_data"),
+    BLOCKS("blocks"),
+    LOCATION("location"),
+    DATA("data"),
     PLACEABLE("Placeable"),
     ID("id"),
 

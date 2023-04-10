@@ -1,6 +1,7 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
+import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
@@ -80,13 +81,13 @@ public class McPlanes extends JavaPlugin {
 
         // initialize resource manager now that client jar has been downloaded
         resourceManager = new ResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
-        blockManager = new BlockManager(persistentDataKeyManager, resourceManager);
+        blockManager = new BlockManager(persistentDataKeyManager, getServer(), resourceManager);
 
         // // Listeners!!!
 
         // ProtocolLib listeners
         protocolManager.addPacketListener(new ServerboundPlayerInputListener(this, vehicleManager));
-        protocolManager.addPacketListener(new CustomBlockDigListener(this));
+        protocolManager.addPacketListener(new CustomBlockDigListener(this, blockManager));
 
         // Bukkit Listeners
         registerListener(new CustomVehicleEnterExitListener(vehicleManager));
@@ -156,7 +157,12 @@ public class McPlanes extends JavaPlugin {
         resourceManager.registerItem(new SimpleItem(this, "wrench", true, "Wrench"));
 
         // Blocks
-        resourceManager.registerItem(new SimplePlaceableItem(this, "aircrafter", true, "Aircrafter"));
+        registerItemAndBlock(new SimplePlaceableItem(this, "aircrafter", true, "Aircrafter"));
+    }
+
+    private void registerItemAndBlock(PlaceableItem item) {
+        resourceManager.registerItem(item);
+        blockManager.registerBlock(item.asBlock());
     }
 
     /**
