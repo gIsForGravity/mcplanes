@@ -4,6 +4,7 @@ import co.tantleffbeef.mcplanes.Commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.Custom.item.PlaceableItem;
 import co.tantleffbeef.mcplanes.Custom.item.SimpleItem;
 import co.tantleffbeef.mcplanes.Custom.item.SimplePlaceableItem;
+import co.tantleffbeef.mcplanes.Custom.item.VehicleItem;
 import co.tantleffbeef.mcplanes.Listeners.*;
 import co.tantleffbeef.mcplanes.Listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.Listeners.protocol.ServerboundPlayerInputListener;
@@ -155,6 +156,7 @@ public class McPlanes extends JavaPlugin {
         resourceManager.registerItem(new SimpleItem(this, "tail", true, "Tail"));
         resourceManager.registerItem(new SimpleItem(this, "wing", true, "Wing"));
         resourceManager.registerItem(new SimpleItem(this, "wrench", true, "Wrench"));
+        resourceManager.registerItem(new VehicleItem(this, "p_51", true, "P-51"));
 
         // Blocks
         registerItemAndBlock(new SimplePlaceableItem(this, "aircrafter", true, "Aircrafter"));
