@@ -52,7 +52,7 @@ public class CustomBlockDigListener extends PacketAdapter {
         Bukkit.broadcastMessage("block dig");
 
         if (blockManager.isCustomBlock(block.getLocation()))
-            blockManager.deleteCustomBlock(block.getLocation());
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> blockManager.deleteCustomBlock(block.getLocation()), 0);
     }
 
     private void finishBlockDig(Player player, Block block) {
