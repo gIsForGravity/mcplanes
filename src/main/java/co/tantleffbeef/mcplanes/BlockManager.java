@@ -75,6 +75,7 @@ public class BlockManager {
         mcBlock.setType(block.blockMaterial());
 
         createDisplay(block, location);
+        saveBlockToChunk(block, location);
     }
 
     private void saveBlockToChunk(@NotNull CustomBlock block, @NotNull Location location) {
