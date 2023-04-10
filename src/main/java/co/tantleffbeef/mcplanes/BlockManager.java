@@ -357,12 +357,20 @@ public class BlockManager {
      * @param blockLocation the block to replace with air
      */
     public void deleteCustomBlock(Location blockLocation) {
+        Bukkit.broadcastMessage("deleting block data from chunk");
+
         deleteBlockDataFromChunk(blockLocation);
+        blockLocation.getBlock().setType(Material.AIR);
+
+        Bukkit.broadcastMessage("trying to remove entity");
         final var entityId = displayEntities.remove(blockLocation);
         final var entity = Bukkit.getEntity(entityId);
-        if (entity == null)
+        if (entity == null) {
+            Bukkit.broadcastMessage("entity is null");
             return;
+        }
 
+        Bukkit.broadcastMessage("removing");
         entity.remove();
     }
 

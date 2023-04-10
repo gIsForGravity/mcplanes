@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -48,6 +49,7 @@ public class CustomBlockDigListener extends PacketAdapter {
 
     private void onBlockDig(Player player, Block block) {
         // TODO: block breaking progress
+        Bukkit.broadcastMessage("block dig");
 
         if (blockManager.isCustomBlock(block.getLocation()))
             blockManager.deleteCustomBlock(block.getLocation());
