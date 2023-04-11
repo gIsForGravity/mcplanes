@@ -34,31 +34,6 @@ public class BlockManager {
         blockKeys.put(block.id(), block);
     }
 
-    /* *
-     * Breaks custom block at blocklocation. Do not use this for a non-custom block
-     * @param blockLocation
-     * @param drop whether to drop an item
-     */
-    /*public void breakBlock(Location blockLocation, boolean drop) {
-        final var block = blockLocation.getBlock();
-        final var blockData = block.getBlockData();
-
-        assert blockData.getMaterial() != Material.AIR && blockData.getMaterial() != Material.CAVE_AIR &&
-                blockData.getMaterial() != Material.VOID_AIR;
-
-        final var chunkStorage = blockLocation.getChunk().getPersistentDataContainer();
-
-        assert chunkStorage.has(keyManager.keyFor(PluginKey.CUSTOM_BLOCK_DATA), PersistentDataType.TAG_CONTAINER);
-
-        final var customBlockData = chunkStorage.get(
-                keyManager.keyFor(PluginKey.CUSTOM_BLOCK_DATA),
-                        PersistentDataType.TAG_CONTAINER);
-
-        assert customBlockData != null;
-
-        customBlockData
-    }*/
-
     /**
      * Places a custom block at blockLocation
      * @param block the custom block to be placed
