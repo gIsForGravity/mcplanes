@@ -1,7 +1,7 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
-import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
+import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;

@@ -1,4 +1,4 @@
-package co.tantleffbeef.mcplanes.serialize;
+package co.tantleffbeef.mcplanes.pojo.serialize;
 
 import co.tantleffbeef.mcplanes.CustomItemNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;

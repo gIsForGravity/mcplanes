@@ -1,19 +1,8 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.custom.block.CustomBlockType;
-import co.tantleffbeef.mcplanes.serialize.CustomBlockNbt;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public interface BlockManager {
     /**

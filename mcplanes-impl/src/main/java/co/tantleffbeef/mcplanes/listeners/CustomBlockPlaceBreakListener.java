@@ -3,7 +3,7 @@ package co.tantleffbeef.mcplanes.listeners;
 import co.tantleffbeef.mcplanes.*;
 import co.tantleffbeef.mcplanes.custom.item.PlaceableItemType;
 import co.tantleffbeef.mcplanes.event.CustomBlockPlaceEvent;
-import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
+import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
