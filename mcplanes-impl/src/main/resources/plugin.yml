@@ -1,0 +1,27 @@
+name: MCPlanes
+version: 0.0.0
+main: co.tantleffbeef.mcplanes.McPlanes
+api-version: 1.19
+
+authors: [gIsForGravity, Finnerex, SniperNerd]
+
+depend: [ProtocolLib]
+
+permissions:
+  mcplanes.resourcegive:
+    default: op
+
+commands:
+  resourcegive:
+    description: "gives a custom item"
+    aliases:
+      - rg
+      - planegive
+      - pgive
+      - rgive
+    usage: "Usage: /resourcegive <player> <item id>"
+    permission: mcplanes.resourcegive
+
+libraries:
+#  - me.lucko:commodore:2.2
+  - org.eclipse.jetty:jetty-server:11.0.14
