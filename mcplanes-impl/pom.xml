@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>co.tantleffbeef</groupId>
-        <artifactId>mcplanes</artifactId>
+        <artifactId>mcplanes-project</artifactId>
         <version>0.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>mcplanes-impl</artifactId>
+    <artifactId>mcplanes</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
