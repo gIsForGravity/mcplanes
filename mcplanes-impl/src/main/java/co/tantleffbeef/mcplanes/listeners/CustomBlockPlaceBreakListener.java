@@ -22,10 +22,10 @@ public class CustomBlockPlaceBreakListener implements Listener {
     private final BlockManager blockManager;
     private final ResourceManager resourceManager;
     private final PluginManager pluginManager;
-    private final KeyManager<CustomItemNbtKey> keyManager;
+    private final KeyManager<CustomNbtKey> keyManager;
     private final Map<UUID, BlockBreakProgress> playerBlockProgress; // TODO: block breaking progress
 
-    public CustomBlockPlaceBreakListener(BlockManager blockManager, ResourceManager resourceManager, PluginManager pluginManager, KeyManager<CustomItemNbtKey> keyManager) {
+    public CustomBlockPlaceBreakListener(BlockManager blockManager, ResourceManager resourceManager, PluginManager pluginManager, KeyManager<CustomNbtKey> keyManager) {
         this.blockManager = blockManager;
         this.resourceManager = resourceManager;
         this.keyManager = keyManager;

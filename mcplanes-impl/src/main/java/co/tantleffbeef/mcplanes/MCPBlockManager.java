@@ -16,13 +16,13 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MCPBlockManager implements BlockManager {
-    private final KeyManager<CustomItemNbtKey> keyManager;
+    private final KeyManager<CustomNbtKey> keyManager;
     private final Server server;
     private final ResourceManager resourceManager;
     private final Map<Location, UUID> displayEntities;
     private final Map<NamespacedKey, CustomBlockType> blockKeys;
 
-    public MCPBlockManager(KeyManager<CustomItemNbtKey> keyManager, Server server, ResourceManager resourceManager) {
+    public MCPBlockManager(KeyManager<CustomNbtKey> keyManager, Server server, ResourceManager resourceManager) {
         this.keyManager = keyManager;
         this.server = server;
         this.resourceManager = resourceManager;
@@ -85,8 +85,8 @@ public class MCPBlockManager implements BlockManager {
         // Get the blocks tag in chunk if it exists, otherwise create one
         final PersistentDataContainer chunkBlocksNbt;
         final boolean dataIsNew;
-        if (chunkNbt.has(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER)) {
-            chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
+        if (chunkNbt.has(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER)) {
+            chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
             dataIsNew = false;
         }
         else {
@@ -103,7 +103,7 @@ public class MCPBlockManager implements BlockManager {
         if (dataIsNew)
             chunkBlockLocationsArray = new PersistentDataContainer[0];
         else
-            chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
+            chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
 
         // There should be a locations tag now
         assert chunkBlockLocationsArray != null;
@@ -113,7 +113,7 @@ public class MCPBlockManager implements BlockManager {
         if (dataIsNew)
             chunkBlocksArray = new PersistentDataContainer[0];
         else
-            chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
+            chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
 
         // There should be a blocks array tag now
         assert chunkBlocksArray != null;
@@ -123,7 +123,7 @@ public class MCPBlockManager implements BlockManager {
         int locationIndex = -1;
         for (int i = 0; i < chunkBlockLocationsArray.length; i++) {
             final var locationContainer = chunkBlockLocationsArray[i];
-            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
+            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
             assert nbtLocation != null;
             assert nbtLocation.length == 3;
 
@@ -147,7 +147,7 @@ public class MCPBlockManager implements BlockManager {
             thisLocationNbtContainer = chunkBlocksNbt.getAdapterContext().newPersistentDataContainer();
             thisLocationArray = new int[3];
         } else
-            thisLocationArray = thisLocationNbtContainer.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
+            thisLocationArray = thisLocationNbtContainer.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
 
         assert thisLocationArray != null;
         assert thisLocationArray.length == 3;
@@ -165,18 +165,18 @@ public class MCPBlockManager implements BlockManager {
 
         // Save everything back
         // Save this location's array to this location tag
-        thisLocationNbtContainer.set(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY, thisLocationArray);
+        thisLocationNbtContainer.set(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY, thisLocationArray);
 
         // Save location tag and block tag to location and block arrays
         chunkBlockLocationsArray[locationIndex] = thisLocationNbtContainer;
         chunkBlocksArray[locationIndex] = thisBlockNbtContainer;
 
         // Save arrays back to blocks tag
-        chunkBlocksNbt.set(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY, chunkBlockLocationsArray);
-        chunkBlocksNbt.set(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY, chunkBlocksArray);
+        chunkBlocksNbt.set(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY, chunkBlockLocationsArray);
+        chunkBlocksNbt.set(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY, chunkBlocksArray);
 
         // Save blocks tag back to chunk
-        chunkNbt.set(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER, chunkBlocksNbt);
+        chunkNbt.set(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER, chunkBlocksNbt);
     }
 
     private void deleteBlockDataFromChunk(Location blockLocation) {
@@ -185,13 +185,13 @@ public class MCPBlockManager implements BlockManager {
         final var chunk = blockLocation.getChunk();
         final var chunkNbt = chunk.getPersistentDataContainer();
 
-        final var chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
+        final var chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
         assert chunkBlocksNbt != null;
 
-        final var chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
+        final var chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
         assert chunkBlockLocationsArray != null;
 
-        final var chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
+        final var chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
         assert chunkBlocksArray != null;
 
         assert chunkBlockLocationsArray.length == chunkBlocksArray.length;
@@ -200,7 +200,7 @@ public class MCPBlockManager implements BlockManager {
         for (int i = 0; i < chunkBlockLocationsArray.length; i++) {
             final var locationContainer = chunkBlockLocationsArray[i];
 
-            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
+            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
             assert nbtLocation != null;
             assert nbtLocation.length == 3;
 
@@ -225,26 +225,26 @@ public class MCPBlockManager implements BlockManager {
         System.arraycopy(chunkBlocksArray, locationIndex + 1, newChunkBlocksArray, locationIndex, chunkBlocksArray.length - locationIndex - 1);
 
         // Save arrays back to blocks tag
-        chunkBlocksNbt.set(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY, newChunkBlockLocationsArray);
-        chunkBlocksNbt.set(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY, newChunkBlocksArray);
+        chunkBlocksNbt.set(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY, newChunkBlockLocationsArray);
+        chunkBlocksNbt.set(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY, newChunkBlocksArray);
 
         // Save blocks tag back to chunk
-        chunkNbt.set(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER, chunkBlocksNbt);
+        chunkNbt.set(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER, chunkBlocksNbt);
     }
 
     public boolean isCustomBlock(@NotNull Location location) {
         final var chunk = location.getChunk();
         final var chunkNbt = chunk.getPersistentDataContainer();
-        if (!chunkNbt.has(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER))
+        if (!chunkNbt.has(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER))
             return false;
 
-        final var chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
+        final var chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
         assert chunkBlocksNbt != null;
 
-        final var chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
+        final var chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
         assert chunkBlockLocationsArray != null;
 
-        final var chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
+        final var chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
         assert chunkBlocksArray != null;
 
         assert chunkBlockLocationsArray.length == chunkBlocksArray.length;
@@ -252,7 +252,7 @@ public class MCPBlockManager implements BlockManager {
         for (int i = 0; i < chunkBlockLocationsArray.length; i++) {
             final var locationContainer = chunkBlockLocationsArray[i];
 
-            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
+            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
             assert nbtLocation != null;
             assert nbtLocation.length == 3;
 
@@ -276,22 +276,22 @@ public class MCPBlockManager implements BlockManager {
 
         final var chunk = location.getChunk();
         final var chunkNbt = chunk.getPersistentDataContainer();
-        assert chunkNbt.has(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
+        assert chunkNbt.has(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
 
-        final var chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
+        final var chunkBlocksNbt = chunkNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER);
         assert chunkBlocksNbt != null;
 
-        final var chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
+        final var chunkBlockLocationsArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.TAG_CONTAINER_ARRAY);
         assert chunkBlockLocationsArray != null;
 
-        final var chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomItemNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
+        final var chunkBlocksArray = chunkBlocksNbt.get(keyManager.keyFor(CustomNbtKey.BLOCKS), PersistentDataType.TAG_CONTAINER_ARRAY);
         assert chunkBlocksArray != null;
 
         assert chunkBlockLocationsArray.length == chunkBlocksArray.length;
 
         for (int i = 0; i < chunkBlockLocationsArray.length; i++) {
             final var locationContainer = chunkBlockLocationsArray[i];
-            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomItemNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
+            final var nbtLocation = locationContainer.get(keyManager.keyFor(CustomNbtKey.LOCATION), PersistentDataType.INTEGER_ARRAY);
             assert nbtLocation != null;
             assert nbtLocation.length == 3;
 

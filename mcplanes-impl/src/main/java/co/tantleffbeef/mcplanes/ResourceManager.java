@@ -22,7 +22,7 @@ import static co.tantleffbeef.mcplanes.Tools.clearFolder;
 
 public class ResourceManager implements Listener {
     private final McPlanes plugin;
-    private final KeyManager<CustomItemNbtKey> nbtKeyManager;
+    private final KeyManager<CustomNbtKey> nbtKeyManager;
     private final File tempFolder;
     private final File webserverFolder;
     private final Gson gson;
@@ -32,7 +32,7 @@ public class ResourceManager implements Listener {
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
     private byte[] resourcePackHash;
 
-    public ResourceManager(McPlanes plugin, KeyManager<CustomItemNbtKey> nbtKeyManager, File webserverFolder, File clientJar) {
+    public ResourceManager(McPlanes plugin, KeyManager<CustomNbtKey> nbtKeyManager, File webserverFolder, File clientJar) {
         this.plugin = plugin;
         this.nbtKeyManager = nbtKeyManager;
         this.webserverFolder = webserverFolder;

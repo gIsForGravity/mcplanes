@@ -37,7 +37,7 @@ public class McPlanes extends JavaPlugin {
     private RecipeManager recipeManager;
     private WebServer webServer;
     private BlockManager blockManager;
-    private KeyManager<CustomItemNbtKey> persistentDataKeyManager;
+    private KeyManager<CustomNbtKey> persistentDataKeyManager;
     private String mcVersion;
 
     @Override
@@ -46,7 +46,7 @@ public class McPlanes extends JavaPlugin {
         vehicleManager = new VehicleManager(this);
 
         persistentDataKeyManager = new KeyManager<>(this);
-        CustomItemNbtKey.registerKeys(persistentDataKeyManager);
+        CustomNbtKey.registerKeys(persistentDataKeyManager);
 
         saveDefaultConfig();
         addDefaultsToConfig();
