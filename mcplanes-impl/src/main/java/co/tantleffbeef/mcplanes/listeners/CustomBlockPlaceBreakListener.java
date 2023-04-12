@@ -57,7 +57,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
             return null;
 
         // finally get the custom item and place it
-        return (PlaceableItemType) resourceManager.getCustomItem(itemNbt.id);
+        return (PlaceableItemType) resourceManager.getCustomItemType(itemNbt.id);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

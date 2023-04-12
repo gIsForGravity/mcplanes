@@ -81,7 +81,7 @@ public class McPlanes extends JavaPlugin {
         }
 
         // initialize resource manager now that client jar has been downloaded
-        resourceManager = new ResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
+        resourceManager = new MCPResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
         blockManager = new MCPBlockManager(persistentDataKeyManager, getServer(), resourceManager);
 
         // // Listeners!!!
