@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes.custom.item;
 
-import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
+import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;

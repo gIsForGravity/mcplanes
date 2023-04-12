@@ -3,7 +3,7 @@ package co.tantleffbeef.mcplanes.listeners;
 import co.tantleffbeef.mcplanes.*;
 import co.tantleffbeef.mcplanes.custom.item.PlaceableItemType;
 import co.tantleffbeef.mcplanes.event.CustomBlockPlaceEvent;
-import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
+import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,10 +22,10 @@ public class CustomBlockPlaceBreakListener implements Listener {
     private final BlockManager blockManager;
     private final ResourceManager resourceManager;
     private final PluginManager pluginManager;
-    private final KeyManager<CustomItemNbtKey> keyManager;
+    private final KeyManager<CustomNbtKey> keyManager;
     private final Map<UUID, BlockBreakProgress> playerBlockProgress; // TODO: block breaking progress
 
-    public CustomBlockPlaceBreakListener(BlockManager blockManager, ResourceManager resourceManager, PluginManager pluginManager, KeyManager<CustomItemNbtKey> keyManager) {
+    public CustomBlockPlaceBreakListener(BlockManager blockManager, ResourceManager resourceManager, PluginManager pluginManager, KeyManager<CustomNbtKey> keyManager) {
         this.blockManager = blockManager;
         this.resourceManager = resourceManager;
         this.keyManager = keyManager;
@@ -57,7 +57,7 @@ public class CustomBlockPlaceBreakListener implements Listener {
             return null;
 
         // finally get the custom item and place it
-        return (PlaceableItemType) resourceManager.getCustomItem(itemNbt.id);
+        return (PlaceableItemType) resourceManager.getCustomItemType(itemNbt.id);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

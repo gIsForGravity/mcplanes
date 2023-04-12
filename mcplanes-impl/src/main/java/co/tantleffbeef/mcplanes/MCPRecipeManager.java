@@ -6,10 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
-public class RecipeManager {
+public class MCPRecipeManager implements RecipeManager {
     // I guess we don't need to keep the plugin around???
     //private final Plugin plugin;
     // List of ingredients to be checked first before indexing the second list
@@ -18,7 +19,7 @@ public class RecipeManager {
     private final Map<NamespacedKey, List<RecipeIngredient>> recipes = new HashMap<>();
     private final NamespacedKey customItemKey;
 
-    public RecipeManager(McPlanes plugin) {
+    public MCPRecipeManager(Plugin plugin) {
         //this.plugin = plugin;
 
         customItemKey = new NamespacedKey(plugin, "customItem");

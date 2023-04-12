@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes;
 
-public enum CustomItemNbtKey {
+public enum CustomNbtKey {
     CUSTOM_BLOCK_DATA("custom_block_data"),
     CUSTOM_ITEM_DATA("custom_item_data"),
     BLOCKS("blocks"),
@@ -13,12 +13,12 @@ public enum CustomItemNbtKey {
 
     public final String keyName;
 
-    CustomItemNbtKey(String keyName) {
+    CustomNbtKey(String keyName) {
         this.keyName = keyName;
     }
 
-    public static void registerKeys(KeyManager<CustomItemNbtKey> manager) {
-        for (CustomItemNbtKey k : CustomItemNbtKey.values()) {
+    public static void registerKeys(KeyManager<CustomNbtKey> manager) {
+        for (CustomNbtKey k : CustomNbtKey.values()) {
             manager.registerKey(k.keyName, k);
         }
     }
