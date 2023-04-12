@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,26 +28,37 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.jar.JarFile;
 
-public class McPlanes extends JavaPlugin {
+public class McPlanes extends JavaPlugin implements ResourceApi {
+    private final Set<Runnable> initialBuildListeners = new HashSet<>();
+
     private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
     private WebServer webServer;
     private BlockManager blockManager;
-    private KeyManager<CustomItemNbtKey> persistentDataKeyManager;
+    private KeyManager<CustomNbtKey> persistentDataKeyManager;
     private String mcVersion;
 
     @Override
+    public void onLoad() {
+        final var servicesManager = getServer().getServicesManager();
+
+        servicesManager.register(ResourceApi.class, this, this, ServicePriority.Normal);
+    }
+
+    @Override
     public void onEnable() {
-        recipeManager = new RecipeManager(this);
+        recipeManager = new MCPRecipeManager(this);
         vehicleManager = new VehicleManager(this);
 
         persistentDataKeyManager = new KeyManager<>(this);
-        CustomItemNbtKey.registerKeys(persistentDataKeyManager);
+        CustomNbtKey.registerKeys(persistentDataKeyManager);
 
         saveDefaultConfig();
         addDefaultsToConfig();
@@ -81,8 +93,8 @@ public class McPlanes extends JavaPlugin {
         }
 
         // initialize resource manager now that client jar has been downloaded
-        resourceManager = new ResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
-        blockManager = new BlockManager(persistentDataKeyManager, getServer(), resourceManager);
+        resourceManager = new MCPResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
+        blockManager = new MCPBlockManager(persistentDataKeyManager, getServer(), resourceManager);
 
         // // Listeners!!!
 
@@ -160,6 +172,13 @@ public class McPlanes extends JavaPlugin {
 
         // Blocks
         registerItemAndBlock(new SimplePlaceableItemType(this, "aircrafter", true, "Aircrafter"));
+
+        // Register items and blocks for other plugins
+        for (final var callback : initialBuildListeners) {
+            callback.run();
+        }
+
+        initialBuildListeners.clear();
     }
 
     private void registerItemAndBlock(PlaceableItemType item) {
@@ -443,5 +462,30 @@ public class McPlanes extends JavaPlugin {
         }
 
         return json;
+    }
+
+    @Override
+    public void registerInitialBuildListener(Runnable listener) {
+        initialBuildListeners.add(listener);
+    }
+
+    @Override
+    public BlockManager getBlockManager() {
+        return blockManager;
+    }
+
+    @Override
+    public KeyManager<CustomNbtKey> getNbtKeyManager() {
+        return persistentDataKeyManager;
+    }
+
+    @Override
+    public RecipeManager getRecipeManager() {
+        return recipeManager;
+    }
+
+    @Override
+    public ResourceManager getResourceManager() {
+        return resourceManager;
     }
 }

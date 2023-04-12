@@ -1,7 +1,7 @@
 package co.tantleffbeef.mcplanes.custom.block;
 
 import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
-import co.tantleffbeef.mcplanes.serialize.CustomBlockNbt;
+import co.tantleffbeef.mcplanes.pojo.serialize.CustomBlockNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ItemDisplay;

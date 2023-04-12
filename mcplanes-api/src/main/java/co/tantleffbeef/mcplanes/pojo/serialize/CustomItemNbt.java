@@ -1,6 +1,6 @@
-package co.tantleffbeef.mcplanes.serialize;
+package co.tantleffbeef.mcplanes.pojo.serialize;
 
-import co.tantleffbeef.mcplanes.CustomItemNbtKey;
+import co.tantleffbeef.mcplanes.CustomNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -19,23 +19,23 @@ public class CustomItemNbt {
         this.placeable = placeable;
     }
 
-    public static boolean hasCustomItemNbt(PersistentDataContainer container, KeyManager<CustomItemNbtKey> keys) {
-        return container.has(keys.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER);
+    public static boolean hasCustomItemNbt(PersistentDataContainer container, KeyManager<CustomNbtKey> keys) {
+        return container.has(keys.keyFor(CustomNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER);
     }
     public static @NotNull CustomItemNbt fromPersistentDataContainer(@NotNull PersistentDataContainer container,
-                                                                     @NotNull KeyManager<CustomItemNbtKey> keys) {
-        final var customItemData = container.get(keys.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA),
+                                                                     @NotNull KeyManager<CustomNbtKey> keys) {
+        final var customItemData = container.get(keys.keyFor(CustomNbtKey.CUSTOM_ITEM_DATA),
                 PersistentDataType.TAG_CONTAINER);
         assert customItemData != null;
 
-        final var idString = customItemData.get(keys.keyFor(CustomItemNbtKey.ID), PersistentDataType.STRING);
+        final var idString = customItemData.get(keys.keyFor(CustomNbtKey.ID), PersistentDataType.STRING);
         assert idString != null;
 
         Bukkit.broadcastMessage("idString: " + idString);
 
         final var id = NamespacedKey.fromString(idString);
 
-        final var placeableByte = customItemData.get(keys.keyFor(CustomItemNbtKey.PLACEABLE), PersistentDataType.BYTE);
+        final var placeableByte = customItemData.get(keys.keyFor(CustomNbtKey.PLACEABLE), PersistentDataType.BYTE);
         assert placeableByte != null && (placeableByte.equals((byte) 1) || placeableByte.equals((byte) 0));
 
         final var placeable = placeableByte.equals((byte) 1);
@@ -44,19 +44,19 @@ public class CustomItemNbt {
     }
 
     public void saveToPersistentDataContainer(@NotNull PersistentDataContainer rootContainer,
-                                              @NotNull KeyManager<CustomItemNbtKey> keys) {
+                                              @NotNull KeyManager<CustomNbtKey> keys) {
         // Create container to represent the custom_item_data
         final var customItemContainer = rootContainer.getAdapterContext().newPersistentDataContainer();
         // Serialize id to the container
-        customItemContainer.set(keys.keyFor(CustomItemNbtKey.ID), PersistentDataType.STRING, id.toString());
+        customItemContainer.set(keys.keyFor(CustomNbtKey.ID), PersistentDataType.STRING, id.toString());
         // Serialize placeable to the container
         if (placeable)
-            customItemContainer.set(keys.keyFor(CustomItemNbtKey.PLACEABLE), PersistentDataType.BYTE, (byte) 1);
+            customItemContainer.set(keys.keyFor(CustomNbtKey.PLACEABLE), PersistentDataType.BYTE, (byte) 1);
         else
-            customItemContainer.set(keys.keyFor(CustomItemNbtKey.PLACEABLE), PersistentDataType.BYTE, (byte) 0);
+            customItemContainer.set(keys.keyFor(CustomNbtKey.PLACEABLE), PersistentDataType.BYTE, (byte) 0);
 
         // Save the custom_item_data container to the root container
-        rootContainer.set(keys.keyFor(CustomItemNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER, customItemContainer);
+        rootContainer.set(keys.keyFor(CustomNbtKey.CUSTOM_ITEM_DATA), PersistentDataType.TAG_CONTAINER, customItemContainer);
     }
 
 }

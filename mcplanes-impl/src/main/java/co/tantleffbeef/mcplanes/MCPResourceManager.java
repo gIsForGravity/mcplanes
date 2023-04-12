@@ -1,12 +1,11 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
-import co.tantleffbeef.mcplanes.serialize.CustomItemNbt;
+import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -20,9 +19,9 @@ import java.util.zip.ZipOutputStream;
 
 import static co.tantleffbeef.mcplanes.Tools.clearFolder;
 
-public class ResourceManager implements Listener {
+public class MCPResourceManager implements ResourceManager {
     private final McPlanes plugin;
-    private final KeyManager<CustomItemNbtKey> nbtKeyManager;
+    private final KeyManager<CustomNbtKey> nbtKeyManager;
     private final File tempFolder;
     private final File webserverFolder;
     private final Gson gson;
@@ -32,7 +31,7 @@ public class ResourceManager implements Listener {
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
     private byte[] resourcePackHash;
 
-    public ResourceManager(McPlanes plugin, KeyManager<CustomItemNbtKey> nbtKeyManager, File webserverFolder, File clientJar) {
+    public MCPResourceManager(McPlanes plugin, KeyManager<CustomNbtKey> nbtKeyManager, File webserverFolder, File clientJar) {
         this.plugin = plugin;
         this.nbtKeyManager = nbtKeyManager;
         this.webserverFolder = webserverFolder;
@@ -162,7 +161,7 @@ public class ResourceManager implements Listener {
         return new ItemStack(Objects.requireNonNull(customItemStacks.get(key)));
     }
 
-    public CustomItemType getCustomItem(NamespacedKey key) {
+    public CustomItemType getCustomItemType(NamespacedKey key) {
         return Objects.requireNonNull(customItems.get(key));
     }
 
@@ -342,3 +341,4 @@ public class ResourceManager implements Listener {
         return resourcePackHash;
     }
 }
+
