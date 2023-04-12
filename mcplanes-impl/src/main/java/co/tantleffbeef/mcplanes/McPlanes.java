@@ -42,7 +42,7 @@ public class McPlanes extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        recipeManager = new RecipeManager(this);
+        recipeManager = new MCPRecipeManager(this);
         vehicleManager = new VehicleManager(this);
 
         persistentDataKeyManager = new KeyManager<>(this);
