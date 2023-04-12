@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,13 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
     private BlockManager blockManager;
     private KeyManager<CustomNbtKey> persistentDataKeyManager;
     private String mcVersion;
+
+    @Override
+    public void onLoad() {
+        final var servicesManager = getServer().getServicesManager();
+
+        servicesManager.register(ResourceApi.class, this, this, ServicePriority.Normal);
+    }
 
     @Override
     public void onEnable() {
