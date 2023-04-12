@@ -325,7 +325,7 @@ public class MCPBlockManager implements BlockManager {
      * Replaces a custom block with air
      * @param blockLocation the block to replace with air
      */
-    public void deleteCustomBlock(Location blockLocation) {
+    public void deleteCustomBlock(@NotNull Location blockLocation) {
         deleteBlockDataFromChunk(blockLocation);
         blockLocation.getBlock().setType(Material.AIR);
 
@@ -338,11 +338,11 @@ public class MCPBlockManager implements BlockManager {
         entity.remove();
     }
 
-    public void loadChunk(Chunk chunk) {
+    public void loadChunk(@NotNull Chunk chunk) {
 
     }
 
-    public void unloadChunk(Chunk chunk) {
+    public void unloadChunk(@NotNull Chunk chunk) {
 
     }
 }

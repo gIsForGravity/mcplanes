@@ -3,6 +3,7 @@ package co.tantleffbeef.mcplanes;
 import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.*;
@@ -13,14 +14,14 @@ public interface ResourceManager {
      * Loads assets from the resources of the jar to be added to the server pack
      * @param jar the jarfile of a plugin whose resources are to be added
      */
-    void addAssetsFolder(JarFile jar);
+    void addAssetsFolder(@NotNull JarFile jar);
 
     /**
      * Registers an item, will create a custom model data variant for it which can be
      *  accessed with {@link ResourceManager#getCustomItemStack(NamespacedKey)}
      * @param itemType the item type to register
      */
-    void registerItem(CustomItemType itemType);
+    void registerItem(@NotNull CustomItemType itemType);
 
     /**
      * Returns the filename of the resource pack within the www folder
@@ -32,21 +33,21 @@ public interface ResourceManager {
      * Returns all custom item ids, so they can be queried and indexed through
      * @return a set of all custom item ids
      */
-    Set<NamespacedKey> getItemIdList();
+    @NotNull Set<NamespacedKey> getItemIdList();
 
     /**
      * Returns the item stack for the custom item
      * @param key a namespacedkey representing the custom item
      * @return a clone of the item stack
      */
-    ItemStack getCustomItemStack(NamespacedKey key);
+    @NotNull ItemStack getCustomItemStack(@NotNull NamespacedKey key);
 
     /**
      * Returns the custom item type for the custom item
      * @param key a namespaced key representing the custom item
      * @return the item type
      */
-    CustomItemType getCustomItemType(NamespacedKey key);
+    @NotNull CustomItemType getCustomItemType(@NotNull NamespacedKey key);
 
     /**
      * Compiles all plugin resources

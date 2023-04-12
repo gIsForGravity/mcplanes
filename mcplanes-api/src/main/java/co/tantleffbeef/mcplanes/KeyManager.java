@@ -11,7 +11,7 @@ public class KeyManager<T> {
     private final Plugin namespacePlugin;
     private final Map<T, NamespacedKey> keyMap;
 
-    public KeyManager(Plugin namespace) {
+    public KeyManager(@NotNull Plugin namespace) {
         namespacePlugin = namespace;
         keyMap = new HashMap<>();
     }
@@ -28,7 +28,7 @@ public class KeyManager<T> {
         return key;
     }
 
-    public void registerKey(String key, T For) {
+    public void registerKey(@NotNull String key, @NotNull T For) {
         assert !keyMap.containsKey(For);
 
         final var newKey = new NamespacedKey(namespacePlugin, key);

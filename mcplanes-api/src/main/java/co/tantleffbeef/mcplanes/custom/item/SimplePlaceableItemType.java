@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SimplePlaceableItemType implements PlaceableItemType, CustomBlockType {
     private final NamespacedKey id;
@@ -22,7 +23,7 @@ public class SimplePlaceableItemType implements PlaceableItemType, CustomBlockTy
     }
 
     @Override
-    public Material baseMaterial() {
+    public @NotNull Material baseMaterial() {
         return Material.BARRIER;
     }
 
@@ -32,12 +33,12 @@ public class SimplePlaceableItemType implements PlaceableItemType, CustomBlockTy
     }
 
     @Override
-    public NamespacedKey model() {
+    public @Nullable NamespacedKey model() {
         return customModel ? new NamespacedKey(plugin, "block/" + id.getKey()) : null;
     }
 
     @Override
-    public String name() {
+    public @NotNull String name() {
         return name;
     }
 

@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +67,7 @@ public class MCPResourceManager implements ResourceManager {
         webserverFolder.mkdirs();
     }
 
-    public void addAssetsFolder(JarFile jar) {
+    public void addAssetsFolder(@NotNull JarFile jar) {
         // only get assets inside of assets folder
         final var directory = "assets";
         final Enumeration<JarEntry> entries = jar.entries();
@@ -88,7 +89,7 @@ public class MCPResourceManager implements ResourceManager {
         }
     }
 
-    public void registerItem(CustomItemType item) {
+    public void registerItem(@NotNull CustomItemType item) {
         ItemStack customItemStack = new ItemStack(item.baseMaterial());
         ItemMeta meta = customItemStack.getItemMeta();
         assert meta != null;
@@ -153,15 +154,15 @@ public class MCPResourceManager implements ResourceManager {
     }
 
     // return list of custom item ids
-    public Set<NamespacedKey> getItemIdList() {
+    public @NotNull Set<NamespacedKey> getItemIdList() {
         return customItemStacks.keySet();
     }
 
-    public ItemStack getCustomItemStack(NamespacedKey key) {
+    public @NotNull ItemStack getCustomItemStack(@NotNull NamespacedKey key) {
         return new ItemStack(Objects.requireNonNull(customItemStacks.get(key)));
     }
 
-    public CustomItemType getCustomItemType(NamespacedKey key) {
+    public @NotNull CustomItemType getCustomItemType(@NotNull NamespacedKey key) {
         return Objects.requireNonNull(customItems.get(key));
     }
 

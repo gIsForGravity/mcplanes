@@ -3,6 +3,8 @@ package co.tantleffbeef.mcplanes.custom.item;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SimpleItemType implements CustomItemType {
     private final NamespacedKey id;
@@ -18,22 +20,22 @@ public class SimpleItemType implements CustomItemType {
     }
 
     @Override
-    public Material baseMaterial() {
+    public @NotNull Material baseMaterial() {
         return Material.STICK;
     }
 
     @Override
-    public NamespacedKey id() {
+    public @NotNull NamespacedKey id() {
         return id;
     }
 
     @Override
-    public NamespacedKey model() {
+    public @Nullable NamespacedKey model() {
         return customModel ? new NamespacedKey(plugin, "item/" + id.getKey()) : null;
     }
 
     @Override
-    public String name() {
+    public @NotNull String name() {
         return name;
     }
 }

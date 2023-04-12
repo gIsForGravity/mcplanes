@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -66,7 +67,7 @@ public class MCPRecipeManager implements RecipeManager {
      * @param recipeId The id of the recipe to register for
      * @param materials The materials to unlock with
      */
-    public void registerUnlockableRecipe(NamespacedKey recipeId, Material... materials) {
+    public void registerUnlockableRecipe(@NotNull NamespacedKey recipeId, @NotNull Material @NotNull ... materials) {
         checkList(recipeId);
 
         List<RecipeIngredient> ingredients = recipes.get(recipeId);
@@ -85,7 +86,7 @@ public class MCPRecipeManager implements RecipeManager {
      * @param recipeId The id of the recipe to register for
      * @param choices The ingredients to unlock with
      */
-    public void registerUnlockableRecipe(NamespacedKey recipeId, RecipeChoice... choices) {
+    public void registerUnlockableRecipe(@NotNull NamespacedKey recipeId, RecipeChoice... choices) {
         checkList(recipeId);
 
         List<RecipeIngredient> ingredients = recipes.get(recipeId);
@@ -104,7 +105,7 @@ public class MCPRecipeManager implements RecipeManager {
      * @param player the player who picked up the item
      * @param pickedUp the item they picked up
      */
-    public void unlockRecipes(Player player, ItemStack pickedUp) {
+    public void unlockRecipes(@NotNull Player player, @NotNull ItemStack pickedUp) {
         // get persistent data of item to check if its a custom item
         var itemData = Objects.requireNonNull(pickedUp.getItemMeta()).getPersistentDataContainer();
 

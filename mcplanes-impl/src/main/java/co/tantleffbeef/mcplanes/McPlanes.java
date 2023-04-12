@@ -465,27 +465,27 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
     }
 
     @Override
-    public void registerInitialBuildListener(Runnable listener) {
+    public void registerInitialBuildListener(@NotNull Runnable listener) {
         initialBuildListeners.add(listener);
     }
 
     @Override
-    public BlockManager getBlockManager() {
+    public @NotNull BlockManager getBlockManager() {
         return blockManager;
     }
 
     @Override
-    public KeyManager<CustomNbtKey> getNbtKeyManager() {
+    public @NotNull KeyManager<CustomNbtKey> getNbtKeyManager() {
         return persistentDataKeyManager;
     }
 
     @Override
-    public RecipeManager getRecipeManager() {
+    public @NotNull RecipeManager getRecipeManager() {
         return recipeManager;
     }
 
     @Override
-    public ResourceManager getResourceManager() {
+    public @NotNull ResourceManager getResourceManager() {
         return resourceManager;
     }
 }
