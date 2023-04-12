@@ -27,10 +27,14 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.jar.JarFile;
 
-public class McPlanes extends JavaPlugin {
+public class McPlanes extends JavaPlugin implements ResourceApi {
+    private final Set<Runnable> initialBuildListeners = new HashSet<>();
+
     private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
@@ -160,6 +164,13 @@ public class McPlanes extends JavaPlugin {
 
         // Blocks
         registerItemAndBlock(new SimplePlaceableItemType(this, "aircrafter", true, "Aircrafter"));
+
+        // Register items and blocks for other plugins
+        for (final var callback : initialBuildListeners) {
+            callback.run();
+        }
+
+        initialBuildListeners.clear();
     }
 
     private void registerItemAndBlock(PlaceableItemType item) {
@@ -443,5 +454,30 @@ public class McPlanes extends JavaPlugin {
         }
 
         return json;
+    }
+
+    @Override
+    public void registerInitialBuildListener(Runnable listener) {
+        initialBuildListeners.add(listener);
+    }
+
+    @Override
+    public BlockManager getBlockManager() {
+        return blockManager;
+    }
+
+    @Override
+    public KeyManager<CustomNbtKey> getNbtKeyManager() {
+        return persistentDataKeyManager;
+    }
+
+    @Override
+    public RecipeManager getRecipeManager() {
+        return recipeManager;
+    }
+
+    @Override
+    public ResourceManager getResourceManager() {
+        return resourceManager;
     }
 }
