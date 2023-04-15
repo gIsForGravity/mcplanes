@@ -53,6 +53,8 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         final var registration = servicesManager.getRegistration(ResourceApi.class);
         if (registration == null)
             getLogger().severe("despite me just registering it, it is not registered");
+        else
+            getLogger().info("it is actually registered you just got trolled");
     }
 
     @Override
