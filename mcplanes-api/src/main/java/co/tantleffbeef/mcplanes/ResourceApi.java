@@ -2,6 +2,7 @@ package co.tantleffbeef.mcplanes;
 
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public interface ResourceApi {
     /**
      * Registers a listener to be called during McPlanes' onEnable function to register custom content

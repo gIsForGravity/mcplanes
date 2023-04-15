@@ -9,6 +9,10 @@
     <version>0.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
     <modules>
         <module>mcplanes-api</module>
         <module>mcplanes-impl</module>
