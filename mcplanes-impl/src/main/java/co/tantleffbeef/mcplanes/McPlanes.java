@@ -50,6 +50,9 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         final var servicesManager = getServer().getServicesManager();
 
         servicesManager.register(ResourceApi.class, this, this, ServicePriority.Normal);
+        final var registration = servicesManager.getRegistration(ResourceApi.class);
+        if (registration == null)
+            getLogger().severe("despite me just registering it, it is not registered");
     }
 
     @Override
