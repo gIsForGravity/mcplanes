@@ -39,7 +39,7 @@ public class InteractableItemListener implements Listener {
             return;
 
         // Pass event to item
-        item.interact(event.getPlayer(), event.getItem());
+        item.interact(event.getPlayer(), event.getItem(), event.getClickedBlock());
     }
 
     private InteractableItemType getItemForInteractEvent(PlayerInteractEvent event) {
