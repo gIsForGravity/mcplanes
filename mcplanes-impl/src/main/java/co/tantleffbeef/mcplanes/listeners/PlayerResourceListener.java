@@ -46,7 +46,7 @@ public class PlayerResourceListener implements Listener {
             //Bukkit.broadcastMessage("time: " + time);
 
             // if time between response was less than 3 seconds then resend
-            if (time < 3000)
+            if (time < 1250)
                 sendPack(player);
 
             // Remove old value that isn't needed anymore
