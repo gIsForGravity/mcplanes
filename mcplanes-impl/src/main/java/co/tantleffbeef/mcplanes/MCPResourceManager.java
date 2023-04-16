@@ -6,8 +6,10 @@ import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -15,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -27,16 +30,23 @@ public class MCPResourceManager implements ResourceManager {
     private final File webserverFolder;
     private final Gson gson;
     private final File clientJar;
+    private final String webserverUrl;
+    private boolean currentlyCompiling;
     private final Map<NamespacedKey, CustomItemType> customItems = new HashMap<>();
     private final Map<NamespacedKey, ItemStack> customItemStacks = new HashMap<>();
     private final Map<Material, List<NamespacedKey>> customModels = new HashMap<>();
     private byte[] resourcePackHash;
 
-    public MCPResourceManager(McPlanes plugin, KeyManager<CustomNbtKey> nbtKeyManager, File webserverFolder, File clientJar) {
+    public MCPResourceManager(McPlanes plugin,
+                              KeyManager<CustomNbtKey> nbtKeyManager,
+                              File webserverFolder,
+                              File clientJar,
+                              String webserverUrl) {
         this.plugin = plugin;
         this.nbtKeyManager = nbtKeyManager;
         this.webserverFolder = webserverFolder;
         this.clientJar = clientJar;
+        this.webserverUrl = webserverUrl;
 
         this.gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -122,7 +132,7 @@ public class MCPResourceManager implements ResourceManager {
         customItems.put(item.id(), item);
     }
 
-    private File saveFile(File folder, String path, JarFile jar, ZipEntry zipFile) {
+    private static File saveFile(File folder, String path, JarFile jar, ZipEntry zipFile) {
         final File javaFile = new File(folder, path);
 
         // make directories if they don't exist
@@ -166,8 +176,69 @@ public class MCPResourceManager implements ResourceManager {
         return Objects.requireNonNull(customItems.get(key));
     }
 
-    public void compileResources() throws IOException {
-        plugin.getLogger().info("Building resources");
+    public void compileResourcesAsync(@NotNull BukkitScheduler scheduler) {
+        scheduler.runTaskAsynchronously(plugin, () -> {
+            final byte[] hash;
+            try {
+                final var clonedCustomModels = new HashMap<Material, List<NamespacedKey>>();
+                // deep clone custom models hash map
+                for (final var entry : customModels.entrySet()) {
+                    clonedCustomModels.put(entry.getKey(),
+                            List.copyOf(entry.getValue()));
+                }
+
+                // Compile resources
+                hash = compileResources(plugin.getLogger(),
+                        tempFolder,
+                        gson,
+                        clonedCustomModels,
+                        clientJar,
+                        webserverFolder);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            // Set the new hash and resend resources to all online players since they have updated
+            scheduler.runTask(plugin, () -> {
+                resourcePackHash = hash;
+                for (final var player : plugin.getServer().getOnlinePlayers()) {
+                    sendResourcesToPlayer(player);
+                }
+            });
+        });
+    }
+
+    @Override
+    public void sendResourcesToPlayer(@NotNull Player player) {
+        player.setResourcePack(
+                webserverUrl + '/' + getResourcePackFilename(),
+                getResourcePackHash(),
+                true);
+    }
+
+    @Override
+    public boolean currentlyCompilingResources() {
+        return currentlyCompiling;
+    }
+
+    /**
+     * Compiles all resources into a resource pack. It's recommended to use compileResourcesAsync
+     * unless you know what you're doing
+     * @param logger use the bukkit plugin's logger
+     * @param tempFolder the folder to store assets before zipped
+     * @param gson a gson instance used to create all the json files for the pack
+     * @param customModels The custom models for each minecraft material
+     * @param clientJar The jar to get the original minecraft assets from (if necessary)
+     * @param webserverFolder the folder to put the completed zip file when it is finished
+     * @return the sha1 hash of the resources zip file
+     * @throws IOException file stuff idk hope it doesn't happen lol
+     */
+    private static synchronized byte[] compileResources(Logger logger,
+                                        File tempFolder,
+                                        Gson gson,
+                                        Map<Material, List<NamespacedKey>> customModels,
+                                        File clientJar,
+                                        File webserverFolder) throws IOException {
+        logger.info("Building resources");
 
         // create pack.mcmeta file
         JsonObject mcMeta = new JsonObject();
@@ -196,7 +267,7 @@ public class MCPResourceManager implements ResourceManager {
             try (var jar = new JarFile(clientJar)) {
                 var jarEntry = jar.getEntry(path);
 
-                plugin.getLogger().info("Saving file " + path);
+                logger.info("Saving file " + path);
                 modelFile = saveFile(tempFolder, path, jar, jarEntry);
             }
 
@@ -241,11 +312,11 @@ public class MCPResourceManager implements ResourceManager {
         File resourcePackFile = new File(webserverFolder, "resources.zip");
 
         // save resource pack to a zip file so it can be sent to players
-        saveResourcesToZip(tempFolder, resourcePackFile, true);
+        saveResourcesToZip(logger, tempFolder, resourcePackFile, true);
 
         //   hash resource pack so clients can know if the resource pack has
         // changed since the last time they joined the server
-        hashResourcePack(resourcePackFile);
+        return hashResourcePack(resourcePackFile);
     }
 
     /**
@@ -254,7 +325,7 @@ public class MCPResourceManager implements ResourceManager {
      * @param outputFile the file to output said folder to
      * @param compressZip whether to compress the zip file or not
      */
-    private void saveResourcesToZip(File inputFolder, File outputFile, boolean compressZip) {
+    private static void saveResourcesToZip(Logger logger, File inputFolder, File outputFile, boolean compressZip) {
         if (outputFile.exists())
             outputFile.delete();
 
@@ -262,7 +333,7 @@ public class MCPResourceManager implements ResourceManager {
         final List<String> fileNames = new ArrayList<>();
         addFilesToList(fileNames, inputFolder, "");
 
-        plugin.getLogger().info("Saving resource pack to zip file");
+        logger.info("Saving resource pack to zip file");
         // make zip file
         try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(outputFile))) {
             if (compressZip)
@@ -277,7 +348,7 @@ public class MCPResourceManager implements ResourceManager {
 
             // loop through all the files in the folder
             for (String fileName : fileNames) {
-                plugin.getLogger().info("Writing " + fileName);
+                logger.info("Writing " + fileName);
 
                 // Add new zip entry to the stream
                 zip.putNextEntry(new ZipEntry(fileName));
@@ -301,7 +372,7 @@ public class MCPResourceManager implements ResourceManager {
         }
     }
 
-    private void addFilesToList(List<String> files, File directory, String parent) {
+    private static void addFilesToList(List<String> files, File directory, String parent) {
         // if the directory doesn't exist or if the file isn't a directory then just leave
         // we should never get here but just ignore
         if (!directory.exists() || !directory.isDirectory())
@@ -332,10 +403,10 @@ public class MCPResourceManager implements ResourceManager {
         }
     }
 
-    private void hashResourcePack(File resourcePackFile) {
+    private static byte[] hashResourcePack(File resourcePackFile) {
         // sets local variable resourcePackHash to the hash of the resources.zip which
         // will then be passed to the player upon login
-        resourcePackHash = Tools.createSha1(resourcePackFile).clone();
+        return Tools.createSha1(resourcePackFile).clone();
     }
 
     public byte[] getResourcePackHash() {

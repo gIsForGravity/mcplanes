@@ -98,7 +98,11 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         }
 
         // initialize resource manager now that client jar has been downloaded
-        resourceManager = new MCPResourceManager(this, persistentDataKeyManager, webserverFolder, clientJar);
+        resourceManager = new MCPResourceManager(this,
+                persistentDataKeyManager,
+                webserverFolder,
+                clientJar,
+                getConfig().getString("webserver-url"));
         blockManager = new MCPBlockManager(persistentDataKeyManager, getServer(), resourceManager);
 
         // // Listeners!!!
@@ -110,7 +114,6 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         // Bukkit Listeners
         registerListener(new CustomVehicleEnterExitListener(vehicleManager));
         registerListener(new PlayerResourceListener(this,
-                getConfig().getString("webserver-url"),
                 resourceManager));
         registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager, getServer().getPluginManager(), persistentDataKeyManager));
         if (getConfig().getBoolean("crafting.unlock-recipes")) {
@@ -127,11 +130,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         registerItems();
         registerRecipes();
 
-        try {
-            resourceManager.compileResources();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        getServer().getScheduler().runTask(this, () -> resourceManager.compileResourcesAsync(getServer().getScheduler()));
 
         getLogger().info("Running garbage collector");
         System.gc();

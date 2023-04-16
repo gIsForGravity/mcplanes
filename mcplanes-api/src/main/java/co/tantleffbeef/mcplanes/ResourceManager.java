@@ -2,10 +2,11 @@ package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
 import java.util.*;
 import java.util.jar.JarFile;
 
@@ -50,9 +51,17 @@ public interface ResourceManager {
     @NotNull CustomItemType getCustomItemType(@NotNull NamespacedKey key);
 
     /**
-     * Compiles all plugin resources
+     * Compiles all plugin resources. Call this function synchronously, and it will create an async task to run later
      */
-    void compileResources() throws IOException;
+    void compileResourcesAsync(@NotNull BukkitScheduler scheduler);
+
+    /**
+     * sends the compiled resource pack to said player. check if resources are compiling first please
+     * @param player the player to send it to
+     */
+    void sendResourcesToPlayer(@NotNull Player player);
+
+    boolean currentlyCompilingResources();
 
     /**
      * Returns a hash of the resource pack. Can be sent to the client to verify an updated version has been downloaded

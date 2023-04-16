@@ -1,21 +1,22 @@
 package co.tantleffbeef.mcplanes.listeners;
 
 import co.tantleffbeef.mcplanes.ResourceManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Objects;
+import java.util.*;
 
 public class PlayerResourceListener implements Listener {
     private final Plugin plugin;
-    private final String webserverUrl;
     private final ResourceManager resourceManager;
+    private final Map<UUID, Long> timer = new HashMap<>();
 
-    public PlayerResourceListener(Plugin plugin, String webserverUrl, ResourceManager resourceManager) {
+    public PlayerResourceListener(Plugin plugin, ResourceManager resourceManager) {
         this.plugin = plugin;
-        this.webserverUrl = webserverUrl;
         this.resourceManager = resourceManager;
     }
 
@@ -23,14 +24,40 @@ public class PlayerResourceListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         // this is actually the tick before the player joins
         // the server so we gotta wait one
+        sendPack(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
+        final var player = event.getPlayer();
+
+        //Bukkit.broadcastMessage(event.getStatus().toString());
+        //Bukkit.broadcastMessage(String.valueOf(new Date().getTime()));
+
+        if (event.getStatus() == PlayerResourcePackStatusEvent.Status.ACCEPTED) {
+            // Start timer when player accepts resource pack
+
+            timer.remove(player.getUniqueId());
+            timer.put(player.getUniqueId(), new Date().getTime());
+        } else if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
+            // Stop timer after resource pack is accepted
+            final long time = new Date().getTime() - timer.get(player.getUniqueId());
+            //Bukkit.broadcastMessage("time: " + time);
+
+            // if time between response was less than 3 seconds then resend
+            if (time < 3000)
+                sendPack(player);
+
+            // Remove old value that isn't needed anymore
+            timer.remove(player.getUniqueId());
+        }
+    }
+
+    private void sendPack(Player player) {
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             // TODO: add a feature to set an optional prompt message for the resource pack
 
-            Objects.requireNonNull(event.getPlayer().getPlayer())
-                    .setResourcePack(
-                            webserverUrl + '/' + resourceManager.getResourcePackFilename(),
-                            resourceManager.getResourcePackHash(),
-                            true);
+            resourceManager.sendResourcesToPlayer(Objects.requireNonNull(player));
         }, 1);
     }
 }
