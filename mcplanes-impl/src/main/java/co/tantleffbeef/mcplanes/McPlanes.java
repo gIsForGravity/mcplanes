@@ -46,7 +46,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
     private String mcVersion;
 
     @Override
-    public void onLoad() {
+    public void onEnable() {
         final var servicesManager = getServer().getServicesManager();
 
         servicesManager.register(ResourceApi.class, this, this, ServicePriority.Normal);
@@ -55,10 +55,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             getLogger().severe("despite me just registering it, it is not registered");
         else
             getLogger().info("it is actually registered you just got trolled");
-    }
 
-    @Override
-    public void onEnable() {
         recipeManager = new MCPRecipeManager(this);
         vehicleManager = new VehicleManager(this);
 
@@ -130,6 +127,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         registerItems();
         registerRecipes();
 
+        // Allow everyone to register items and stuff in enable. On the first tick, resources will be compiled
         getServer().getScheduler().runTask(this, () -> resourceManager.compileResourcesAsync(getServer().getScheduler()));
 
         getLogger().info("Running garbage collector");
