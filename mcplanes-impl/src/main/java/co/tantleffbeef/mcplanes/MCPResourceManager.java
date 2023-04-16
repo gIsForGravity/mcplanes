@@ -48,6 +48,8 @@ public class MCPResourceManager implements ResourceManager {
         this.clientJar = clientJar;
         this.webserverUrl = webserverUrl;
 
+        currentlyCompiling = false;
+
         this.gson = new GsonBuilder().setPrettyPrinting().create();
 
         final File dataFolder = plugin.getDataFolder();
@@ -180,6 +182,8 @@ public class MCPResourceManager implements ResourceManager {
         scheduler.runTaskAsynchronously(plugin, () -> {
             final byte[] hash;
             try {
+                currentlyCompiling = true;
+
                 final var clonedCustomModels = new HashMap<Material, List<NamespacedKey>>();
                 // deep clone custom models hash map
                 for (final var entry : customModels.entrySet()) {
@@ -200,6 +204,7 @@ public class MCPResourceManager implements ResourceManager {
             // Set the new hash and resend resources to all online players since they have updated
             scheduler.runTask(plugin, () -> {
                 resourcePackHash = hash;
+                currentlyCompiling = false;
                 for (final var player : plugin.getServer().getOnlinePlayers()) {
                     sendResourcesToPlayer(player);
                 }

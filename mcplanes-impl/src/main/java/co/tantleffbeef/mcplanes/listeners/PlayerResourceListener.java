@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -54,6 +55,23 @@ public class PlayerResourceListener implements Listener {
     }
 
     private void sendPack(Player player) {
+        if (resourceManager.currentlyCompilingResources())
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!resourceManager.currentlyCompilingResources()) {
+                        // Once resources no longer compiling, send the pack
+                        sendPackNow(player);
+                        // Stop checking, we all good now
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, 0, 0);
+        else
+            sendPackNow(player);
+    }
+
+    private void sendPackNow(Player player) {
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             // TODO: add a feature to set an optional prompt message for the resource pack
 
