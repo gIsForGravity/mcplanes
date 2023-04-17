@@ -28,8 +28,6 @@ public class CustomBlockNbt {
         final var idString = customItemData.get(keys.keyFor(CustomNbtKey.ID), PersistentDataType.STRING);
         assert idString != null;
 
-        Bukkit.broadcastMessage("idString: " + idString);
-
         final var id = NamespacedKey.fromString(idString);
         assert id != null;
 
