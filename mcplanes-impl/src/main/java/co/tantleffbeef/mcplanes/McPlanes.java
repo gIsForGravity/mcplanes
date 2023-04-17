@@ -113,6 +113,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         registerListener(new PlayerResourceListener(this,
                 resourceManager));
         registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager, getServer().getPluginManager(), persistentDataKeyManager));
+        registerListener(new InteractableItemListener(persistentDataKeyManager, resourceManager));
         if (getConfig().getBoolean("crafting.unlock-recipes")) {
             registerListener(new EntityPickupItemListener(recipeManager));
             registerListener(new InventoryMoveItemListener(recipeManager));
