@@ -5,6 +5,7 @@ import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,8 +39,8 @@ public class SimplePlaceableItemType implements PlaceableItemType, CustomBlockTy
     }
 
     @Override
-    public @NotNull String name() {
-        return name;
+    public void modifyItemMeta(@NotNull ItemMeta meta) {
+        meta.setDisplayName(name);
     }
 
     @Override

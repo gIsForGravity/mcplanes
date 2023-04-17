@@ -3,6 +3,7 @@ package co.tantleffbeef.mcplanes.custom.item;
 import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +11,7 @@ public interface CustomItemType {
     @NotNull Material baseMaterial();
     @NotNull NamespacedKey id();
     @Nullable NamespacedKey model();
-    @NotNull String name();
+    void modifyItemMeta(@NotNull ItemMeta meta);
 
     /**
      * Called to add additional data to the nbt of an item, like whether it's placeable.

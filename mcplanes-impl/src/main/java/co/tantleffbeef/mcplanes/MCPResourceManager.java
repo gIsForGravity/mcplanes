@@ -105,8 +105,7 @@ public class MCPResourceManager implements ResourceManager {
         ItemStack customItemStack = new ItemStack(item.baseMaterial());
         ItemMeta meta = customItemStack.getItemMeta();
         assert meta != null;
-
-        meta.setDisplayName(ChatColor.RESET + item.name());
+        item.modifyItemMeta(meta);
 
         if (item.model() != null) {
             // If there isn't already an entry in the custom model list for this material, make one
