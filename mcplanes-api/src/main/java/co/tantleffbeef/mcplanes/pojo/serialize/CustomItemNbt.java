@@ -31,8 +31,6 @@ public class CustomItemNbt {
         final var idString = customItemData.get(keys.keyFor(CustomNbtKey.ID), PersistentDataType.STRING);
         assert idString != null;
 
-        Bukkit.broadcastMessage("idString: " + idString);
-
         final var id = NamespacedKey.fromString(idString);
 
         final var placeableByte = customItemData.get(keys.keyFor(CustomNbtKey.PLACEABLE), PersistentDataType.BYTE);

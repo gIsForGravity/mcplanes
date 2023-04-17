@@ -32,9 +32,6 @@ public class PlayerResourceListener implements Listener {
     public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         final var player = event.getPlayer();
 
-        //Bukkit.broadcastMessage(event.getStatus().toString());
-        //Bukkit.broadcastMessage(String.valueOf(new Date().getTime()));
-
         if (event.getStatus() == PlayerResourcePackStatusEvent.Status.ACCEPTED) {
             // Start timer when player accepts resource pack
 
@@ -43,7 +40,6 @@ public class PlayerResourceListener implements Listener {
         } else if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
             // Stop timer after resource pack is accepted
             final long time = new Date().getTime() - timer.get(player.getUniqueId());
-            //Bukkit.broadcastMessage("time: " + time);
 
             // if time between response was less than 3 seconds then resend
             if (time < 1250)
