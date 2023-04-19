@@ -216,7 +216,7 @@ public class MCPResourceManager implements ResourceManager {
         player.setResourcePack(
                 webserverUrl + '/' + getResourcePackFilename(),
                 getResourcePackHash(),
-                true);
+                false);
     }
 
     @Override
