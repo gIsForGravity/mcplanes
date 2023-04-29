@@ -268,6 +268,9 @@ public class MCPResourceManager implements ResourceManager {
         }
 
         if (atlasDirectories.size() > 0) {
+            final var blocksAtlasFile = new File(new File(new File(new File(tempFolder, "assets"), "minecraft"), "atlases"), "blocks.json");
+            blocksAtlasFile.mkdirs();
+
             JsonObject blocksAtlas = new JsonObject();
             JsonArray sources = new JsonArray();
 
@@ -282,9 +285,7 @@ public class MCPResourceManager implements ResourceManager {
 
             blocksAtlas.add("sources", sources);
 
-            try (Writer writer = new PrintWriter(new FileOutputStream(
-                    new File(new File(new File(new File(tempFolder, "assets"), "minecraft"), "atlases"), "blocks.json")
-            ))) {
+            try (Writer writer = new PrintWriter(new FileOutputStream(blocksAtlasFile))) {
                 writer.write(gson.toJson(blocksAtlas));
             }
         }
