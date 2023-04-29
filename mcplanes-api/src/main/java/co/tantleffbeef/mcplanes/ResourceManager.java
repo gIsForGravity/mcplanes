@@ -24,6 +24,9 @@ public interface ResourceManager {
      */
     void registerItem(@NotNull CustomItemType itemType);
 
+    // TODO: add javadoc
+    void registerItemTextureAtlasDirectory(String dirName);
+
     /**
      * Returns the filename of the resource pack within the www folder
      * @return the built resource pack's filename

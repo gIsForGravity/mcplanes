@@ -123,6 +123,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         registerCommands();
 
         // Maybe setup resources would've been a better name, but maybe I'm lazy - gavint
+        resourceManager.registerItemTextureAtlasDirectory("vehicles");
         setupTextures();
 
         registerItems();
