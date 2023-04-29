@@ -278,7 +278,7 @@ public class MCPResourceManager implements ResourceManager {
                 JsonObject source = new JsonObject();
                 source.add("type", new JsonPrimitive("directory"));
                 source.add("source", new JsonPrimitive(dir));
-                source.add("source", new JsonPrimitive(dir + "/"));
+                source.add("prefix", new JsonPrimitive(dir + "/"));
 
                 sources.add(source);
             }
