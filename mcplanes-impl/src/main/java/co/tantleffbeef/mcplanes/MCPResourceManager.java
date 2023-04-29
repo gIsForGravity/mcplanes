@@ -269,7 +269,7 @@ public class MCPResourceManager implements ResourceManager {
 
         if (atlasDirectories.size() > 0) {
             final var blocksAtlasFile = new File(new File(new File(new File(tempFolder, "assets"), "minecraft"), "atlases"), "blocks.json");
-            blocksAtlasFile.mkdirs();
+            blocksAtlasFile.getParentFile().mkdirs();
 
             JsonObject blocksAtlas = new JsonObject();
             JsonArray sources = new JsonArray();
