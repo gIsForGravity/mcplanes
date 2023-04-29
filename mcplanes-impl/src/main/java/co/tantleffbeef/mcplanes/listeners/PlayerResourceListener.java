@@ -38,6 +38,11 @@ public class PlayerResourceListener implements Listener {
             timer.remove(player.getUniqueId());
             timer.put(player.getUniqueId(), new Date().getTime());
         } else if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
+            if (timer.get(player.getUniqueId()) == null) {
+                sendPack(player);
+                return;
+            }
+
             // Stop timer after resource pack is accepted
             final long time = new Date().getTime() - timer.get(player.getUniqueId());
 
