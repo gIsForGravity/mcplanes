@@ -4,13 +4,10 @@ import co.tantleffbeef.mcplanes.CustomNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;
 import co.tantleffbeef.mcplanes.ResourceManager;
 import co.tantleffbeef.mcplanes.custom.item.InteractableItemType;
-import co.tantleffbeef.mcplanes.custom.item.PlaceableItemType;
 import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +39,9 @@ public class InteractableItemListener implements Listener {
             return;
 
         // Pass event to item
-        item.interact(event.getPlayer(), event.getItem(), event.getClickedBlock());
+        final var shouldCancel = item.interact(event.getPlayer(), event.getItem(), event.getClickedBlock());
+
+        event.setCancelled(shouldCancel);
     }
 
     private @Nullable InteractableItemType getItemForInteractEvent(@NotNull PlayerInteractEvent event) {
