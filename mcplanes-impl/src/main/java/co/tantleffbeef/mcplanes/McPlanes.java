@@ -8,6 +8,7 @@ import co.tantleffbeef.mcplanes.custom.item.VehicleItemType;
 import co.tantleffbeef.mcplanes.listeners.*;
 import co.tantleffbeef.mcplanes.listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.listeners.protocol.ServerboundPlayerInputListener;
+import co.tantleffbeef.mcplanes.vehicles.VehicleKey;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
@@ -28,14 +29,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.jar.JarFile;
 
 public class McPlanes extends JavaPlugin implements ResourceApi {
-    private final Set<Runnable> initialBuildListeners = new HashSet<>();
-
     private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
@@ -43,6 +40,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
     private WebServer webServer;
     private BlockManager blockManager;
     private KeyManager<CustomNbtKey> persistentDataKeyManager;
+    private KeyManager<VehicleKey> vehicleKeyManager;
     private String mcVersion;
 
     @Override
@@ -61,6 +59,9 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
 
         persistentDataKeyManager = new KeyManager<>(this);
         CustomNbtKey.registerKeys(persistentDataKeyManager);
+
+        vehicleKeyManager = new KeyManager<>(this);
+        VehicleKey.registerKeys(vehicleKeyManager);
 
         saveDefaultConfig();
         addDefaultsToConfig();
@@ -123,8 +124,9 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         registerCommands();
 
         // Maybe setup resources would've been a better name, but maybe I'm lazy - gavint
-        resourceManager.registerItemTextureAtlasDirectory("vehicles");
         setupTextures();
+        // Registers the directory "vehicles" in the assets/namespace/textures folder
+        resourceManager.registerItemTextureAtlasDirectory("vehicles");
 
         registerItems();
         registerRecipes();
@@ -176,13 +178,6 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
 
         // Blocks
         registerItemAndBlock(new SimplePlaceableItemType(this, "aircrafter", true, "Aircrafter"));
-
-        // Register items and blocks for other plugins
-        for (final var callback : initialBuildListeners) {
-            callback.run();
-        }
-
-        initialBuildListeners.clear();
     }
 
     private void registerItemAndBlock(PlaceableItemType item) {
@@ -466,11 +461,6 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         }
 
         return json;
-    }
-
-    @Override
-    public void registerInitialBuildListener(@NotNull Runnable listener) {
-        initialBuildListeners.add(listener);
     }
 
     @Override
