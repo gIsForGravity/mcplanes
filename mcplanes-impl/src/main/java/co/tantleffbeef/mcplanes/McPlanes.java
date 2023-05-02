@@ -26,7 +26,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -150,8 +149,6 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             final var p51 = P51.spawn(getServer().getPluginManager(), player.getLocation(),
                     resourceManager.getCustomItemStack(new NamespacedKey(this, "p_51")));
             vehicleManager.registerVehicle(p51);
-
-            p51.rb.addForce(new Vector3f(0, 0, 2));
 
             return true;
         });

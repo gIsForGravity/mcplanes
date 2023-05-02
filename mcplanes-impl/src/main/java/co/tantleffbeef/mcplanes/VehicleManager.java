@@ -26,6 +26,7 @@ public class VehicleManager implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("vehiclemanager.run");
         for (int i = 0; i < vehicles.size(); i++) {
             final var vehicle = vehicles.get(i);
             final var driver = vehicle.driver();
@@ -34,6 +35,7 @@ public class VehicleManager implements Runnable {
             if (driver != null && (input = inputs.get(driver.getUniqueId())) != null) {
                 vehicle.tick(input, FIXED_DELTA_TIME);
             } else {
+                System.out.println("driver null");
                 vehicle.tick(null, FIXED_DELTA_TIME);
             }
         }

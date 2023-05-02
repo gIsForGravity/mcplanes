@@ -39,11 +39,17 @@ public class P51 implements PhysicsVehicle {
         this.rb = new Rigidbody(pluginManager, new RigidDisplay(entity), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), entity.getWorld()), 1.0f);
     }
 
+    private boolean firstTick = true;
+
     @Override
     public void tick(@Nullable Input input, float deltaTime) {
+        System.out.println("p51 tick");
         rb.pretick();
 
-
+        if (firstTick) {
+            rb.addForce(new Vector3f(0, 0, 2));
+            firstTick = false;
+        }
 
         rb.tick(deltaTime);
     }
