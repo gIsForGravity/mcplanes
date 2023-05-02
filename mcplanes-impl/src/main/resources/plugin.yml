@@ -21,13 +21,15 @@ commands:
       - rgive
     usage: "Usage: /resourcegive <player> <item id>"
     permission: mcplanes.resourcegive
-  vehiclesummon:
-    description: "summons a vehicle"
-    aliases:
-      - vs
-      - vsummon
-      - psummon
-    usage: "Usage: /vehiclesummon <vehicle_id>"
+#  vehiclesummon:
+#    description: "summons a vehicle"
+#    aliases:
+#      - vs
+#      - vsummon
+#      - psummon
+#    usage: "Usage: /vehiclesummon <vehicle_id>"
+  p51:
+    description: "summons a p51"
 
 libraries:
 #  - me.lucko:commodore:2.2

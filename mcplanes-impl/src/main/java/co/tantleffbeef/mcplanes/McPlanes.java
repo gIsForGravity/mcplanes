@@ -8,6 +8,7 @@ import co.tantleffbeef.mcplanes.custom.item.VehicleItemType;
 import co.tantleffbeef.mcplanes.listeners.*;
 import co.tantleffbeef.mcplanes.listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.listeners.protocol.ServerboundPlayerInputListener;
+import co.tantleffbeef.mcplanes.vehicles.P51;
 import co.tantleffbeef.mcplanes.vehicles.VehicleKey;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -17,6 +18,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.RecipeChoice;
@@ -24,6 +26,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -139,6 +142,19 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         System.gc();
 
         webServer.start();
+
+        getCommandRNN("p51").setExecutor((sender, command, label, args) -> {
+            if (!(sender instanceof Player player))
+                return false;
+
+            final var p51 = P51.spawn(getServer().getPluginManager(), player.getLocation(),
+                    resourceManager.getCustomItemStack(new NamespacedKey(this, "p_51")));
+            vehicleManager.registerVehicle(p51);
+
+            p51.rb.addForce(new Vector3f(0, 0, 2));
+
+            return true;
+        });
     }
 
     @Override
@@ -175,6 +191,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         resourceManager.registerItem(new SimpleItemType(this, "tail", true, "Tail"));
         resourceManager.registerItem(new SimpleItemType(this, "wing", true, "Wing"));
         resourceManager.registerItem(new SimpleItemType(this, "wrench", true, "Wrench"));
+
         resourceManager.registerItem(new VehicleItemType(this, "p_51", true, "P-51"));
 
         // Blocks
