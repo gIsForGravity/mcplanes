@@ -1,13 +1,10 @@
 package co.tantleffbeef.mcplanes.listeners.protocol;
 
-import co.tantleffbeef.mcplanes.Input;
 import co.tantleffbeef.mcplanes.McPlanes;
 import co.tantleffbeef.mcplanes.VehicleManager;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
 
 public class ServerboundPlayerInputListener extends PacketAdapter {
     private final VehicleManager vehicleManager;
@@ -21,7 +18,7 @@ public class ServerboundPlayerInputListener extends PacketAdapter {
 
     // you can change this if you want i guess
     private static final ListenerPriority listenerPriority = ListenerPriority.MONITOR;
-    @Override
+    /*@Override
     public void onPacketReceiving(PacketEvent event) {
         // cast packet as ServerboundPlayerInputPacket
         final var packet = (ServerboundPlayerInputPacket) event.getPacket().getHandle();
@@ -34,6 +31,6 @@ public class ServerboundPlayerInputListener extends PacketAdapter {
         // create Input based on packet and then send it to the JVehicleRider
         final Input input = new Input(packet.getZza(), packet.getXxa(), packet.isJumping(), packet.isShiftKeyDown());
         vehicleManager.riderInput(event.getPlayer(), input);
-    }
+    }*/
 }
 

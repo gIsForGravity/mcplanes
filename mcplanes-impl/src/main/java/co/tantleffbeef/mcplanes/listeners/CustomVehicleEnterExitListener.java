@@ -1,10 +1,10 @@
 package co.tantleffbeef.mcplanes.listeners;
 
 import co.tantleffbeef.mcplanes.VehicleManager;
-import org.bukkit.event.EventHandler;
+//import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.vehicle.VehicleEnterEvent;
-import org.bukkit.event.vehicle.VehicleExitEvent;
+//import org.bukkit.event.vehicle.VehicleEnterEvent;
+//import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public class CustomVehicleEnterExitListener implements Listener {
     private final VehicleManager manager;
@@ -12,7 +12,7 @@ public class CustomVehicleEnterExitListener implements Listener {
         this.manager = manager;
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onVehicleEnter(VehicleEnterEvent event) {
         var vehicle = event.getVehicle();
         var data = vehicle.getPersistentDataContainer();
@@ -31,5 +31,5 @@ public class CustomVehicleEnterExitListener implements Listener {
         if (!manager.checkIfVehicle(vehicle))
             return;
 
-    }
+    }*/
 }

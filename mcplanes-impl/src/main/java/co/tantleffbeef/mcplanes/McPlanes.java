@@ -55,7 +55,8 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             getLogger().info("it is actually registered you just got trolled");
 
         recipeManager = new MCPRecipeManager(this);
-        vehicleManager = new VehicleManager(this);
+        vehicleManager = new VehicleManager();
+        vehicleManager.start(this, getServer().getScheduler());
 
         persistentDataKeyManager = new KeyManager<>(this);
         CustomNbtKey.registerKeys(persistentDataKeyManager);
