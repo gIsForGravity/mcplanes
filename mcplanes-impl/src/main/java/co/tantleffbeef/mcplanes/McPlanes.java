@@ -150,6 +150,8 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
                     resourceManager.getCustomItemStack(new NamespacedKey(this, "p_51")));
             vehicleManager.registerVehicle(p51);
 
+
+
             return true;
         });
     }

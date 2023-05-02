@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -26,8 +27,10 @@ public class P51 implements PhysicsVehicle {
         assert location.getWorld() != null;
         final var display = location.getWorld().spawn(location, ItemDisplay.class);
         display.setItemStack(displayItem);
+        display.setVelocity(new Vector(0, 0, 5));
 
-        return new P51(pluginManager, display);
+        //return new P51(pluginManager, display);
+        return null;
     }
 
     public P51(PluginManager pluginManager, Display entity) {
