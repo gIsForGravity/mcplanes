@@ -27,7 +27,6 @@ public class Rigidbody implements Tickable {
      * Call this before any physics thing
      */
     public void pretick() {
-        System.out.println("rb pretick");
         // Sub-Preticks
         entity.pretick();
 
@@ -41,7 +40,6 @@ public class Rigidbody implements Tickable {
      */
     @Override
     public void tick(float deltaTime) {
-        System.out.println("rb tick");
         // Tick this object first
         // Apply acceleration
         entity.velocity().add(acceleration);
