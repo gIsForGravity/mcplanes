@@ -23,7 +23,7 @@ import java.util.zip.ZipOutputStream;
 
 import static co.tantleffbeef.mcplanes.Tools.clearFolder;
 
-public class MCPResourceManager implements ResourceManager {
+public final class MCPResourceManager implements ResourceManager {
     private final McPlanes plugin;
     private final KeyManager<CustomNbtKey> nbtKeyManager;
     private final File tempFolder;

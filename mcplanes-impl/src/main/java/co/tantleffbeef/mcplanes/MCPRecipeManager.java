@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class MCPRecipeManager implements RecipeManager {
+public final class MCPRecipeManager implements RecipeManager {
     // I guess we don't need to keep the plugin around???
     //private final Plugin plugin;
     // List of ingredients to be checked first before indexing the second list

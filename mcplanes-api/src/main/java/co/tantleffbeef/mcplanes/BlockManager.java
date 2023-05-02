@@ -25,6 +25,7 @@ public interface BlockManager {
      * @param blockLocation the block to replace with air
      */
     void deleteCustomBlock(@NotNull Location blockLocation);
+    @NotNull CustomBlockType getCustomBlockAtLocation(@NotNull Location location);
 
     void loadChunk(@NotNull Chunk chunk);
 

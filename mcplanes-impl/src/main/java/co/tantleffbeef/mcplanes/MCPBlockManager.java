@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class MCPBlockManager implements BlockManager {
+public final class MCPBlockManager implements BlockManager {
     private final KeyManager<CustomNbtKey> keyManager;
     private final Server server;
     private final ResourceManager resourceManager;
@@ -271,7 +271,8 @@ public class MCPBlockManager implements BlockManager {
      * @return a custom block which is the type found at that location
      * @see BlockManager#isCustomBlock(Location)
      */
-    private @NotNull CustomBlockType getCustomBlockAtLocation(@NotNull Location location) {
+    @Override
+    public @NotNull CustomBlockType getCustomBlockAtLocation(@NotNull Location location) {
         assert isCustomBlock(location);
 
         final var chunk = location.getChunk();
