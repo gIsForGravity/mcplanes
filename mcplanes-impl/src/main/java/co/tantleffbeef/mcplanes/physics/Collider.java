@@ -1,13 +1,21 @@
 package co.tantleffbeef.mcplanes.physics;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 public class Collider implements Tickable {
+    private static final ArrayList<Collider> colliders = new ArrayList<>();
+
+    public static void startTicking(Plugin plugin) {
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> colliders.forEach(Collider::renderOutline), 1, 1);
+    }
+
     public enum CollisionDirection {
         NONE,
         UP,
@@ -28,12 +36,51 @@ public class Collider implements Tickable {
         this.world = world;
         this.location = location;
         this.direction = CollisionDirection.NONE;
+
+        colliders.add(this);
     }
 
     public void moveCenter(Vector3f newLocation) {
         newLocation.sub(location, location);
         box.shift(location.x, location.y, location.z);
         location.set(newLocation);
+    }
+
+    public void renderOutline() {
+        // corners
+        final var eus = new Vector3d(box.getMaxX(), box.getMaxY(), box.getMaxZ());
+        final var eds = new Vector3d(box.getMaxX(), box.getMinY(), box.getMaxZ());
+        final var eun = new Vector3d(box.getMaxX(), box.getMaxY(), box.getMinZ());
+        final var edn = new Vector3d(box.getMaxX(), box.getMinY(), box.getMinZ());
+        final var wus = new Vector3d(box.getMinX(), box.getMaxY(), box.getMaxZ());
+        final var wds = new Vector3d(box.getMinX(), box.getMinY(), box.getMaxZ());
+        final var wun = new Vector3d(box.getMinX(), box.getMaxY(), box.getMinZ());
+        final var wdn = new Vector3d(box.getMinX(), box.getMinY(), box.getMinZ());
+        // minX, minY, minZ -> maxX, minY, minZ
+        renderLine(world, eus, eds);
+        renderLine(world, eus, eun);
+        renderLine(world, eus, wus);
+
+        renderLine(world, wds, wus);
+        renderLine(world, wds, wdn);
+        renderLine(world, wds, eds);
+
+        renderLine(world, edn, eds);
+        renderLine(world, edn, eun);
+        renderLine(world, edn, wdn);
+
+        renderLine(world, wun, wdn);
+        renderLine(world, wun, wus);
+        renderLine(world, wun, eun);
+    }
+
+    private static void renderLine(World world, Vector3d pos1, Vector3d pos2) {
+        final Vector3d tempVector = new Vector3d();
+
+        for (double i = 0; i <= 1.0; i += 0.1) {
+            final var pos = pos1.lerp(pos2, i, tempVector);
+            world.spawnParticle(Particle.SPELL_INSTANT, pos.x, pos.y, pos.z, 1);
+        }
     }
 
     public @NotNull CollisionDirection getDirection() {

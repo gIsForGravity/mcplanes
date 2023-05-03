@@ -8,6 +8,7 @@ import co.tantleffbeef.mcplanes.custom.item.VehicleItemType;
 import co.tantleffbeef.mcplanes.listeners.*;
 import co.tantleffbeef.mcplanes.listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.listeners.protocol.ServerboundPlayerInputListener;
+import co.tantleffbeef.mcplanes.physics.Collider;
 import co.tantleffbeef.mcplanes.vehicles.P51;
 import co.tantleffbeef.mcplanes.vehicles.VehicleKey;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -19,7 +20,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
@@ -168,6 +168,8 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             lastp51.addPassenger(player);
             return true;
         });
+
+        Collider.startTicking(this);
     }
 
     private Entity lastp51;
