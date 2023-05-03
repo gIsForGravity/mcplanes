@@ -99,15 +99,15 @@ public class Collider implements Tickable {
     private boolean checkNorth() {
         return checkBounds(box.getMinX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
-                box.getMaxZ(), box.getMaxZ() + 1,
-                CollisionDirection.NORTH);
+                box.getMinZ(), box.getMinZ() - 1,
+                CollisionDirection.SOUTH);
     }
 
     private boolean checkSouth() {
         return checkBounds(box.getMinX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
-                box.getMinZ(), box.getMinZ() - 1,
-                CollisionDirection.SOUTH);
+                box.getMaxZ(), box.getMaxZ() + 1,
+                CollisionDirection.NORTH);
     }
 
     private boolean checkEast() {

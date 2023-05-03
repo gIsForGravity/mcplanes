@@ -30,6 +30,8 @@ commands:
 #    usage: "Usage: /vehiclesummon <vehicle_id>"
   p51:
     description: "summons a p51"
+  ride:
+    description: "rides the p51"
 
 libraries:
 #  - me.lucko:commodore:2.2

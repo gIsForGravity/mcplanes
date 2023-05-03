@@ -18,6 +18,8 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
@@ -150,11 +152,24 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
                     resourceManager.getCustomItemStack(new NamespacedKey(this, "p_51")));
             vehicleManager.registerVehicle(p51);
 
+            lastp51 = p51.entity;
+            return true;
+        });
 
+        getCommandRNN("ride").setExecutor((sender, command, label, args) -> {
+            if (lastp51 == null)
+                return false;
 
+            if (!(sender instanceof Player player))
+                return false;
+
+            sender.sendMessage("riding");
+            lastp51.addPassenger(player);
             return true;
         });
     }
+
+    private Entity lastp51;
 
     @Override
     public void onDisable() {

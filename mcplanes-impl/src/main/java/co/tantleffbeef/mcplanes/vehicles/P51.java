@@ -6,6 +6,7 @@ import co.tantleffbeef.mcplanes.physics.Rigidbody;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +18,7 @@ import org.joml.Vector3f;
 
 public class P51 implements PhysicsVehicle {
     public final Rigidbody rb;
+    public final Entity entity;
 
     /**
      * *Precondition: location has a world*
@@ -37,6 +39,7 @@ public class P51 implements PhysicsVehicle {
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
         this.rb = new Rigidbody(pluginManager, new RigidDisplay(entity), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), entity.getWorld()), 1.0f);
+        this.entity = entity;
     }
 
     private boolean firstTick = true;
