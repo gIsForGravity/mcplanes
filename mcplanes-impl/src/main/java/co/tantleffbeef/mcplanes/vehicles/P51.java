@@ -33,7 +33,7 @@ public class P51 implements PhysicsVehicle {
 
             world.spawn(location, ItemDisplay.class, display -> {
                 display.setItemStack(displayItem);
-                display.addPassenger(display);
+                stand.addPassenger(display);
                 display.addScoreboardTag("mcplanes_plane");
                 display.addScoreboardTag("mcplanes_p51");
                 final var transformation = display.getTransformation();
