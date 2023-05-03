@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes.physics;
 
-import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
@@ -70,11 +70,7 @@ public class RigidDisplay implements RigidEntity {
         currentLocation.add(velocity.mul(deltaTime, tempVector));
 
         // Set the bukkitLocation
-        final var bukkitLocation = display.getLocation();
-        bukkitLocation.setX(currentLocation.x);
-        bukkitLocation.setY(currentLocation.y);
-        bukkitLocation.setZ(currentLocation.z);
-        teleport(display, bukkitLocation);
+        teleport(display, currentLocation);
 
 
         // Set the rotation
@@ -83,11 +79,10 @@ public class RigidDisplay implements RigidEntity {
         display.setTransformation(bukkitTransform);
     }
 
-    private static void teleport(Entity entity, Location location) {
-        final var passengers = entity.getPassengers();
-
-        passengers.forEach(entity::removePassenger);
-        entity.teleport(location);
-        passengers.forEach(entity::addPassenger);
+    private static void teleport(Entity entity, Vector3fc location) {
+        assert entity instanceof CraftEntity;
+        final var craftEntity = (CraftEntity) entity;
+        final var internalEntity = craftEntity.getHandle();
+        internalEntity.moveTo(location.x(), location.y(), location.z(), 0, 0);
     }
 }

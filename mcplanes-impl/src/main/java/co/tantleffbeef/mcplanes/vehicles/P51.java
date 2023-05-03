@@ -55,7 +55,7 @@ public class P51 implements PhysicsVehicle {
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
         this.rb = new Rigidbody(pluginManager, new RigidDisplay(stand, model), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), model.getWorld()), 1.0f);
-        this.entity = stand;
+        this.entity = model;
     }
 
     private boolean firstTick = true;
