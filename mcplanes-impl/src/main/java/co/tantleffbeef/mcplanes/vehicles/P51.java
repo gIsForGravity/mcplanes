@@ -5,10 +5,7 @@ import co.tantleffbeef.mcplanes.physics.RigidDisplay;
 import co.tantleffbeef.mcplanes.physics.Rigidbody;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.Location;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.BoundingBox;
@@ -26,23 +23,32 @@ public class P51 implements PhysicsVehicle {
      */
     public static P51 spawn(@NotNull PluginManager pluginManager, @NotNull Location location, ItemStack displayItem) {
         assert location.getWorld() != null;
-        final var display = location.getWorld().spawn(location, ItemDisplay.class);
-        display.setItemStack(displayItem);
-        final var transformation = display.getTransformation();
-        transformation.getScale().set(5f, 5f, 5f);
-        display.setTransformation(transformation);
 
-        return new P51(pluginManager, display);
+        final var world = location.getWorld();
+        final var armorStand = world.spawn(location, ArmorStand.class, stand -> {
+            stand.setVisible(false);
+            stand.setGravity(false);
+
+            world.spawn(location, ItemDisplay.class, display -> {
+                display.setItemStack(displayItem);
+                final var transformation = display.getTransformation();
+                transformation.getScale().set(5f, 5f, 5f);
+                display.setTransformation(transformation);
+                stand.addPassenger(display);
+            });
+        });
+
+        return new P51(pluginManager, armorStand, (Display) armorStand.getPassengers().get(0));
     }
 
-    public P51(PluginManager pluginManager, Display entity) {
-        final var xPos = entity.getLocation().getX();
-        final var yPos = entity.getLocation().getY();
-        final var zPos = entity.getLocation().getZ();
+    public P51(PluginManager pluginManager, ArmorStand stand, Display model) {
+        final var xPos = stand.getLocation().getX();
+        final var yPos = stand.getLocation().getY();
+        final var zPos = stand.getLocation().getZ();
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
-        this.rb = new Rigidbody(pluginManager, new RigidDisplay(entity), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), entity.getWorld()), 1.0f);
-        this.entity = entity;
+        this.rb = new Rigidbody(pluginManager, new RigidDisplay(stand, model), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), model.getWorld()), 1.0f);
+        this.entity = model;
     }
 
     private boolean firstTick = true;

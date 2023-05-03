@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes.physics;
 
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Display;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
@@ -7,15 +8,17 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class RigidDisplay implements RigidEntity {
-    private final Display entity;
+    private final Display display;
+    private final ArmorStand physics;
     private final Vector3f currentLocation;
     private final Vector3f previousLocation;
     private final Quaternionf currentRotation;
     private final Vector3f velocity;
     private final Vector3f tempVector;
 
-    public RigidDisplay(Display displayEntity) {
-        this.entity = displayEntity;
+    public RigidDisplay(@NotNull ArmorStand physicsEntity, @NotNull Display displayEntity) {
+        this.display = displayEntity;
+        this.physics = physicsEntity;
         this.currentLocation = new Vector3f();
         this.previousLocation = new Vector3f();
         this.currentRotation = new Quaternionf();
@@ -51,11 +54,11 @@ public class RigidDisplay implements RigidEntity {
 
         // Grab the entity's current location and
         // save that
-        final var location = entity.getLocation();
+        final var location = physics.getLocation();
         currentLocation.set(location.getX(), location.getY(), location.getZ());
 
         // Grab the rotation
-        final var transform = entity.getTransformation();
+        final var transform = display.getTransformation();
         currentRotation.set(transform.getRightRotation());
     }
 
@@ -65,15 +68,15 @@ public class RigidDisplay implements RigidEntity {
         currentLocation.add(velocity.mul(deltaTime, tempVector));
 
         // Set the bukkitLocation
-        final var bukkitLocation = entity.getLocation();
+        final var bukkitLocation = physics.getLocation();
         bukkitLocation.setX(currentLocation.x);
         bukkitLocation.setY(currentLocation.y);
         bukkitLocation.setZ(currentLocation.z);
-        entity.teleport(bukkitLocation);
+        display.teleport(bukkitLocation);
 
         // Set the rotation
-        final var bukkitTransform = entity.getTransformation();
+        final var bukkitTransform = display.getTransformation();
         bukkitTransform.getRightRotation().set(currentRotation);
-        entity.setTransformation(bukkitTransform);
+        display.setTransformation(bukkitTransform);
     }
 }
