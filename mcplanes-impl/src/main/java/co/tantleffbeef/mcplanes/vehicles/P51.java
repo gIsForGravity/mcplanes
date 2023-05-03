@@ -29,23 +29,17 @@ public class P51 implements PhysicsVehicle {
             stand.setVisible(false);
             stand.setGravity(false);
 
-            /*world.spawn(location, ItemDisplay.class, display -> {
+            world.spawn(location, ItemDisplay.class, display -> {
                 display.setItemStack(displayItem);
                 final var transformation = display.getTransformation();
                 transformation.getScale().set(5f, 5f, 5f);
                 display.setTransformation(transformation);
                 stand.addPassenger(display);
-            });*/
+            });
         });
 
-        final var itemDisplay = world.spawn(location, ItemDisplay.class, display -> {
-            display.setItemStack(displayItem);
-            final var transformation = display.getTransformation();
-            transformation.getScale().set(5f, 5f, 5f);
-            display.setTransformation(transformation);
-        });
-
-        return new P51(pluginManager, armorStand, itemDisplay);
+        // TODO: refactor this and make it not bad
+        return new P51(pluginManager, armorStand, (Display) armorStand.getPassengers().get(0));
     }
 
     public P51(PluginManager pluginManager, ArmorStand stand, Display model) {
@@ -55,16 +49,19 @@ public class P51 implements PhysicsVehicle {
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
         this.rb = new Rigidbody(pluginManager, new RigidDisplay(stand, model), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), model.getWorld()), 1.0f);
-        this.entity = model;
+        this.entity = stand;
     }
 
-    private boolean firstTick = true;
+    private int tick = 0;
 
     @Override
     public void tick(@Nullable Input input, float deltaTime) {
         rb.pretick();
 
-        rb.velocity().set(0, 0, 2);
+        if (tick < 100) {
+            rb.addForce(new Vector3f(0, 0, 1));
+            tick++;
+        }
 
         rb.tick(deltaTime);
     }

@@ -70,8 +70,7 @@ public class RigidDisplay implements RigidEntity {
         currentLocation.add(velocity.mul(deltaTime, tempVector));
 
         // Set the bukkitLocation
-        teleport(display, currentLocation);
-
+        teleport(physics, currentLocation);
 
         // Set the rotation
         final var bukkitTransform = display.getTransformation();
@@ -82,7 +81,7 @@ public class RigidDisplay implements RigidEntity {
     private static void teleport(Entity entity, Vector3fc location) {
         assert entity instanceof CraftEntity;
         final var craftEntity = (CraftEntity) entity;
-        final var internalEntity = craftEntity.getHandle();
-        internalEntity.moveTo(location.x(), location.y(), location.z(), 0, 0);
+        final var serverEntity = craftEntity.getHandle();
+        serverEntity.moveTo(location.x(), location.y(), location.z(), 0, 0);
     }
 }

@@ -14,12 +14,14 @@ public class Rigidbody implements Tickable {
     // by mass
     private float inverseMass;
     private final Vector3f acceleration;
+    private final Vector3f tempVector;
 
     public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass) {
         this.pluginManager = pluginManager;
         this.entity = entity;
         this.collider = collider;
         this.acceleration = new Vector3f();
+        this.tempVector = new Vector3f();
         setMass(mass);
     }
 
@@ -42,7 +44,7 @@ public class Rigidbody implements Tickable {
     public void tick(float deltaTime) {
         // Tick this object first
         // Apply acceleration
-        entity.velocity().add(acceleration);
+        entity.velocity().add(acceleration.mul(deltaTime, tempVector));
 
         // Call subticks
         collider.tick(deltaTime);
