@@ -56,7 +56,7 @@ public class RigidDisplay implements RigidEntity {
 
         // Grab the entity's current location and
         // save that
-        final var location = display.getLocation();
+        final var location = physics.getLocation();
         currentLocation.set(location.getX(), location.getY(), location.getZ());
 
         // Grab the rotation

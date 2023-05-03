@@ -58,11 +58,10 @@ public class P51 implements PhysicsVehicle {
     public void tick(@Nullable Input input, float deltaTime) {
         rb.pretick();
 
-        /*if (tick < 100) {
+        if (tick < 100) {
             rb.addForce(new Vector3f(0, 0, 1));
             tick++;
-        }*/
-        rb.velocity().set(0, 0, 5);
+        }
 
         rb.tick(deltaTime);
     }
