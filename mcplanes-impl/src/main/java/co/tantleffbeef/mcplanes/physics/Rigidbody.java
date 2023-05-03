@@ -47,6 +47,7 @@ public class Rigidbody implements Tickable {
         entity.velocity().add(acceleration.mul(deltaTime, tempVector));
 
         // Call subticks
+        collider.moveCenter(entity.location());
         collider.tick(deltaTime);
         resolveCollisions();
         entity.tick(deltaTime);
