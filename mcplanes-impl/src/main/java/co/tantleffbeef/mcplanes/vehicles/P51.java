@@ -28,14 +28,14 @@ public class P51 implements PhysicsVehicle {
         final var armorStand = world.spawn(location, ArmorStand.class, stand -> {
             stand.setVisible(false);
             stand.setGravity(false);
-            stand.addScoreboardTag("pluggytesty:plane");
-            stand.addScoreboardTag("pluggytesty:p51");
+            stand.addScoreboardTag("mcplanes_plane");
+            stand.addScoreboardTag("mcplanes_p51");
 
             world.spawn(location, ItemDisplay.class, display -> {
                 display.setItemStack(displayItem);
                 display.addPassenger(display);
-                display.addScoreboardTag("pluggytesty:plane");
-                display.addScoreboardTag("pluggytesty:p51");
+                display.addScoreboardTag("mcplanes_plane");
+                display.addScoreboardTag("mcplanes_p51");
                 final var transformation = display.getTransformation();
                 transformation.getScale().set(5f, 5f, 5f);
                 display.setTransformation(transformation);

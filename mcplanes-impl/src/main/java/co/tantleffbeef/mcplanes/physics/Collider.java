@@ -46,7 +46,7 @@ public class Collider implements Tickable {
         location.set(newLocation);
     }
 
-    public void renderOutline() {
+    public static void renderBounds(BoundingBox box, World world) {
         // corners
         final var eus = new Vector3d(box.getMaxX(), box.getMaxY(), box.getMaxZ());
         final var eds = new Vector3d(box.getMaxX(), box.getMinY(), box.getMaxZ());
@@ -72,6 +72,10 @@ public class Collider implements Tickable {
         renderLine(world, wun, wdn);
         renderLine(world, wun, wus);
         renderLine(world, wun, eun);
+    }
+
+    public void renderOutline() {
+        renderBounds(box, world);
     }
 
     private static void renderLine(World world, Vector3d pos1, Vector3d pos2) {
