@@ -28,6 +28,9 @@ public class P51 implements PhysicsVehicle {
         assert location.getWorld() != null;
         final var display = location.getWorld().spawn(location, ItemDisplay.class);
         display.setItemStack(displayItem);
+        final var transformation = display.getTransformation();
+        transformation.getScale().set(5f, 5f, 5f);
+        display.setTransformation(transformation);
 
         return new P51(pluginManager, display);
     }
