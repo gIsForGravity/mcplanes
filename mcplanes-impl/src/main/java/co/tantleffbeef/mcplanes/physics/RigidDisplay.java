@@ -72,7 +72,8 @@ public class RigidDisplay implements RigidEntity {
         bukkitLocation.setX(currentLocation.x);
         bukkitLocation.setY(currentLocation.y);
         bukkitLocation.setZ(currentLocation.z);
-        display.teleport(bukkitLocation);
+        physics.teleport(bukkitLocation);
+
 
         // Set the rotation
         final var bukkitTransform = display.getTransformation();
