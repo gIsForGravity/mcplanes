@@ -12,6 +12,7 @@ public class RigidDisplay implements RigidEntity {
     private final Vector3f previousLocation;
     private final Quaternionf currentRotation;
     private final Vector3f velocity;
+    private final Vector3f tempVector;
 
     public RigidDisplay(Display displayEntity) {
         this.entity = displayEntity;
@@ -19,6 +20,7 @@ public class RigidDisplay implements RigidEntity {
         this.previousLocation = new Vector3f();
         this.currentRotation = new Quaternionf();
         this.velocity = new Vector3f();
+        this.tempVector = new Vector3f();
     }
 
     @Override
@@ -55,14 +57,13 @@ public class RigidDisplay implements RigidEntity {
         // Grab the rotation
         final var transform = entity.getTransformation();
         currentRotation.set(transform.getRightRotation());
-
-        // Grab the velocity
-        final var bukkitVelocity = entity.getVelocity();
-        velocity.set(bukkitVelocity.getX(), bukkitVelocity.getY(), bukkitVelocity.getZ());
     }
 
     @Override
     public void tick(float deltaTime) {
+        // Move based on velocity
+        currentLocation.add(velocity.mul(deltaTime, tempVector));
+
         // Set the bukkitLocation
         final var bukkitLocation = entity.getLocation();
         bukkitLocation.setX(currentLocation.x);
@@ -74,12 +75,5 @@ public class RigidDisplay implements RigidEntity {
         final var bukkitTransform = entity.getTransformation();
         bukkitTransform.getRightRotation().set(currentRotation);
         entity.setTransformation(bukkitTransform);
-
-        // Set the velocity
-        final var bukkitVelocity = entity.getVelocity();
-        bukkitVelocity.setX(velocity.x);
-        bukkitVelocity.setY(velocity.y);
-        bukkitVelocity.setZ(velocity.z);
-        entity.setVelocity(bukkitVelocity);
     }
 }
