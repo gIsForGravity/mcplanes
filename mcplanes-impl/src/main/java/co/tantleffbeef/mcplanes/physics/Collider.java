@@ -13,7 +13,7 @@ public class Collider implements Tickable {
     private static final ArrayList<Collider> colliders = new ArrayList<>();
 
     public static void startTicking(Plugin plugin) {
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> colliders.forEach(Collider::renderOutline), 1, 1);
+        //plugin.getServer().getScheduler().runTaskTimer(plugin, () -> colliders.forEach(Collider::renderOutline), 1, 1);
     }
 
     public enum CollisionDirection {
@@ -83,7 +83,7 @@ public class Collider implements Tickable {
 
         for (double i = 0; i <= 1.0; i += 0.1) {
             final var pos = pos1.lerp(pos2, i, tempVector);
-            world.spawnParticle(Particle.SPELL_INSTANT, pos.x, pos.y, pos.z, 1);
+            world.spawnParticle(Particle.CRIT, pos.x, pos.y, pos.z, 1);
         }
     }
 
@@ -121,7 +121,10 @@ public class Collider implements Tickable {
                             || type == Material.STRUCTURE_VOID)
                         continue;
 
-                    if (!box.contains(BoundingBox.of(block)))
+                    final var blockBoundingBox = BoundingBox.of(block);
+                    renderBounds(blockBoundingBox, world);
+
+                    if (!box.contains(blockBoundingBox))
                         continue;
 
                     this.direction = direction;
