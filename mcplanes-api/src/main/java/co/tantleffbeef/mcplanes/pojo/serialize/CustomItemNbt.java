@@ -2,8 +2,8 @@ package co.tantleffbeef.mcplanes.pojo.serialize;
 
 import co.tantleffbeef.mcplanes.CustomNbtKey;
 import co.tantleffbeef.mcplanes.KeyManager;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +39,23 @@ public class CustomItemNbt {
         final var placeable = placeableByte.equals((byte) 1);
 
         return new CustomItemNbt(id, placeable);
+    }
+
+    /**
+     * gives the custom item's id or a minecraft: id if its a vanilla item
+     * @return the item's id (either namespace:custom or minecraft:builtin_item)
+     */
+    public static @NotNull NamespacedKey customItemIdOrVanilla(@NotNull ItemStack item,
+                                                               @NotNull KeyManager<CustomNbtKey> keys) {
+        final var meta = item.getItemMeta();
+        if (meta == null)
+            return item.getType().getKey();
+
+        final var persistentData = meta.getPersistentDataContainer();
+        if (!hasCustomItemNbt(persistentData, keys))
+            return item.getType().getKey();
+
+        return fromPersistentDataContainer(persistentData, keys).id;
     }
 
     public void saveToPersistentDataContainer(@NotNull PersistentDataContainer rootContainer,
