@@ -1,7 +1,9 @@
 package co.tantleffbeef.mcplanes.physics;
 
+import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -54,7 +56,7 @@ public class RigidDisplay implements RigidEntity {
 
         // Grab the entity's current location and
         // save that
-        final var location = physics.getLocation();
+        final var location = display.getLocation();
         currentLocation.set(location.getX(), location.getY(), location.getZ());
 
         // Grab the rotation
@@ -68,16 +70,24 @@ public class RigidDisplay implements RigidEntity {
         currentLocation.add(velocity.mul(deltaTime, tempVector));
 
         // Set the bukkitLocation
-        final var bukkitLocation = physics.getLocation();
+        final var bukkitLocation = display.getLocation();
         bukkitLocation.setX(currentLocation.x);
         bukkitLocation.setY(currentLocation.y);
         bukkitLocation.setZ(currentLocation.z);
-        physics.teleport(bukkitLocation);
+        teleport(display, bukkitLocation);
 
 
         // Set the rotation
         final var bukkitTransform = display.getTransformation();
         bukkitTransform.getRightRotation().set(currentRotation);
         display.setTransformation(bukkitTransform);
+    }
+
+    private static void teleport(Entity entity, Location location) {
+        final var passengers = entity.getPassengers();
+
+        passengers.forEach(entity::removePassenger);
+        entity.teleport(location);
+        passengers.forEach(entity::addPassenger);
     }
 }

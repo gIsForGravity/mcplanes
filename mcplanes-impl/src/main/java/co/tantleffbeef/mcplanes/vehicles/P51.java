@@ -29,16 +29,23 @@ public class P51 implements PhysicsVehicle {
             stand.setVisible(false);
             stand.setGravity(false);
 
-            world.spawn(location, ItemDisplay.class, display -> {
+            /*world.spawn(location, ItemDisplay.class, display -> {
                 display.setItemStack(displayItem);
                 final var transformation = display.getTransformation();
                 transformation.getScale().set(5f, 5f, 5f);
                 display.setTransformation(transformation);
                 stand.addPassenger(display);
-            });
+            });*/
         });
 
-        return new P51(pluginManager, armorStand, (Display) armorStand.getPassengers().get(0));
+        final var itemDisplay = world.spawn(location, ItemDisplay.class, display -> {
+            display.setItemStack(displayItem);
+            final var transformation = display.getTransformation();
+            transformation.getScale().set(5f, 5f, 5f);
+            display.setTransformation(transformation);
+        });
+
+        return new P51(pluginManager, armorStand, itemDisplay);
     }
 
     public P51(PluginManager pluginManager, ArmorStand stand, Display model) {
