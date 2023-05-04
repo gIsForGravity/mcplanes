@@ -9,10 +9,10 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class PhysicsObjectCollisionEvent extends Event {
-    private final static HandlerList handlerList = new HandlerList();
+    private final static HandlerList HANDLER_LIST = new HandlerList();
 
     public static @NotNull HandlerList getHandlerList() {
-        return handlerList;
+        return HANDLER_LIST;
     }
 
     private final Rigidbody collidingBody;
@@ -40,7 +40,7 @@ public class PhysicsObjectCollisionEvent extends Event {
     @NotNull
     @Override
     public HandlerList getHandlers() {
-        return handlerList;
+        return HANDLER_LIST;
     }
 
     /**

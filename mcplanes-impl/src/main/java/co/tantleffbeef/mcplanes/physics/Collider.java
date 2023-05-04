@@ -108,12 +108,21 @@ public class Collider implements Tickable {
 
     private boolean checkBounds(double minX, double maxX, double minY, double maxY, double minZ, double maxZ,
                                 CollisionDirection direction) {
+        return checkBounds(minX, maxX, minY, maxY, minZ, maxZ, direction, false);
+    }
+
+    private boolean checkBounds(double minX, double maxX, double minY, double maxY, double minZ, double maxZ,
+                                CollisionDirection direction, boolean showDebugBox) {
         for (double ix = minX; ix <= maxX; ix++) {
             for (double iy = minY; iy <= maxY; iy++) {
                 for (double iz = minZ; iz <= maxZ; iz++) {
                     final var blockLoc = new Location(world, ix, iy, iz);
                     final var block = blockLoc.getBlock();
                     final var type = block.getType();
+
+                    if (showDebugBox) {
+                        renderBounds(BoundingBox.of(block), world);
+                    }
 
                     if (type == Material.AIR
                             || type == Material.CAVE_AIR
@@ -122,7 +131,6 @@ public class Collider implements Tickable {
                         continue;
 
                     final var blockBoundingBox = BoundingBox.of(block);
-                    renderBounds(blockBoundingBox, world);
 
                     if (!box.contains(blockBoundingBox))
                         continue;
@@ -168,7 +176,8 @@ public class Collider implements Tickable {
         return checkBounds(box.getMaxX(), box.getMaxX() + 1,
                 box.getMinY(), box.getMaxY(),
                 box.getMinZ(), box.getMaxZ(),
-                CollisionDirection.EAST);
+                CollisionDirection.EAST,
+                true);
     }
 
     private boolean checkWest() {
