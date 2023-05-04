@@ -132,6 +132,8 @@ public class Collider implements Tickable {
 
                     final var blockBoundingBox = BoundingBox.of(block);
 
+                    renderBounds(blockBoundingBox, world);
+
                     if (!box.contains(blockBoundingBox))
                         continue;
 
@@ -162,22 +164,21 @@ public class Collider implements Tickable {
         return checkBounds(box.getMinX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
                 box.getMinZ(), box.getMinZ() - 1,
-                CollisionDirection.SOUTH);
+                CollisionDirection.NORTH);
     }
 
     private boolean checkSouth() {
         return checkBounds(box.getMinX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
                 box.getMaxZ(), box.getMaxZ() + 1,
-                CollisionDirection.NORTH);
+                CollisionDirection.SOUTH);
     }
 
     private boolean checkEast() {
         return checkBounds(box.getMaxX(), box.getMaxX() + 1,
                 box.getMinY(), box.getMaxY(),
                 box.getMinZ(), box.getMaxZ(),
-                CollisionDirection.EAST,
-                true);
+                CollisionDirection.EAST);
     }
 
     private boolean checkWest() {
