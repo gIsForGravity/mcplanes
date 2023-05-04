@@ -87,14 +87,10 @@ public class ResourceGiveCommand implements CommandExecutor, TabCompleter {
         for (var key: namespacedKeys)
             itemIds.add(key.toString());
 
-//        for (var key: namespacedKeys) {
-//            String keyString = key.toString();
-//            itemIds.add(keyString.substring(keyString.indexOf(":") + 1));
-//        }
-
         final List<String> completions = new ArrayList<>();
 
         StringUtil.copyPartialMatches(args[1], itemIds, completions);
+
         StringUtil.copyPartialMatches("pluggytesty:" + args[1], itemIds, completions);
         StringUtil.copyPartialMatches("mcplanes:" + args[1], itemIds, completions);
         return completions;
