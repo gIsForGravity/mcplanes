@@ -81,9 +81,9 @@ public class Collider implements Tickable {
     private static void renderLine(World world, Vector3d pos1, Vector3d pos2) {
         final Vector3d tempVector = new Vector3d();
 
-        for (double i = 0; i <= 1.0; i += 0.1) {
+        for (double i = 0; i <= 1.0; i += 0.5) {
             final var pos = pos1.lerp(pos2, i, tempVector);
-            world.spawnParticle(Particle.CRIT, pos.x, pos.y, pos.z, 1);
+            world.spawnParticle(Particle.SPELL_INSTANT, pos.x, pos.y, pos.z, 1);
         }
     }
 
