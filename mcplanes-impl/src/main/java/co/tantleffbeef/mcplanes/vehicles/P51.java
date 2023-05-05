@@ -15,7 +15,8 @@ import org.joml.Vector3f;
 
 public class P51 implements PhysicsVehicle {
     public final Rigidbody rb;
-    public final Entity entity;
+    public final ArmorStand entity;
+    private final Display model;
 
     /**
      * *Precondition: location has a world*
@@ -54,12 +55,21 @@ public class P51 implements PhysicsVehicle {
         box.expand(2.0);
         this.rb = new Rigidbody(pluginManager, new RigidDisplay(stand, model), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), model.getWorld()), 1.0f);
         this.entity = stand;
+        this.model = model;
     }
 
     private int tick = 0;
 
     @Override
-    public void tick(@Nullable Input input, float deltaTime) {
+    public boolean tick(@Nullable Input input, float deltaTime) {
+        // If the entity has been killed, then destroy all of the objects
+        if (entity.isDead() || model.isDead()) {
+            entity.remove();
+            model.remove();
+
+            return false;
+        }
+
         rb.pretick();
 
         if (tick < 100) {
@@ -68,6 +78,8 @@ public class P51 implements PhysicsVehicle {
         }
 
         rb.tick(deltaTime);
+
+        return true;
     }
 
     @Override
