@@ -22,20 +22,34 @@ public class VehicleManager implements Runnable {
     public void unregisterVehicle(@NotNull PhysicsVehicle vehicle) {
         assert vehicles.contains(vehicle);
         vehicles.remove(vehicle);
+
+        // Grab the driver and dismount them
+        final var driver = vehicle.driver();
+        if (driver != null)
+            driver.leaveVehicle();
     }
 
     @Override
     public void run() {
+        // Loop through all vehicles in the list
+        // and run their tick function
         for (int i = 0; i < vehicles.size(); i++) {
             final var vehicle = vehicles.get(i);
             final var driver = vehicle.driver();
 
             final Input input;
+            final boolean result;
+            // If the vehicle has a driver then pass it in
             if (driver != null && (input = inputs.get(driver.getUniqueId())) != null) {
-                vehicle.tick(input, FIXED_DELTA_TIME);
+                result = vehicle.tick(input, FIXED_DELTA_TIME);
             } else {
-                vehicle.tick(null, FIXED_DELTA_TIME);
+                // Otherwise just pass in null
+                result = vehicle.tick(null, FIXED_DELTA_TIME);
             }
+
+            // If the entity is dead then unregister the vehicle
+            if (!result)
+                unregisterVehicle(vehicle);
         }
     }
 

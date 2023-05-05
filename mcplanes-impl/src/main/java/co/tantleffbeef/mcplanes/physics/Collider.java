@@ -134,9 +134,6 @@ public class Collider implements Tickable {
 
                     renderBounds(blockBoundingBox, world);
 
-                    if (!box.contains(blockBoundingBox))
-                        continue;
-
                     this.direction = direction;
                     return true;
                 }
@@ -148,14 +145,14 @@ public class Collider implements Tickable {
 
     private boolean checkUp() {
         return checkBounds(box.getMinX(), box.getMaxX(),
-                box.getMaxY(), box.getMaxY() + 1,
+                box.getMaxY(), box.getMaxY(),
                 box.getMinZ(), box.getMaxZ(),
                 CollisionDirection.UP);
     }
 
     private boolean checkDown() {
         return checkBounds(box.getMinX(), box.getMaxX(),
-                box.getMinY(), box.getMinY() - 1,
+                box.getMinY(), box.getMinY(),
                 box.getMinZ(), box.getMaxZ(),
                 CollisionDirection.DOWN);
     }
@@ -163,26 +160,26 @@ public class Collider implements Tickable {
     private boolean checkNorth() {
         return checkBounds(box.getMinX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
-                box.getMinZ(), box.getMinZ() - 1,
+                box.getMinZ(), box.getMinZ(),
                 CollisionDirection.NORTH);
     }
 
     private boolean checkSouth() {
         return checkBounds(box.getMinX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
-                box.getMaxZ(), box.getMaxZ() + 1,
+                box.getMaxZ(), box.getMaxZ(),
                 CollisionDirection.SOUTH);
     }
 
     private boolean checkEast() {
-        return checkBounds(box.getMaxX(), box.getMaxX() + 1,
+        return checkBounds(box.getMaxX(), box.getMaxX(),
                 box.getMinY(), box.getMaxY(),
                 box.getMinZ(), box.getMaxZ(),
                 CollisionDirection.EAST);
     }
 
     private boolean checkWest() {
-        return checkBounds(box.getMinX(), box.getMinX() - 1,
+        return checkBounds(box.getMinX(), box.getMinX(),
                 box.getMinY(), box.getMaxY(),
                 box.getMinZ(), box.getMaxZ(),
                 CollisionDirection.WEST);
