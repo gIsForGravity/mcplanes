@@ -15,7 +15,7 @@ public final class MCPRecipeManager implements RecipeManager {
     // I guess we don't need to keep the plugin around???
     //private final Plugin plugin;
     // List of ingredients to be checked first before indexing the second list
-    private final List<RecipeIngredient> ingredientList = new ArrayList<>();
+    private final Set<RecipeIngredient> ingredientList = new HashSet<>();
     // List of recipes and their composite parts (the namespaced key is the recipe id)
     private final Map<NamespacedKey, List<RecipeIngredient>> recipes = new HashMap<>();
     private final NamespacedKey customItemKey;
@@ -77,7 +77,7 @@ public final class MCPRecipeManager implements RecipeManager {
 
             var ingredient = new RecipeIngredient(mat);
             if (!ingredients.contains(ingredient)) ingredients.add(ingredient);
-            if (!ingredientList.contains(ingredient)) ingredientList.add(ingredient);
+            ingredientList.add(ingredient);
         }
     }
 
@@ -96,7 +96,7 @@ public final class MCPRecipeManager implements RecipeManager {
 
             var ingredient = new RecipeIngredient(choice);
             if (!ingredients.contains(ingredient)) ingredients.add(ingredient);
-            if (!ingredientList.contains(ingredient)) ingredientList.add(ingredient);
+            ingredientList.add(ingredient);
         }
     }
 
@@ -121,19 +121,8 @@ public final class MCPRecipeManager implements RecipeManager {
             //itemId = itemStack.getType().getKey().toString();
         }
 
-        // whether we found the item in our list of custom recipes
-        boolean found = false;
-
-        // iterate through list of recipe items and if we don't find picked up item then stop
-        for (var ingredient : ingredientList) {
-            if (ingredientFound.equals(ingredient)) {
-                found = true;
-                break;
-            }
-        }
-
         // if item not found then just leave
-        if (!found)
+        if (!ingredientList.contains(ingredientFound))
             return;
 
         // Loop through every recipe and every item in every recipe and unlock applicable ones
