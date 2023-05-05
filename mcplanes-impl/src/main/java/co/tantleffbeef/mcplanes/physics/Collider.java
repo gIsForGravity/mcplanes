@@ -132,10 +132,10 @@ public class Collider implements Tickable {
 
                     final var blockBoundingBox = BoundingBox.of(block);
 
-                    renderBounds(blockBoundingBox, world);
-
                     if (!box.contains(blockBoundingBox))
                         continue;
+
+                    renderBounds(blockBoundingBox, world);
 
                     this.direction = direction;
                     return true;
