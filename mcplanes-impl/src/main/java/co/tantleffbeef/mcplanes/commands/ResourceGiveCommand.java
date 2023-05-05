@@ -82,17 +82,21 @@ public class ResourceGiveCommand implements CommandExecutor, TabCompleter {
             return null;
 
         var namespacedKeys = resourceManager.getItemIdList();
-        final List<String> itemIds = new ArrayList<>(namespacedKeys.size());
-
-        for (var key: namespacedKeys)
-            itemIds.add(key.toString());
-
+        //final List<String> itemIds = new ArrayList<>(namespacedKeys.size());
         final List<String> completions = new ArrayList<>();
 
-        StringUtil.copyPartialMatches(args[1], itemIds, completions);
+        for (var key: namespacedKeys) {
+            String keyString = key.toString();
+            if (keyString.contains(args[1]))
+                completions.add(keyString);
+        }
 
-        StringUtil.copyPartialMatches("pluggytesty:" + args[1], itemIds, completions);
-        StringUtil.copyPartialMatches("mcplanes:" + args[1], itemIds, completions);
+
+//        StringUtil.copyPartialMatches(args[1], itemIds, completions);
+//
+//        StringUtil.copyPartialMatches("pluggytesty:" + args[1], itemIds, completions);
+//        StringUtil.copyPartialMatches("mcplanes:" + args[1], itemIds, completions);
+
         return completions;
     }
 
