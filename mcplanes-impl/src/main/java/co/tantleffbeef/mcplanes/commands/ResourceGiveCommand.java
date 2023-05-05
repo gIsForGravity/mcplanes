@@ -90,6 +90,9 @@ public class ResourceGiveCommand implements CommandExecutor, TabCompleter {
         final List<String> completions = new ArrayList<>();
 
         StringUtil.copyPartialMatches(args[1], itemIds, completions);
+
+        StringUtil.copyPartialMatches("pluggytesty:" + args[1], itemIds, completions);
+        StringUtil.copyPartialMatches("mcplanes:" + args[1], itemIds, completions);
         return completions;
     }
 
