@@ -13,7 +13,7 @@ public class Collider implements Tickable {
     private static final ArrayList<Collider> colliders = new ArrayList<>();
 
     public static void startTicking(Plugin plugin) {
-        //plugin.getServer().getScheduler().runTaskTimer(plugin, () -> colliders.forEach(Collider::renderOutline), 1, 1);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> colliders.forEach(Collider::renderOutline), 1, 1);
     }
 
     private final BoundingBox box;
