@@ -1,6 +1,6 @@
 package co.tantleffbeef.mcplanes.physics.event;
 
-import co.tantleffbeef.mcplanes.physics.Collider;
+import co.tantleffbeef.mcplanes.physics.CollisionDirections;
 import co.tantleffbeef.mcplanes.physics.Rigidbody;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -16,14 +16,14 @@ public class PhysicsObjectCollisionEvent extends Event {
     }
 
     private final Rigidbody collidingBody;
-    private final Collider.CollisionDirection direction;
+    private final CollisionDirections direction;
     private final Vector3fc oldVelocity;
     private final Vector3f newVelocity;
     private final Vector3fc collidingPosition;
     private final Vector3f resolvedPosition;
 
     public PhysicsObjectCollisionEvent(@NotNull Rigidbody collidingBody,
-                                       @NotNull Collider.CollisionDirection direction,
+                                       @NotNull CollisionDirections direction,
                                        @NotNull Vector3fc oldVelocity,
                                        @NotNull Vector3f newVelocity,
                                        @NotNull Vector3fc collidingPosition,
@@ -55,7 +55,7 @@ public class PhysicsObjectCollisionEvent extends Event {
      * Gives the cardinal direction the collision happened in
      * @return the cardinal direction
      */
-    public @NotNull Collider.CollisionDirection getDirection() {
+    public @NotNull CollisionDirections getDirection() {
         return direction;
     }
 

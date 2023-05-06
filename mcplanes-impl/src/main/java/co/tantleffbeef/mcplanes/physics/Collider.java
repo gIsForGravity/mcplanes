@@ -16,26 +16,16 @@ public class Collider implements Tickable {
         //plugin.getServer().getScheduler().runTaskTimer(plugin, () -> colliders.forEach(Collider::renderOutline), 1, 1);
     }
 
-    public enum CollisionDirection {
-        NONE,
-        UP,
-        DOWN,
-        NORTH,
-        WEST,
-        SOUTH,
-        EAST
-    }
-
     private final BoundingBox box;
     private final World world;
     private final Vector3f location;
-    private CollisionDirection direction;
+    private final CollisionDirections directions;
 
     public Collider(BoundingBox fromBox, Vector3f location, World world) {
         this.box = fromBox.clone();
         this.world = world;
         this.location = location;
-        this.direction = CollisionDirection.NONE;
+        this.directions = new CollisionDirections();
 
         colliders.add(this);
     }
@@ -87,32 +77,28 @@ public class Collider implements Tickable {
         }
     }
 
-    public @NotNull CollisionDirection getDirection() {
-        return direction;
+    public @NotNull CollisionDirections getDirections() {
+        return directions;
     }
 
     @Override
     public void tick(float deltaTime) {
-        if (checkUp())
-            return;
-        if (checkDown())
-            return;
-        if (checkNorth())
-            return;
-        if (checkSouth())
-            return;
-        if (checkWest())
-            return;
-        checkEast();
+        directions.clear();
+
+        directions.up = checkUp();
+        directions.down = checkDown();
+        directions.north = checkNorth();
+        directions.south = checkSouth();
+        directions.east = checkEast();
+        directions.west = checkWest();
+    }
+
+    private boolean checkBounds(double minX, double maxX, double minY, double maxY, double minZ, double maxZ) {
+        return checkBounds(minX, maxX, minY, maxY, minZ, maxZ, false);
     }
 
     private boolean checkBounds(double minX, double maxX, double minY, double maxY, double minZ, double maxZ,
-                                CollisionDirection direction) {
-        return checkBounds(minX, maxX, minY, maxY, minZ, maxZ, direction, false);
-    }
-
-    private boolean checkBounds(double minX, double maxX, double minY, double maxY, double minZ, double maxZ,
-                                CollisionDirection direction, boolean showDebugBox) {
+                                boolean showDebugBox) {
         for (double ix = minX; ix <= maxX; ix++) {
             for (double iy = minY; iy <= maxY; iy++) {
                 for (double iz = minZ; iz <= maxZ; iz++) {
@@ -134,7 +120,6 @@ public class Collider implements Tickable {
 
                     renderBounds(blockBoundingBox, world);
 
-                    this.direction = direction;
                     return true;
                 }
             }
@@ -144,44 +129,38 @@ public class Collider implements Tickable {
     }
 
     private boolean checkUp() {
-        return checkBounds(box.getMinX(), box.getMaxX(),
+        return checkBounds(box.getMinX() + 0.5, box.getMaxX() - 0.5,
                 box.getMaxY(), box.getMaxY(),
-                box.getMinZ(), box.getMaxZ(),
-                CollisionDirection.UP);
+                box.getMinZ() + 0.5, box.getMaxZ() - 0.5);
     }
 
     private boolean checkDown() {
-        return checkBounds(box.getMinX(), box.getMaxX(),
+        return checkBounds(box.getMinX() + 0.5, box.getMaxX() - 0.5,
                 box.getMinY(), box.getMinY(),
-                box.getMinZ(), box.getMaxZ(),
-                CollisionDirection.DOWN);
+                box.getMinZ() + 0.5, box.getMaxZ() - 0.5);
     }
 
     private boolean checkNorth() {
-        return checkBounds(box.getMinX(), box.getMaxX(),
-                box.getMinY(), box.getMaxY(),
-                box.getMinZ(), box.getMinZ(),
-                CollisionDirection.NORTH);
+        return checkBounds(box.getMinX() + 0.5, box.getMaxX() - 0.5,
+                box.getMinY() + 0.5, box.getMaxY() - 0.5,
+                box.getMinZ(), box.getMinZ());
     }
 
     private boolean checkSouth() {
-        return checkBounds(box.getMinX(), box.getMaxX(),
-                box.getMinY(), box.getMaxY(),
-                box.getMaxZ(), box.getMaxZ(),
-                CollisionDirection.SOUTH);
+        return checkBounds(box.getMinX() + 0.5, box.getMaxX() - 0.5,
+                box.getMinY() + 0.5, box.getMaxY() - 0.5,
+                box.getMaxZ(), box.getMaxZ());
     }
 
     private boolean checkEast() {
         return checkBounds(box.getMaxX(), box.getMaxX(),
-                box.getMinY(), box.getMaxY(),
-                box.getMinZ(), box.getMaxZ(),
-                CollisionDirection.EAST);
+                box.getMinY() + 0.5, box.getMaxY() - 0.5,
+                box.getMinZ() + 0.5, box.getMaxZ() - 0.5);
     }
 
     private boolean checkWest() {
         return checkBounds(box.getMinX(), box.getMinX(),
-                box.getMinY(), box.getMaxY(),
-                box.getMinZ(), box.getMaxZ(),
-                CollisionDirection.WEST);
+                box.getMinY() + 0.5, box.getMaxY() - 0.5,
+                box.getMinZ() + 0.5, box.getMaxZ() - 0.5);
     }
 }

@@ -80,37 +80,37 @@ public class Rigidbody implements Tickable {
     }
 
     private void resolveCollisions() {
-        final var collisionDirection = collider.getDirection();
-        if (collisionDirection == Collider.CollisionDirection.NONE)
+        final var collisionDirection = collider.getDirections();
+        if (!collisionDirection.isColliding())
             return;
 
         final Vector3f calculatedVelocity = new Vector3f().set(entity.velocity());
 
-        switch (collisionDirection) {
-            case UP, DOWN -> {
-                float yVel = calculatedVelocity.y * 0.25f;
+        if (collisionDirection.up || collisionDirection.down) {
+            float yVel = calculatedVelocity.y * 0.25f;
 
-                if (yVel > 0.05f)
-                    calculatedVelocity.y = yVel;
-                else
-                    calculatedVelocity.y = 0;
-            }
-            case NORTH, SOUTH -> {
-                float zVel = calculatedVelocity.z * 0.25f;
+            if (yVel > 0.05f)
+                calculatedVelocity.y = yVel;
+            else
+                calculatedVelocity.y = 0;
+        }
 
-                if (zVel > 0.05f)
-                    calculatedVelocity.z = zVel;
-                else
-                    calculatedVelocity.z = 0;
-            }
-            case WEST, EAST -> {
-                float xVel = calculatedVelocity.x * 0.25f;
+        if (collisionDirection.north || collisionDirection.south) {
+            float zVel = calculatedVelocity.z * 0.25f;
 
-                if (xVel > 0.05f)
-                    calculatedVelocity.x = xVel;
-                else
-                    calculatedVelocity.x = 0;
-            }
+            if (zVel > 0.05f)
+                calculatedVelocity.z = zVel;
+            else
+                calculatedVelocity.z = 0;
+        }
+
+        if (collisionDirection.east || collisionDirection.west) {
+            float xVel = calculatedVelocity.x * 0.25f;
+
+            if (xVel > 0.05f)
+                calculatedVelocity.x = xVel;
+            else
+                calculatedVelocity.x = 0;
         }
 
         final var event = new PhysicsObjectCollisionEvent(this,
