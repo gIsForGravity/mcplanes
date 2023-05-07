@@ -63,12 +63,12 @@ public class P51 implements PhysicsVehicle {
     @Override
     public boolean tick(@Nullable Input input, float deltaTime) {
         // If the entity has been killed, then destroy all of the objects
-        if (entity.isDead()) {
+        /*if (entity.isDead()) {
             entity.remove();
             model.remove();
 
             return false;
-        }
+        }*/
 
         rb.pretick();
 
