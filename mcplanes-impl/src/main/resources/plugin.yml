@@ -34,4 +34,5 @@ commands:
     description: "rides the p51"
 
 libraries:
+#  - me.lucko:commodore:2.2
   - org.eclipse.jetty:jetty-server:11.0.14
