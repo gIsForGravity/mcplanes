@@ -64,7 +64,7 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>11.0.14</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
