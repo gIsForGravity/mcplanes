@@ -4,6 +4,7 @@ import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
 import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -103,6 +104,8 @@ public final class MCPResourceManager implements ResourceManager {
     }
 
     public void registerItem(@NotNull CustomItemType item) {
+        Bukkit.broadcastMessage("registering item type: " + item.getClass().getName());
+
         ItemStack customItemStack = new ItemStack(item.baseMaterial());
         ItemMeta meta = customItemStack.getItemMeta();
         assert meta != null;
