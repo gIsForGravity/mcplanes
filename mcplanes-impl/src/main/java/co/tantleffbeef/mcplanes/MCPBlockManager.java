@@ -318,6 +318,9 @@ public final class MCPBlockManager implements BlockManager {
 
         display.setItemStack(displayItemStack);
         display.setItemDisplayTransform(block.displayTransform());
+        final var transfomation = display.getTransformation();
+        transfomation.getScale().set(1.001, 1.001, 1.001);
+        display.setTransformation(transfomation);
 
         displayEntities.put(location.getBlock().getLocation(), display.getUniqueId());
     }
