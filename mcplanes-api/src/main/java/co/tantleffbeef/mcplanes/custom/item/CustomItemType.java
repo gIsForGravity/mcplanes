@@ -24,6 +24,15 @@ public interface CustomItemType {
      */
     default void addAdditionalNbtItemData(@NotNull CustomItemNbt data) {}
 
+
+    /**
+     * @param type the class that you are checking if itemStack is an instance of
+     * @param itemStack the itemStack the is being checked
+     * @param keyManager key manager things
+     * @param resourceManager manages the resource
+     * @return the CustomItemType as an instance of type or null if it is not an instance of type
+     * @param <T> class for instance of
+     */
     static <T extends CustomItemType> @Nullable T asInstanceOf(Class<T> type, ItemStack itemStack,
                                                                       KeyManager<CustomNbtKey> keyManager, ResourceManager resourceManager) {
         ItemMeta meta = itemStack.getItemMeta();
