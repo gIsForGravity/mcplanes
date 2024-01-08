@@ -8,4 +8,5 @@ public interface ResourceApi {
     @NotNull KeyManager<CustomNbtKey> getNbtKeyManager();
     @NotNull RecipeManager getRecipeManager();
     @NotNull ResourceManager getResourceManager();
+    @NotNull InternalsTools getInternalsTools();
 }

@@ -37,13 +37,16 @@ import java.util.Objects;
 import java.util.jar.JarFile;
 
 public class McPlanes extends JavaPlugin implements ResourceApi {
+    @SuppressWarnings("FieldCanBeLocal")
     private ProtocolManager protocolManager;
     private VehicleManager vehicleManager;
     private ResourceManager resourceManager;
     private RecipeManager recipeManager;
+    private InternalsTools internalsTools;
     private WebServer webServer;
     private BlockManager blockManager;
     private KeyManager<CustomNbtKey> persistentDataKeyManager;
+    @SuppressWarnings("FieldCanBeLocal")
     private KeyManager<VehicleKey> vehicleKeyManager;
     private String mcVersion;
 
@@ -58,6 +61,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         else
             getLogger().info("it is actually registered you just got trolled");
 
+        internalsTools = new MCPInternalsTools();
         recipeManager = new MCPRecipeManager(this);
         vehicleManager = new VehicleManager();
         vehicleManager.start(this, getServer().getScheduler());
@@ -517,5 +521,10 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
     @Override
     public @NotNull ResourceManager getResourceManager() {
         return resourceManager;
+    }
+
+    @Override
+    public @NotNull InternalsTools getInternalsTools() {
+        return internalsTools;
     }
 }
