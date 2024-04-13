@@ -79,7 +79,6 @@ public class P51 implements PhysicsVehicle {
         Quaternionf rotation = rb.currentRotation();
 
         Vector3f forward = rb.forward();
-        Vector3f up = rb.up();
         Vector3f right = rb.right();
 
         if (rb.velocity().lengthSquared() < MAX_VELOCITY_SQUARED)
