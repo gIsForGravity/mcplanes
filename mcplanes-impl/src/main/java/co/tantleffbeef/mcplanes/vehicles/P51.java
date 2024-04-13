@@ -11,6 +11,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.QuaternionfInterpolator;
 import org.joml.Vector3f;
 
 public class P51 implements PhysicsVehicle {
@@ -59,6 +61,8 @@ public class P51 implements PhysicsVehicle {
     }
 
     private int tick = 0;
+    private final float MAX_VELOCITY_SQUARED = 100;
+    private final float THRUST_FORCE = 1;
 
     @Override
     public boolean tick(@Nullable Input input, float deltaTime) {
@@ -72,10 +76,37 @@ public class P51 implements PhysicsVehicle {
 
         rb.pretick();
 
-        if (tick < 100) {
-            rb.addForce(new Vector3f(0, 0, 1));
-            tick++;
+        Quaternionf rotation = rb.currentRotation();
+
+        Vector3f forward = rb.forward();
+        Vector3f up = rb.up();
+        Vector3f right = rb.right();
+
+        if (rb.velocity().lengthSquared() < MAX_VELOCITY_SQUARED)
+             // im assuming this is normalized already
+            rb.addForce(rb.forward().mul(THRUST_FORCE));
+
+
+        if (input != null) {
+
+            if (input.forward() > 0.1f)
+                rotation.rotateAxis(-0.1f, right);
+
+            else if (input.forward() < -0.1f)
+                rotation.rotateAxis(0.1f, right);
+
+            if (input.right() > 0.1f)
+                rotation.rotateAxis(0.1f, forward);
+
+            else if (input.right() < -0.1f)
+                rotation.rotateAxis(-0.1f, forward);
+
         }
+//        if (tick < 100) {
+//            rb.addForce(new Vector3f(0, 0, 1));
+//            tick++;
+//        }
+
 
         rb.tick(deltaTime);
 

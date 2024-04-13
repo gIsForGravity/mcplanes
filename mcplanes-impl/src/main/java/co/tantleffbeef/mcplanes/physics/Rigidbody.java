@@ -2,7 +2,12 @@ package co.tantleffbeef.mcplanes.physics;
 
 import co.tantleffbeef.mcplanes.physics.event.PhysicsObjectCollisionEvent;
 import org.bukkit.plugin.PluginManager;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
+
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
 public class Rigidbody implements Tickable {
     private final RigidEntity entity;
@@ -15,6 +20,7 @@ public class Rigidbody implements Tickable {
     private float inverseMass;
     private final Vector3f acceleration;
     private final Vector3f tempVector;
+    private Matrix4f rotationMatrix = new Matrix4f();
 
     public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass) {
         this.pluginManager = pluginManager;
@@ -34,6 +40,8 @@ public class Rigidbody implements Tickable {
 
         // This object
         acceleration.zero();
+
+        rotationMatrix = rotationMatrix.rotation(currentRotation());
     }
 
     /**
@@ -65,6 +73,11 @@ public class Rigidbody implements Tickable {
     public Vector3f velocity() {
         return entity.velocity();
     }
+    public Quaternionf currentRotation() { return entity.currentRotation(); }
+
+    public Vector3f forward() { return new Vector3f(rotationMatrix.m20(), rotationMatrix.m21(), rotationMatrix.m22()); }
+    public Vector3f up() { return new Vector3f(rotationMatrix.m10(), rotationMatrix.m11(), rotationMatrix.m12()); }
+    public Vector3f right() { return new Vector3f(rotationMatrix.m00(), rotationMatrix.m01(), rotationMatrix.m02()); }
 
     public Vector3f acceleration() {
         return acceleration;
