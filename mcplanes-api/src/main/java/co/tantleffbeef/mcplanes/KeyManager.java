@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KeyManager<T> {
-    // maybe making changes in api works???
     private final Plugin namespacePlugin;
     private final Map<T, NamespacedKey> keyMap;
 

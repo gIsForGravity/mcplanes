@@ -19,16 +19,26 @@ public class Rigidbody implements Tickable {
     // by mass
     private float inverseMass;
     private final Vector3f acceleration;
+    private final float drag;
+    private final float angularDrag;
     private final Vector3f tempVector;
-    private Matrix4f rotationMatrix = new Matrix4f();
+    private Matrix4f rotationMatrix;
+    private final Quaternionf angularVelocity;
 
-    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass) {
+    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass, float drag, float angularDrag) {
         this.pluginManager = pluginManager;
         this.entity = entity;
         this.collider = collider;
         this.acceleration = new Vector3f();
         this.tempVector = new Vector3f();
+        this.angularVelocity = new Quaternionf();
+        this.drag = drag;
+        this.angularDrag = angularDrag;
         setMass(mass);
+    }
+
+    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass) {
+        this(pluginManager, entity, collider, mass, 0, 0);
     }
 
     /**
@@ -51,8 +61,16 @@ public class Rigidbody implements Tickable {
     @Override
     public void tick(float deltaTime) {
         // Tick this object first
+
+        // Apply drag
+        addForce(new Vector3f(velocity()).mul(-drag));
+        addTorque(new Quaternionf(angularVelocity).mul(-angularDrag));
+
         // Apply acceleration
         entity.velocity().add(acceleration.mul(deltaTime, tempVector));
+
+        // Apply rotation velocity
+        currentRotation().add(angularVelocity);
 
         // Call subticks
         collider.moveCenter(entity.location());
@@ -73,6 +91,7 @@ public class Rigidbody implements Tickable {
     public Vector3f velocity() {
         return entity.velocity();
     }
+    public Vector3f getLocation() { return new Vector3f(entity.location()); } // readonly
     public Quaternionf currentRotation() { return entity.currentRotation(); }
 
     public Vector3f forward() { return new Vector3f(rotationMatrix.m20(), rotationMatrix.m21(), rotationMatrix.m22()); }
@@ -90,6 +109,21 @@ public class Rigidbody implements Tickable {
     public void addForce(Vector3f force) {
         force.mul(inverseMass);
         acceleration.add(force);
+    }
+
+    public void addTorque(Vector3f torque) {
+        addTorque(new Quaternionf().rotateTo(new Vector3f(), torque));
+    }
+
+    public void addTorque(Quaternionf torque) {
+        angularVelocity.add(torque.mul(inverseMass));
+    }
+
+    public void addForceAtPosition(Vector3f force, Vector3f position) {
+        addForce(force);
+
+        Vector3f direction = new Vector3f(position).sub(entity.location()); // why does java do this to me
+        addTorque(direction.cross(force));
     }
 
     private void resolveCollisions() {

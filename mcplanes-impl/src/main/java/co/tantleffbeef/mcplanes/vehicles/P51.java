@@ -12,7 +12,6 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-import org.joml.QuaternionfInterpolator;
 import org.joml.Vector3f;
 
 public class P51 implements PhysicsVehicle {
@@ -55,7 +54,8 @@ public class P51 implements PhysicsVehicle {
         final var zPos = stand.getLocation().getZ();
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
-        this.rb = new Rigidbody(pluginManager, new RigidDisplay(stand, model), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos), model.getWorld()), 1.0f);
+        this.rb = new Rigidbody(pluginManager, new RigidDisplay(stand, model), new Collider(box, new Vector3f((float) xPos, (float) yPos, (float) zPos),
+                                model.getWorld()), 1.0f, 0.5f, 0.1f);
         this.entity = stand;
         this.model = model;
     }
@@ -63,6 +63,11 @@ public class P51 implements PhysicsVehicle {
     private int tick = 0;
     private final float MAX_VELOCITY_SQUARED = 100;
     private final float THRUST_FORCE = 1;
+    private final float AIR_DENSITY = 1.225f;
+    private final float WING_AREA = 3;
+    private final float CONTROL_SURFACE_AREA = 0.2f;
+    private final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
+    private float throttle = 1f; // normally start at 0 but 1 for testing
 
     @Override
     public boolean tick(@Nullable Input input, float deltaTime) {
@@ -76,36 +81,67 @@ public class P51 implements PhysicsVehicle {
 
         rb.pretick();
 
-        Quaternionf rotation = rb.currentRotation();
+//        Quaternionf rotation = rb.currentRotation();
+//        Vector3f location = rb.getLocation();
+
+        // PROBABLY SHOULD USE deltaTime but i didnt feel like it
 
         Vector3f forward = rb.forward();
+//        Vector3f up = rb.up();
         Vector3f right = rb.right();
 
+        // throttle
         if (rb.velocity().lengthSquared() < MAX_VELOCITY_SQUARED)
-             // im assuming this is normalized already
-            rb.addForce(rb.forward().mul(THRUST_FORCE));
+            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle));
+
+        // lift
+        // this could be done per surface but rn im doing it for all of them
+        float AoA = forward.angleSigned(rb.velocity(), right);
+        float speedSquared = rb.velocity().lengthSquared();
+
+        float liftForce = 0.5f * AIR_DENSITY * speedSquared *
+                        WING_AREA * 2 * (float)Math.PI * AoA;
+
+        rb.addForce(rb.up().mul(liftForce));
 
 
+        // controls
         if (input != null) {
 
-            if (input.forward() > 0.1f)
-                rotation.rotateAxis(-0.1f, right);
+            float controlSurfaceForce = 0.5f * AIR_DENSITY * speedSquared * CONTROL_SURFACE_AREA *
+                                        2 * (float)Math.PI * (AoA + CONTROL_SURFACE_DEFLECT);
 
-            else if (input.forward() < -0.1f)
-                rotation.rotateAxis(0.1f, right);
+            // in the future these will apply a torque that is in some way proportional to airspeed
 
-            if (input.right() > 0.1f)
-                rotation.rotateAxis(0.1f, forward);
+            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
+                rb.addForceAtPosition(rb.up().mul(controlSurfaceForce).rotateX(-CONTROL_SURFACE_DEFLECT),
+                                      rb.getLocation().add(rb.forward().mul(-2))); // up force back
 
-            else if (input.right() < -0.1f)
-                rotation.rotateAxis(-0.1f, forward);
+            else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
+                rb.addForceAtPosition(rb.up().mul(-1 * controlSurfaceForce).rotateX(CONTROL_SURFACE_DEFLECT),
+                                      rb.getLocation().add(rb.forward().mul(-2))); // down force back
+
+            if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
+                rb.addForceAtPosition(rb.up().mul(-1 * controlSurfaceForce).rotateX(CONTROL_SURFACE_DEFLECT),
+                                      rb.getLocation().add(rb.right().mul(2))); // down force right
+                rb.addForceAtPosition(rb.up().mul(controlSurfaceForce).rotateX(-CONTROL_SURFACE_DEFLECT),
+                                      rb.getLocation().add(rb.right().mul(-2))); // up force left
+
+            } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
+                rb.addForceAtPosition(rb.up().mul(-1 * controlSurfaceForce).rotateX(CONTROL_SURFACE_DEFLECT),
+                                      rb.getLocation().add(rb.right().mul(-2))); // down force left
+                rb.addForceAtPosition(rb.up().mul(controlSurfaceForce).rotateX(-CONTROL_SURFACE_DEFLECT),
+                                      rb.getLocation().add(rb.right().mul(2))); // up force right
+            }
+
+            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
+                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
 
         }
 //        if (tick < 100) {
 //            rb.addForce(new Vector3f(0, 0, 1));
 //            tick++;
 //        }
-
 
         rb.tick(deltaTime);
 
