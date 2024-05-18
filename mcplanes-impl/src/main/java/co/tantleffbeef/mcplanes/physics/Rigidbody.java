@@ -15,17 +15,17 @@ public class Rigidbody implements Tickable {
     private final PluginManager pluginManager;
     private float mass;
     // We store the inverse mass so we can
-    // multiply by that instead of dividing
-    // by mass
+    // multiply by that instead of dividing by mass
     private float inverseMass;
     private final Vector3f acceleration;
     private final float drag;
     private final float angularDrag;
     private final Vector3f tempVector;
-    private Matrix4f rotationMatrix;
+    private Matrix4f rotationMatrix; // idk man chat told me to do this
     private final Quaternionf angularVelocity;
+    private final boolean hasGravity;
 
-    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass, float drag, float angularDrag) {
+    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity) {
         this.pluginManager = pluginManager;
         this.entity = entity;
         this.collider = collider;
@@ -34,7 +34,12 @@ public class Rigidbody implements Tickable {
         this.angularVelocity = new Quaternionf();
         this.drag = drag;
         this.angularDrag = angularDrag;
+        this.hasGravity = hasGravity;
         setMass(mass);
+    }
+
+    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass, float drag, float angularDrag) {
+        this(pluginManager, entity, collider, mass, drag, angularDrag, true);
     }
 
     public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass) {
@@ -50,6 +55,8 @@ public class Rigidbody implements Tickable {
 
         // This object
         acceleration.zero();
+        if (hasGravity)
+            acceleration.y = -9.8f;
 
         rotationMatrix = rotationMatrix.rotation(currentRotation());
     }
@@ -75,7 +82,7 @@ public class Rigidbody implements Tickable {
         // Call subticks
         collider.moveCenter(entity.location());
         collider.tick(deltaTime);
-        resolveCollisions();
+//        resolveCollisions();
         entity.tick(deltaTime);
     }
 

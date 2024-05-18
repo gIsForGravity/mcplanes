@@ -66,6 +66,7 @@ public class P51 implements PhysicsVehicle {
     private final float AIR_DENSITY = 1.225f;
     private final float WING_AREA = 3;
     private final float CONTROL_SURFACE_AREA = 0.2f;
+    private final float STABILIZER_AREA = 0.8f;
     private final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
     private float throttle = 1f; // normally start at 0 but 1 for testing
 
@@ -84,53 +85,44 @@ public class P51 implements PhysicsVehicle {
 //        Quaternionf rotation = rb.currentRotation();
 //        Vector3f location = rb.getLocation();
 
-        // PROBABLY SHOULD USE deltaTime but i didnt feel like it
-
-        Vector3f forward = rb.forward();
+//        Vector3f forward = rb.forward();
 //        Vector3f up = rb.up();
-        Vector3f right = rb.right();
+//        Vector3f right = rb.right();
 
         // throttle
         if (rb.velocity().lengthSquared() < MAX_VELOCITY_SQUARED)
-            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle));
+            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle).mul(deltaTime));
 
         // lift
         // this could be done per surface but rn im doing it for all of them
-        float AoA = forward.angleSigned(rb.velocity(), right);
-        float speedSquared = rb.velocity().lengthSquared();
-
-        float liftForce = 0.5f * AIR_DENSITY * speedSquared *
-                        WING_AREA * 2 * (float)Math.PI * AoA;
-
-        rb.addForce(rb.up().mul(liftForce));
-
+        rb.addForce(rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)));
+        // i could do lift forces on stabilizers other than vertical but im not going to
+        rb.addForceAtPosition(rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
+                              rb.getLocation().add(rb.forward().mul(-2)));
 
         // controls
         if (input != null) {
 
-            float controlSurfaceForce = 0.5f * AIR_DENSITY * speedSquared * CONTROL_SURFACE_AREA *
-                                        2 * (float)Math.PI * (AoA + CONTROL_SURFACE_DEFLECT);
-
             // in the future these will apply a torque that is in some way proportional to airspeed
 
             if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
-                rb.addForceAtPosition(rb.up().mul(controlSurfaceForce).rotateX(-CONTROL_SURFACE_DEFLECT),
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                                       rb.getLocation().add(rb.forward().mul(-2))); // up force back
 
             else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
-                rb.addForceAtPosition(rb.up().mul(-1 * controlSurfaceForce).rotateX(CONTROL_SURFACE_DEFLECT),
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
                                       rb.getLocation().add(rb.forward().mul(-2))); // down force back
 
             if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
-                rb.addForceAtPosition(rb.up().mul(-1 * controlSurfaceForce).rotateX(CONTROL_SURFACE_DEFLECT),
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
                                       rb.getLocation().add(rb.right().mul(2))); // down force right
-                rb.addForceAtPosition(rb.up().mul(controlSurfaceForce).rotateX(-CONTROL_SURFACE_DEFLECT),
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                                       rb.getLocation().add(rb.right().mul(-2))); // up force left
 
             } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
-                rb.addForceAtPosition(rb.up().mul(-1 * controlSurfaceForce).rotateX(CONTROL_SURFACE_DEFLECT),
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
                                       rb.getLocation().add(rb.right().mul(-2))); // down force left
-                rb.addForceAtPosition(rb.up().mul(controlSurfaceForce).rotateX(-CONTROL_SURFACE_DEFLECT),
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                                       rb.getLocation().add(rb.right().mul(2))); // up force right
             }
 
@@ -146,6 +138,30 @@ public class P51 implements PhysicsVehicle {
         rb.tick(deltaTime);
 
         return true;
+    }
+
+    private enum AeroSurfaceType {
+        CONTROL_SURFACE_UP,
+        CONTROL_SURFACE_DOWN,
+        WING,
+        VERTICAL_STABILIZER
+    }
+
+    private float getAeroForce(AeroSurfaceType type, float deltaTime) {
+
+        float defaultAoA = rb.forward().angleSigned(rb.velocity(), rb.right());
+        float speedSquared = rb.velocity().lengthSquared();
+
+        return deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * switch (type) {
+            case WING -> WING_AREA * defaultAoA;
+
+            case CONTROL_SURFACE_UP -> CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT);
+
+            case CONTROL_SURFACE_DOWN -> CONTROL_SURFACE_AREA * (defaultAoA - CONTROL_SURFACE_DEFLECT);
+
+            // might have to do tangential velocity which i dont want to do
+            case VERTICAL_STABILIZER -> STABILIZER_AREA * (rb.forward().angleSigned(rb.velocity(), rb.up()));
+        };
     }
 
     @Override
