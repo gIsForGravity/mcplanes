@@ -83,7 +83,7 @@ public class Rigidbody implements Tickable {
         collider.moveCenter(entity.location());
         collider.tick(deltaTime);
 //        resolveCollisions();
-        entity.tick(deltaTime);
+        entity.tick(deltaTime); //
     }
 
     public float getMass() {
