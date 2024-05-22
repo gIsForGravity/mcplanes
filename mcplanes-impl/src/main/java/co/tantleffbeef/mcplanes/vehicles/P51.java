@@ -71,6 +71,8 @@ public class P51 implements PhysicsVehicle {
     private final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
     private float throttle = 0f; // normally start at 0 but 1 for testing
 
+    private float timer = 0;
+
     @Override
     public boolean tick(@Nullable Input input, float deltaTime) {
         // If the entity has been killed, then destroy all of the objects
@@ -83,7 +85,10 @@ public class P51 implements PhysicsVehicle {
 
         rb.pretick();
 
-        Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
+        if (timer < 1)
+            Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
+
+        timer += deltaTime;
 
 //        Quaternionf rotation = rb.currentRotation();
 //        Vector3f location = rb.getLocation();
