@@ -70,8 +70,8 @@ public class Rigidbody implements Tickable {
         // Tick this object first
 
         // Apply drag
-        addForce(new Vector3f(velocity()).mul(-drag * deltaTime));
-        addTorque(new Quaternionf(angularVelocity).mul(-angularDrag * deltaTime));
+//        addForce(new Vector3f(velocity()).mul(-drag * deltaTime));
+//        addTorque(new Quaternionf(angularVelocity).mul(-angularDrag * deltaTime));
 
         // Apply acceleration
         entity.velocity().add(acceleration.mul(deltaTime, tempVector));

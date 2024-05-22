@@ -85,8 +85,10 @@ public class P51 implements PhysicsVehicle {
 
         rb.pretick();
 
-        if (timer < 1)
+        if (timer < 1) {
             Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
+            Bukkit.broadcastMessage("forward: " + rb.forward().toString() + " right: " + rb.right().toString() + " up: " + rb.up().toString());
+        }
 
         timer += deltaTime;
 
