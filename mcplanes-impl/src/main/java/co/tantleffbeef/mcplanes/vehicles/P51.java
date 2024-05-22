@@ -68,7 +68,7 @@ public class P51 implements PhysicsVehicle {
     private final float CONTROL_SURFACE_AREA = 0.2f;
     private final float STABILIZER_AREA = 0.8f;
     private final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
-    private float throttle = 1f; // normally start at 0 but 1 for testing
+    private float throttle = 0f; // normally start at 0 but 1 for testing
 
     @Override
     public boolean tick(@Nullable Input input, float deltaTime) {
@@ -126,8 +126,11 @@ public class P51 implements PhysicsVehicle {
                                       rb.getLocation().add(rb.right().mul(2))); // up force right
             }
 
-            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
-                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
+            if (input.jump() && throttle < 1) // probably have to cancel leave event but then how do you leave
+                throttle += 0.05f;
+
+//            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
+//                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
 
         }
 //        if (tick < 100) {
