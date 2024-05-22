@@ -88,9 +88,11 @@ public class P51 implements PhysicsVehicle {
         if (timer < 1) {
             Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
             Bukkit.broadcastMessage("forward: " + rb.forward().toString() + " right: " + rb.right().toString() + " up: " + rb.up().toString());
+            // results in nans up the wazoo
+            timer += deltaTime;
         }
 
-        timer += deltaTime;
+
 
 //        Quaternionf rotation = rb.currentRotation();
 //        Vector3f location = rb.getLocation();

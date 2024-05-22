@@ -21,7 +21,6 @@ public class Rigidbody implements Tickable {
     private final float drag;
     private final float angularDrag;
     private final Vector3f tempVector;
-    private Matrix4f rotationMatrix = new Matrix4f(); // idk man chat told me to do this
     private final Quaternionf angularVelocity;
     private final boolean hasGravity;
 
@@ -58,7 +57,6 @@ public class Rigidbody implements Tickable {
 //        if (hasGravity)
 //            acceleration.y = -9.8f;
 
-        rotationMatrix = rotationMatrix.rotation(currentRotation());
     }
 
     /**
@@ -101,9 +99,35 @@ public class Rigidbody implements Tickable {
     public Vector3f getLocation() { return new Vector3f(entity.location()); } // readonly
     public Quaternionf currentRotation() { return entity.currentRotation(); }
 
-    public Vector3f forward() { return new Vector3f(rotationMatrix.m20(), rotationMatrix.m21(), rotationMatrix.m22()); }
-    public Vector3f up() { return new Vector3f(rotationMatrix.m10(), rotationMatrix.m11(), rotationMatrix.m12()); }
-    public Vector3f right() { return new Vector3f(rotationMatrix.m00(), rotationMatrix.m01(), rotationMatrix.m02()); }
+    // https://www.gamedev.net/forums/topic/56471-extracting-direction-vectors-from-quaternion/
+    // probably should be calced avery tick and this should just return that vector
+    public Vector3f forward() {
+        Quaternionf rot = currentRotation();
+
+        return new Vector3f(
+                2 * (rot.x * rot.z + rot.w * rot.z),
+                2 * (rot.y * rot.z - rot.w * rot.x),
+                1 - 2 * (rot.x * rot.x + rot.y * rot.y)
+        );
+    }
+    public Vector3f up() {
+        Quaternionf rot = currentRotation();
+
+        return new Vector3f(
+                2 * (rot.x * rot.y - rot.w * rot.z),
+                1 - 2 * (rot.x * rot.x + rot.z * rot.z),
+                2 * (rot.y * rot.z + rot.w * rot.x)
+        );
+    }
+    public Vector3f right() {
+        Quaternionf rot = currentRotation();
+
+        return new Vector3f(
+                1 - 2 * (rot.y * rot.y + rot.z * rot.z),
+                2 * (rot.x * rot.y + rot.w * rot.z),
+                2 * (rot.x * rot.z - rot.w * rot.y)
+        );
+    }
 
     public Vector3f acceleration() {
         return acceleration;
