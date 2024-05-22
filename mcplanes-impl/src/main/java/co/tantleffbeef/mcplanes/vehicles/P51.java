@@ -83,7 +83,7 @@ public class P51 implements PhysicsVehicle {
 
         rb.pretick();
 
-        Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString());
+        Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
 
 //        Quaternionf rotation = rb.currentRotation();
 //        Vector3f location = rb.getLocation();
@@ -94,7 +94,7 @@ public class P51 implements PhysicsVehicle {
 
         // throttle
         if (rb.velocity().lengthSquared() < MAX_VELOCITY_SQUARED)
-            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle).mul(deltaTime));
+            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime));
 
         // lift
         // this could be done per surface but rn im doing it for all of them
