@@ -55,8 +55,8 @@ public class Rigidbody implements Tickable {
 
         // This object
         acceleration.zero();
-        if (hasGravity)
-            acceleration.y = -9.8f;
+//        if (hasGravity)
+//            acceleration.y = -9.8f;
 
         rotationMatrix = rotationMatrix.rotation(currentRotation());
     }
