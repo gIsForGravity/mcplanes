@@ -4,6 +4,7 @@ import co.tantleffbeef.mcplanes.physics.Collider;
 import co.tantleffbeef.mcplanes.physics.RigidDisplay;
 import co.tantleffbeef.mcplanes.physics.Rigidbody;
 import co.tantleffbeef.mcplanes.pojo.Input;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -81,6 +82,8 @@ public class P51 implements PhysicsVehicle {
         }*/
 
         rb.pretick();
+
+        Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString());
 
 //        Quaternionf rotation = rb.currentRotation();
 //        Vector3f location = rb.getLocation();
