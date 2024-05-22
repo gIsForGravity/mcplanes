@@ -5,6 +5,7 @@ import co.tantleffbeef.mcplanes.physics.RigidDisplay;
 import co.tantleffbeef.mcplanes.physics.Rigidbody;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -87,7 +88,8 @@ public class P51 implements PhysicsVehicle {
 
         if (timer < 1) {
             Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
-            Bukkit.broadcastMessage("forward: " + rb.forward().toString() + " right: " + rb.right().toString() + " up: " + rb.up().toString());
+            Bukkit.broadcastMessage(ChatColor.GOLD + "forward: " + rb.forward().toString() + " right: " + rb.right().toString() + " up: " + rb.up().toString());
+            Bukkit.broadcastMessage(ChatColor.AQUA + "rotation: " + rb.currentRotation().toString());
             // results in nans up the wazoo
             timer += deltaTime;
         }
