@@ -21,7 +21,7 @@ public class Rigidbody implements Tickable {
     private final float drag;
     private final float angularDrag;
     private final Vector3f tempVector;
-    private Matrix4f rotationMatrix; // idk man chat told me to do this
+    private Matrix4f rotationMatrix = new Matrix4f(); // idk man chat told me to do this
     private final Quaternionf angularVelocity;
     private final boolean hasGravity;
 
@@ -83,7 +83,7 @@ public class Rigidbody implements Tickable {
         collider.moveCenter(entity.location());
         collider.tick(deltaTime);
 //        resolveCollisions();
-        entity.tick(deltaTime); //
+        entity.tick(deltaTime);
     }
 
     public float getMass() {
