@@ -79,7 +79,7 @@
     <distributionManagement>
         <snapshotRepository>
             <id>tantleffbeef-nexus-snapshots</id>
-            <url>https://maven.tantleffbeef.co/repository/maven-snapshots/</url>
+            <url>https://maven.tantleffbeef.co/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
