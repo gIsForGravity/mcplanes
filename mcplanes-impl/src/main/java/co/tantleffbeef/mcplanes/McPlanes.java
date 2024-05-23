@@ -95,7 +95,9 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
                 // Attempt to download the client jar for this version
                 downloadClientJar();
             } catch (IOException e) {
-                e.printStackTrace();
+                for (var trace : e.getStackTrace()) {
+                    getLogger().severe(trace.toString());
+                }
                 getLogger().severe(ChatColor.LIGHT_PURPLE + "There was an error downloading the jar. " +
                         "Please download it manually.");
 
@@ -120,9 +122,10 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
 
         // Bukkit Listeners
         registerListener(new CustomVehicleEnterExitListener(vehicleManager));
-        registerListener(new PlayerResourceListener(this,
-                resourceManager));
-        registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager, getServer().getPluginManager(), persistentDataKeyManager));
+        if (getConfig().getBoolean("resource-pack"))
+            registerListener(new PlayerResourceListener(this, resourceManager));
+        registerListener(new CustomBlockPlaceBreakListener(blockManager, resourceManager,
+                getServer().getPluginManager(), persistentDataKeyManager));
         registerListener(new InteractableItemListener(persistentDataKeyManager, resourceManager));
         registerListener(new PhysicsObjectCollisionListener(getServer()));
         registerListener(new InteractableBlockListener(blockManager));

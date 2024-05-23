@@ -1,5 +1,7 @@
 # MCPlanes config
 
+resource-pack: true
+
 # The web address to bind to
 webserver-bind: "0.0.0.0"
 # The web address clients actual connect to
