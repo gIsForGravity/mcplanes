@@ -465,7 +465,10 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         final File versionsFolder = new File(getDataFolder(), "versions");
         final File jarFileLocation = new File(versionsFolder, "client-" + mcVersion + ".jar");
 
-        versionsFolder.mkdirs();
+        var mkDirsResult = versionsFolder.mkdirs();
+        if (!mkDirsResult) {
+            throw new IOException("Unable to create directory " + versionsFolder.getAbsolutePath());
+        }
 
         final byte[] memoryBuffer = new byte[Tools.FILE_BUFFER_SIZE];
         double lastPercent = 0f;
