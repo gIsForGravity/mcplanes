@@ -17,6 +17,7 @@ public class DebugCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         Bukkit.broadcastMessage("debug command");
+        Bukkit.broadcastMessage("poopy butt");
         return true;
     }
 }

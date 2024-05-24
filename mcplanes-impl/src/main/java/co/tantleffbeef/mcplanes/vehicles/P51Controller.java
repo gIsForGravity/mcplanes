@@ -63,6 +63,8 @@ public class P51Controller implements PhysicVehicleController {
 
     @Override
     public boolean tick(float deltaTime, @Nullable Input input, @NotNull Entity vehicle) {
+        timer += deltaTime;
+
         // If the entity has been killed, then destroy all of the objects
         /*if (entity.isDead()) {
             entity.remove();
@@ -78,7 +80,10 @@ public class P51Controller implements PhysicVehicleController {
 //        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime));
 //        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.WING, deltaTime));
 //        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime));
-        getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime);
+        if (timer > 5f) {
+            Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
+            timer = 0;
+        }
 
 //        if (timer < 1) {
 //            Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
