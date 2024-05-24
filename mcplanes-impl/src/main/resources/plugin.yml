@@ -42,6 +42,9 @@ commands:
   deletecurrent:
     description: "deletes the last p51"
     permission: mcplanes.testing
+  applyforce:
+    description: "applies a force to the last p51"
+    permission: mcplanes.testing
 
 # libraries:
 #   - org.eclipse.jetty:jetty-server:11.0.14

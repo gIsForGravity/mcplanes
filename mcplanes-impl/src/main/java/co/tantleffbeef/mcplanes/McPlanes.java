@@ -29,12 +29,14 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.Stack;
 import java.util.jar.JarFile;
 
 public class McPlanes extends JavaPlugin implements ResourceApi {
@@ -162,14 +164,13 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
                     resourceManager.getCustomItemStack(new NamespacedKey(this, "p_51")));
             vehicleManager.registerVehicle(p51);
 
-            lastp51 = p51;
+            p51s.push(p51);
             return true;
         });
 
         getCommandRNN("deletecurrent").setExecutor((commandSender, command, s, strings) -> {
-            if (lastp51 != null) {
-                vehicleManager.unregisterVehicle(lastp51);
-                lastp51 = null;
+            if (!p51s.empty()) {
+                vehicleManager.unregisterVehicle(p51s.pop());
                 return true;
             } else {
                 return false;
@@ -177,21 +178,42 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         });
 
         getCommandRNN("ride").setExecutor((sender, command, label, args) -> {
-            if (lastp51 == null)
+            if (p51s.empty())
                 return false;
 
             if (!(sender instanceof Player player))
                 return false;
 
             sender.sendMessage("riding");
-            lastp51.setRider(player);
+            p51s.peek().setRider(player);
+            return true;
+        });
+
+        getCommandRNN("applyforce").setExecutor((commandSender, command, label, args) -> {
+            if (p51s.empty())
+                return false;
+
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+
+            if (args.length >= 1)
+                x = Float.parseFloat(args[0]);
+            if (args.length >= 2)
+                y = Float.parseFloat(args[1]);
+            if (args.length >= 3)
+                z = Float.parseFloat(args[2]);
+
+            P51Controller controller = (P51Controller) p51s.peek().getController();
+            controller.rb.addForce(new Vector3f(x, y, z));
+
             return true;
         });
 
         Collider.startTicking(this);
     }
 
-    public PhysicVehicle lastp51;
+    public Stack<PhysicVehicle> p51s = new Stack<>();
 
     @Override
     public void onDisable() {
