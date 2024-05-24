@@ -6,9 +6,11 @@ import co.tantleffbeef.mcplanes.physics.Transform;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -46,7 +48,7 @@ public class P51Controller implements PhysicVehicleController {
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
         this.rb = new Rigidbody(new Transform(new Vector3f(xPos, yPos, zPos)), new Collider(box, new Vector3f(xPos, yPos, zPos),
-                location.getWorld()), 1.0f, 0.5f, 0.1f);
+                location.getWorld()), 1.0f, 0.5f, 0.1f, false);
     }
 
     private int tick = 0;
@@ -153,6 +155,20 @@ public class P51Controller implements PhysicVehicleController {
 //        }
 
         rb.tick(deltaTime);
+
+        // update entity position to match transform
+        Transform transform = rb.transform;
+        World world = vehicle.getWorld();
+        ItemDisplay displayVehicle = (ItemDisplay) vehicle;
+        Transformation displayTransform = displayVehicle.getTransformation();
+
+        Vector3f position = transform.position;
+        displayTransform.getLeftRotation().set(transform.rotation);
+
+        Location teleportPosition = new Location(world, position.x, position.y, position.z);
+
+        vehicle.teleport(teleportPosition);
+        displayVehicle.setTransformation(displayTransform);
 
         return true;
     }

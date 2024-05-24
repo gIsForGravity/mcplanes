@@ -166,6 +166,16 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             return true;
         });
 
+        getCommandRNN("deletecurrent").setExecutor((commandSender, command, s, strings) -> {
+            if (lastp51 != null) {
+                vehicleManager.unregisterVehicle(lastp51);
+                lastp51 = null;
+                return true;
+            } else {
+                return false;
+            }
+        });
+
         getCommandRNN("ride").setExecutor((sender, command, label, args) -> {
             if (lastp51 == null)
                 return false;
