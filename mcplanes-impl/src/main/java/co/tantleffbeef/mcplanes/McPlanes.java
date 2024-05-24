@@ -9,7 +9,8 @@ import co.tantleffbeef.mcplanes.listeners.*;
 import co.tantleffbeef.mcplanes.listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.listeners.protocol.ServerboundPlayerInputListener;
 import co.tantleffbeef.mcplanes.physics.Collider;
-import co.tantleffbeef.mcplanes.vehicles.P51;
+import co.tantleffbeef.mcplanes.vehicles.P51Controller;
+import co.tantleffbeef.mcplanes.vehicles.PhysicVehicle;
 import co.tantleffbeef.mcplanes.vehicles.VehicleKey;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -19,7 +20,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.BlastingRecipe;
@@ -157,11 +157,11 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             if (!(sender instanceof Player player))
                 return false;
 
-            final var p51 = P51.spawn(getServer().getPluginManager(), player.getLocation(),
+            final var p51 = P51Controller.spawn(player.getLocation(),
                     resourceManager.getCustomItemStack(new NamespacedKey(this, "p_51")));
             vehicleManager.registerVehicle(p51);
 
-            lastp51 = p51.entity;
+            lastp51 = p51;
             return true;
         });
 
@@ -173,14 +173,14 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
                 return false;
 
             sender.sendMessage("riding");
-            lastp51.addPassenger(player);
+            lastp51.setRider(player);
             return true;
         });
 
         Collider.startTicking(this);
     }
 
-    private Entity lastp51;
+    private PhysicVehicle lastp51;
 
     @Override
     public void onDisable() {

@@ -10,6 +10,8 @@ depend: [ProtocolLib]
 permissions:
   mcplanes.resourcegive:
     default: op
+  mcplanes.testing:
+    default: op
 
 commands:
   resourcegive:
@@ -30,8 +32,10 @@ commands:
 #    usage: "Usage: /vehiclesummon <vehicle_id>"
   p51:
     description: "summons a p51"
+    permission: mcplanes.testing
   ride:
     description: "rides the p51"
+    permission: mcplanes.testing
 
 # libraries:
 #   - org.eclipse.jetty:jetty-server:11.0.14

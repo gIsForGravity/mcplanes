@@ -1,35 +1,31 @@
 package co.tantleffbeef.mcplanes.physics;
 
-import co.tantleffbeef.mcplanes.physics.event.PhysicsObjectCollisionEvent;
-import org.bukkit.plugin.PluginManager;
-import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-
 public class Rigidbody implements Tickable {
-    private final RigidEntity entity;
+    public final Transform transform;
+    public final Vector3f velocity;
+    public final Quaternionf angularVelocity;
     private final Collider collider;
-    private final PluginManager pluginManager;
     private float mass;
     // We store the inverse mass so we can
     // multiply by that instead of dividing by mass
     private float inverseMass;
-    private final Vector3f acceleration;
+    public final Vector3f acceleration;
     private final float drag;
     private final float angularDrag;
     private final Vector3f tempVector;
-    private final Quaternionf angularVelocity;
+    private final Quaternionf tempQuat;
     private final boolean hasGravity;
 
-    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity) {
-        this.pluginManager = pluginManager;
-        this.entity = entity;
+    public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity) {
+        this.transform = transform;
         this.collider = collider;
         this.acceleration = new Vector3f();
         this.tempVector = new Vector3f();
+        this.tempQuat = new Quaternionf();
+        this.velocity = new Vector3f();
         this.angularVelocity = new Quaternionf();
         this.drag = drag;
         this.angularDrag = angularDrag;
@@ -37,25 +33,22 @@ public class Rigidbody implements Tickable {
         setMass(mass);
     }
 
-    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass, float drag, float angularDrag) {
-        this(pluginManager, entity, collider, mass, drag, angularDrag, true);
+    public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag) {
+        this(transform, collider, mass, drag, angularDrag, true);
     }
 
-    public Rigidbody(PluginManager pluginManager, RigidEntity entity, Collider collider, float mass) {
-        this(pluginManager, entity, collider, mass, 0, 0);
+    public Rigidbody(Transform transform, Collider collider, float mass) {
+        this(transform, collider, mass, 0, 0);
     }
 
     /**
      * Call this before any physics thing
      */
     public void pretick() {
-        // Sub-Preticks
-        entity.pretick();
-
         // This object
         acceleration.zero();
-//        if (hasGravity)
-//            acceleration.y = -9.8f;
+        if (hasGravity)
+            acceleration.y = -9.8f;
 
     }
 
@@ -72,16 +65,19 @@ public class Rigidbody implements Tickable {
 //        addTorque(new Quaternionf(angularVelocity).mul(-angularDrag * deltaTime));
 
         // Apply acceleration
-        entity.velocity().add(acceleration.mul(deltaTime, tempVector));
+        velocity.add(acceleration.mul(deltaTime, tempVector));
+
+        // Apply velocity
+        transform.position.add(velocity.mul(deltaTime, tempVector));
 
         // Apply rotation velocity
-        currentRotation().add(angularVelocity);
+        transform.rotation.add(angularVelocity);
 
         // Call subticks
-        collider.moveCenter(entity.location());
-        collider.tick(deltaTime);
-//        resolveCollisions();
-        entity.tick(deltaTime);
+        // TODO fix this
+//        collider.moveCenter(entity.location());
+//        collider.tick(deltaTime);
+////        resolveCollisions();
     }
 
     public float getMass() {
@@ -90,19 +86,13 @@ public class Rigidbody implements Tickable {
 
     public void setMass(float mass) {
         this.mass = mass;
-        this.inverseMass = 1 / mass;
+        this.inverseMass = 1f / mass;
     }
-
-    public Vector3f velocity() {
-        return entity.velocity();
-    }
-    public Vector3f getLocation() { return new Vector3f(entity.location()); } // readonly
-    public Quaternionf currentRotation() { return entity.currentRotation(); }
 
     // https://www.gamedev.net/forums/topic/56471-extracting-direction-vectors-from-quaternion/
     // probably should be calced avery tick and this should just return that vector
     public Vector3f forward() {
-        Quaternionf rot = currentRotation();
+        Quaternionf rot = transform.rotation;
 
         return new Vector3f(
                 2 * (rot.x * rot.z + rot.w * rot.z),
@@ -111,7 +101,7 @@ public class Rigidbody implements Tickable {
         );
     }
     public Vector3f up() {
-        Quaternionf rot = currentRotation();
+        Quaternionf rot = transform.rotation;
 
         return new Vector3f(
                 2 * (rot.x * rot.y - rot.w * rot.z),
@@ -120,17 +110,13 @@ public class Rigidbody implements Tickable {
         );
     }
     public Vector3f right() {
-        Quaternionf rot = currentRotation();
+        Quaternionf rot = transform.rotation;
 
         return new Vector3f(
                 1 - 2 * (rot.y * rot.y + rot.z * rot.z),
                 2 * (rot.x * rot.y + rot.w * rot.z),
                 2 * (rot.x * rot.z - rot.w * rot.y)
         );
-    }
-
-    public Vector3f acceleration() {
-        return acceleration;
     }
 
     /**
@@ -143,7 +129,7 @@ public class Rigidbody implements Tickable {
     }
 
     public void addTorque(Vector3f torque) {
-        addTorque(new Quaternionf().rotateTo(new Vector3f(), torque));
+        addTorque(tempQuat.identity().rotateTo(tempVector.zero(), torque));
     }
 
     public void addTorque(Quaternionf torque) {
@@ -153,53 +139,54 @@ public class Rigidbody implements Tickable {
     public void addForceAtPosition(Vector3f force, Vector3f position) {
         addForce(force);
 
-        Vector3f direction = new Vector3f(position).sub(entity.location()); // why does java do this to me
+        Vector3f direction = position.sub(transform.position, tempVector); // why does java do this to me
         addTorque(direction.cross(force));
     }
 
-    private void resolveCollisions() {
-        final var collisionDirection = collider.getDirections();
-        if (!collisionDirection.isColliding())
-            return;
-
-        final Vector3f calculatedVelocity = new Vector3f().set(entity.velocity());
-
-        if (collisionDirection.up || collisionDirection.down) {
-            float yVel = calculatedVelocity.y * 0.25f;
-
-            if (yVel > 0.05f)
-                calculatedVelocity.y = yVel;
-            else
-                calculatedVelocity.y = 0;
-        }
-
-        if (collisionDirection.north || collisionDirection.south) {
-            float zVel = calculatedVelocity.z * 0.25f;
-
-            if (zVel > 0.05f)
-                calculatedVelocity.z = zVel;
-            else
-                calculatedVelocity.z = 0;
-        }
-
-        if (collisionDirection.east || collisionDirection.west) {
-            float xVel = calculatedVelocity.x * 0.25f;
-
-            if (xVel > 0.05f)
-                calculatedVelocity.x = xVel;
-            else
-                calculatedVelocity.x = 0;
-        }
-
-        final var event = new PhysicsObjectCollisionEvent(this,
-                collisionDirection,
-                entity.velocity(),
-                calculatedVelocity,
-                entity.location(),
-                new Vector3f(entity.previousLocation()));
-
-        pluginManager.callEvent(event);
-        entity.velocity().set(event.newVelocity());
-        entity.location().set(event.resolvedPosition());
-    }
+    // TODO: fix this
+//    private void resolveCollisions() {
+//        final var collisionDirection = collider.getDirections();
+//        if (!collisionDirection.isColliding())
+//            return;
+//
+//        final Vector3f calculatedVelocity = new Vector3f().set(entity.velocity());
+//
+//        if (collisionDirection.up || collisionDirection.down) {
+//            float yVel = calculatedVelocity.y * 0.25f;
+//
+//            if (yVel > 0.05f)
+//                calculatedVelocity.y = yVel;
+//            else
+//                calculatedVelocity.y = 0;
+//        }
+//
+//        if (collisionDirection.north || collisionDirection.south) {
+//            float zVel = calculatedVelocity.z * 0.25f;
+//
+//            if (zVel > 0.05f)
+//                calculatedVelocity.z = zVel;
+//            else
+//                calculatedVelocity.z = 0;
+//        }
+//
+//        if (collisionDirection.east || collisionDirection.west) {
+//            float xVel = calculatedVelocity.x * 0.25f;
+//
+//            if (xVel > 0.05f)
+//                calculatedVelocity.x = xVel;
+//            else
+//                calculatedVelocity.x = 0;
+//        }
+//
+//        final var event = new PhysicsObjectCollisionEvent(this,
+//                collisionDirection,
+//                entity.velocity(),
+//                calculatedVelocity,
+//                entity.location(),
+//                new Vector3f(entity.previousLocation()));
+//
+//        pluginManager.callEvent(event);
+//        entity.velocity().set(event.newVelocity());
+//        entity.location().set(event.resolvedPosition());
+//    }
 }

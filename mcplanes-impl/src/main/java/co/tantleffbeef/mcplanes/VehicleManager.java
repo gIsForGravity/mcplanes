@@ -1,7 +1,7 @@
 package co.tantleffbeef.mcplanes;
 
 import co.tantleffbeef.mcplanes.pojo.Input;
-import co.tantleffbeef.mcplanes.vehicles.PhysicsVehicle;
+import co.tantleffbeef.mcplanes.vehicles.PhysicVehicle;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
@@ -11,40 +11,37 @@ import java.util.*;
 public class VehicleManager implements Runnable {
     public static final float FIXED_DELTA_TIME = 1.0f / 20.0f;
 
-    private final List<PhysicsVehicle> vehicles = new ArrayList<>();
+    private final List<PhysicVehicle> vehicles = new ArrayList<>();
     private final Map<UUID, Input> inputs = new HashMap<>();
 
-    public void registerVehicle(@NotNull PhysicsVehicle vehicle) {
+    public void registerVehicle(@NotNull PhysicVehicle vehicle) {
         assert !vehicles.contains(vehicle);
         vehicles.add(vehicle);
     }
 
-    public void unregisterVehicle(@NotNull PhysicsVehicle vehicle) {
+    public void unregisterVehicle(@NotNull PhysicVehicle vehicle) {
         assert vehicles.contains(vehicle);
         vehicles.remove(vehicle);
 
         // Grab the driver and dismount them
-        final var driver = vehicle.driver();
-        if (driver != null)
-            driver.leaveVehicle();
+        vehicle.setRider(null);
     }
 
     @Override
     public void run() {
         // Loop through all vehicles in the list
         // and run their tick function
-        for (int i = 0; i < vehicles.size(); i++) {
-            final var vehicle = vehicles.get(i);
-            final var driver = vehicle.driver();
+        for (final PhysicVehicle vehicle : vehicles) {
+            final var driver = vehicle.getRider();
 
             final Input input;
             final boolean result;
             // If the vehicle has a driver then pass it in
             if (driver != null && (input = inputs.get(driver.getUniqueId())) != null) {
-                result = vehicle.tick(input, FIXED_DELTA_TIME);
+                result = vehicle.tickVehicle(FIXED_DELTA_TIME, input);
             } else {
                 // Otherwise just pass in null
-                result = vehicle.tick(null, FIXED_DELTA_TIME);
+                result = vehicle.tickVehicle(FIXED_DELTA_TIME, Input.empty);
             }
 
             // If the entity is dead then unregister the vehicle
