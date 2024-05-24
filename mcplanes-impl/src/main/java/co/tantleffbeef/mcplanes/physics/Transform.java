@@ -8,8 +8,8 @@ public class Transform {
     public final Quaternionf rotation;
 
     public Transform(Vector3f position, Quaternionf rotation) {
-        this.position = position;
-        this.rotation = rotation;
+        this.position = new Vector3f(position);
+        this.rotation = new Quaternionf(rotation);
     }
 
     public Transform(Vector3f position) {

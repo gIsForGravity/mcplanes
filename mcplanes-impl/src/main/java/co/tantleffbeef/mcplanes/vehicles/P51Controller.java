@@ -84,6 +84,7 @@ public class P51Controller implements PhysicVehicleController {
 //        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime));
         if (timer > 5f) {
             Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
+            Bukkit.broadcastMessage("position: " + rb.transform.position);
             timer = 0;
         }
 
