@@ -36,6 +36,9 @@ commands:
   ride:
     description: "rides the p51"
     permission: mcplanes.testing
+  mcpdebug:
+    description: "runs whatever code I set it to run"
+    permission: mcplanes.testing
 
 # libraries:
 #   - org.eclipse.jetty:jetty-server:11.0.14

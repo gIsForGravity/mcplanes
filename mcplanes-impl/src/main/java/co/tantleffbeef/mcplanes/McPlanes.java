@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes;
 
+import co.tantleffbeef.mcplanes.commands.DebugCommand;
 import co.tantleffbeef.mcplanes.commands.ResourceGiveCommand;
 import co.tantleffbeef.mcplanes.custom.item.PlaceableItemType;
 import co.tantleffbeef.mcplanes.custom.item.SimpleItemType;
@@ -233,6 +234,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
      */
     private void registerCommands() {
         new ResourceGiveCommand(getCommandRNN("resourcegive"), resourceManager);
+        getCommand("mcpdebug").setExecutor(new DebugCommand(this));
     }
 
     private void registerRecipes() {
