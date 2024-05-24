@@ -173,7 +173,9 @@ public class P51Controller implements PhysicVehicleController {
     private float getAeroForce(AeroSurfaceType type, float deltaTime) {
 
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
+        Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
         float speedSquared = rb.velocity.lengthSquared();
+        Bukkit.broadcastMessage("speedSquared: " + speedSquared);
 
         return deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * switch (type) {
             case WING -> WING_AREA * defaultAoA;
