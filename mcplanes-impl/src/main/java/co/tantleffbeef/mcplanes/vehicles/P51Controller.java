@@ -174,6 +174,9 @@ public class P51Controller implements PhysicVehicleController {
     private float getAeroForce(AeroSurfaceType type, float deltaTime) {
         Bukkit.broadcastMessage("getAeroForce()");
 
+        Bukkit.broadcastMessage("forward: " + rb.forward());
+        Bukkit.broadcastMessage("right: " + rb.right());
+        Bukkit.broadcastMessage("velocity: " + rb.velocity);
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
         Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
         float speedSquared = rb.velocity.lengthSquared();
