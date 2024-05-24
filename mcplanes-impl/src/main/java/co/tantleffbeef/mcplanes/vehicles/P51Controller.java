@@ -73,11 +73,12 @@ public class P51Controller implements PhysicVehicleController {
 
         rb.pretick();
 
-        Bukkit.broadcastMessage("aero forces:");
-        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
-        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime));
-        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.WING, deltaTime));
-        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime));
+//        Bukkit.broadcastMessage("aero forces:");
+//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
+//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime));
+//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.WING, deltaTime));
+//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime));
+        getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime);
 
 //        if (timer < 1) {
 //            Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
@@ -171,6 +172,7 @@ public class P51Controller implements PhysicVehicleController {
     }
 
     private float getAeroForce(AeroSurfaceType type, float deltaTime) {
+        Bukkit.broadcastMessage("getAeroForce()");
 
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
         Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
