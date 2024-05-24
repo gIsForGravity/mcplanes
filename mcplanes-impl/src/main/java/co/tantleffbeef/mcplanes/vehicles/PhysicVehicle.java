@@ -48,6 +48,10 @@ public class PhysicVehicle {
         return rider;
     }
 
+    public @NotNull PhysicVehicleController getController() {
+        return controller;
+    }
+
     /**
      * Applies physics to the vehicle over delta time
      * @param delta the amount of time

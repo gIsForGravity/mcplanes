@@ -181,7 +181,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         Collider.startTicking(this);
     }
 
-    private PhysicVehicle lastp51;
+    public PhysicVehicle lastp51;
 
     @Override
     public void onDisable() {
