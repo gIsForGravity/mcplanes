@@ -47,8 +47,8 @@ public class Rigidbody implements Tickable {
     public void pretick() {
         // This object
         acceleration.zero();
-//        if (hasGravity)
-//            acceleration.y = -9.8f;
+        if (hasGravity)
+            acceleration.y = -9.8f;
 
     }
 

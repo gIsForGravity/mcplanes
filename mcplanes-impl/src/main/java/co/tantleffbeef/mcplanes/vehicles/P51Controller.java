@@ -85,6 +85,7 @@ public class P51Controller implements PhysicVehicleController {
         if (timer > 5f) {
             Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
             Bukkit.broadcastMessage("position: " + rb.transform.position);
+            Bukkit.broadcastMessage("throttle: " + throttle);
             timer = 0;
         }
 
@@ -170,7 +171,8 @@ public class P51Controller implements PhysicVehicleController {
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
         vehicle.teleport(teleportPosition);
-//        displayVehicle.setTransformation(displayTransform);
+        displayVehicle.setTransformation(displayTransform);
+        displayVehicle.getTransformation().getScale().set(5f);
 
         return true;
     }
