@@ -110,6 +110,7 @@ public class P51Controller implements PhysicVehicleController {
             rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime));
 
         // lift
+        // TODO: optimize by caching aero surface positions
         // this could be done per surface but rn im doing it for all of them
 //
 //        rb.addForce(rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)));
@@ -202,7 +203,7 @@ public class P51Controller implements PhysicVehicleController {
         Bukkit.broadcastMessage("velocity: " + rb.velocity);
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
         Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
-        float speedSquared = rb.velocity.lengthSquared();
+        float speedSquared = rb.velocity.lengthSquared(); // would be best as the velocity of the surface but this works
         Bukkit.broadcastMessage("speedSquared: " + speedSquared);
 
         return deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * switch (type) {
