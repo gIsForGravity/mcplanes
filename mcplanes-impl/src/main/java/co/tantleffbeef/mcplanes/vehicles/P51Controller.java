@@ -170,7 +170,7 @@ public class P51Controller implements PhysicVehicleController {
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
         vehicle.teleport(teleportPosition);
-        displayVehicle.setTransformation(displayTransform);
+//        displayVehicle.setTransformation(displayTransform);
 
         return true;
     }
