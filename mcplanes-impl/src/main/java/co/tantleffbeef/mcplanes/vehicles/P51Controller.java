@@ -146,7 +146,7 @@ public class P51Controller implements PhysicVehicleController {
 //            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
             // all zero
 
-            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
+/*            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                         rb.forward().mul(-2)); // up force back
@@ -171,7 +171,7 @@ public class P51Controller implements PhysicVehicleController {
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                         rb.right().mul(2)); // up force right
-            }
+            }*/
 
             if (input.jump() && throttle < 1) { // probably have to cancel leave event but then how do you leave
                 Bukkit.broadcastMessage("jump input is happening");
