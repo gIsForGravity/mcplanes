@@ -48,7 +48,7 @@ public class P51Controller implements PhysicVehicleController {
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
         this.rb = new Rigidbody(new Transform(new Vector3f(xPos, yPos, zPos)), new Collider(box, new Vector3f(xPos, yPos, zPos),
-                location.getWorld()), 1.0f, 0.5f, 0.1f, false);
+                location.getWorld()), 1.0f, 0.5f, 0.1f, true);
     }
 
     private int tick = 0;
@@ -122,11 +122,11 @@ public class P51Controller implements PhysicVehicleController {
         // controls
         // doesnt ever seem to be null
         if (input != null) {
-            Bukkit.broadcastMessage("input is not null");
+//            Bukkit.broadcastMessage("input is not null");
 
             // in the future these will apply a torque that is in some way proportional to airspeed
 
-            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
+//            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
             // all zero
 
 /*            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
