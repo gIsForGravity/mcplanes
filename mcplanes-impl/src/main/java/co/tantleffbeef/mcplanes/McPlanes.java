@@ -185,7 +185,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
                 return false;
 
             sender.sendMessage("riding");
-            p51s.peek().setRider(player);
+            p51s.peek().setRider(player, vehicleManager);
             return true;
         });
 

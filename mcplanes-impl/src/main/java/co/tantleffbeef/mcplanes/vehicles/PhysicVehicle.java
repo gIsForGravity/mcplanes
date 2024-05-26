@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes.vehicles;
 
+import co.tantleffbeef.mcplanes.VehicleManager;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -35,7 +36,13 @@ public class PhysicVehicle {
      * Sets this vehicle's rider. Can be null for no rider
      * @param rider the new rider of the vehicle, or null for none
      */
-    public void setRider(@Nullable Player rider) {
+    public void setRider(@Nullable Player rider, @NotNull VehicleManager manager) {
+        if (rider == null) {
+            manager.setRiderVehicle(this.rider, null);
+        } else {
+            manager.setRiderVehicle(rider, this);
+        }
+
         this.rider = rider;
         controller.setRider(vehicle, rider);
     }
