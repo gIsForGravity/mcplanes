@@ -202,7 +202,14 @@ public class P51Controller implements PhysicVehicleController {
 
         vehicle.teleport(teleportPosition);
 
-        // displayVehicle.setTransformation(displayTransform);
+        // TODO: test this
+        Transformation displayVehicleTransformation = displayVehicle.getTransformation();
+
+        displayVehicleTransformation.getLeftRotation().set(displayTransform.getLeftRotation().normalize());
+        displayVehicleTransformation.getTranslation().set(displayTransform.getTranslation());
+
+        displayVehicle.setTransformation(displayVehicleTransformation);
+//        displayVehicle.setTransformation(displayTransform);
 
 
         return true;
