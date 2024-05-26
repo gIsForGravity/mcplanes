@@ -100,7 +100,7 @@ public class Rigidbody implements Tickable {
                 2 * (rot.x * rot.z + rot.w * rot.z),
                 2 * (rot.y * rot.z - rot.w * rot.x),
                 1 - 2 * (rot.x * rot.x + rot.y * rot.y)
-        );
+        ).normalize();
     }
     public Vector3f up() {
         Quaternionf rot = transform.rotation;
@@ -109,7 +109,7 @@ public class Rigidbody implements Tickable {
                 2 * (rot.x * rot.y - rot.w * rot.z),
                 1 - 2 * (rot.x * rot.x + rot.z * rot.z),
                 2 * (rot.y * rot.z + rot.w * rot.x)
-        );
+        ).normalize();
     }
     public Vector3f right() {
         Quaternionf rot = transform.rotation;
@@ -118,7 +118,7 @@ public class Rigidbody implements Tickable {
                 1 - 2 * (rot.y * rot.y + rot.z * rot.z),
                 2 * (rot.x * rot.y + rot.w * rot.z),
                 2 * (rot.x * rot.z - rot.w * rot.y)
-        );
+        ).normalize();
     }
 
     /**
