@@ -135,7 +135,7 @@ public class Rigidbody implements Tickable {
         Bukkit.broadcastMessage("Special dawg2 - ident: " + new Quaternionf().identity() + " new zero: " + new Vector3f());
         Bukkit.broadcastMessage("schnawg: " + new Quaternionf());
 
-        addTorque(new Quaternionf().identity().rotateTo(new Vector3f(), torque));
+        addTorque(new Quaternionf().rotateXYZ(torque.x, torque.y, torque.z));
     }
 
     public void addTorque(Quaternionf torque) {
