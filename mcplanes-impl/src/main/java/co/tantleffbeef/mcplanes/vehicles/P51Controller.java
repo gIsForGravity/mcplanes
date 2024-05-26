@@ -53,7 +53,7 @@ public class P51Controller implements PhysicVehicleController {
     }
 
     private int tick = 0;
-    private static final float MAX_VELOCITY_SQUARED = 100;
+    private static final float MAX_VELOCITY_SQUARED = 400;
     private static final float THRUST_FORCE = 5;
     private static final float AIR_DENSITY = 1.225f;
     private static final float WING_AREA = 3;
@@ -97,10 +97,7 @@ public class P51Controller implements PhysicVehicleController {
 //                    rb.forward().mul(0.1f).add(rb.transform.position) // the things i do to avoid mutation
 //            );
 
-            rb.addForceAtRelativePosition(
-                    rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-                    rb.forward().mul(0.1f)
-            );
+
         }
 
 //        if (timer < 1) {
@@ -124,6 +121,11 @@ public class P51Controller implements PhysicVehicleController {
         if (rb.velocity.lengthSquared() < MAX_VELOCITY_SQUARED)
             rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime * -1));
 
+        rb.addForceAtRelativePosition(
+                rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
+                rb.forward().mul(0.05f)
+        );
+
 
         // lift
         // this could be done per surface but rn im doing it for all of them
@@ -144,26 +146,32 @@ public class P51Controller implements PhysicVehicleController {
 //            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
             // all zero
 
-/*            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
-                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
-                                      rb.transform.position.add(rb.forward().mul(-2))); // up force back
+            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.forward().mul(-2)); // up force back
 
             else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
-                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
-                                      rb.transform.position.add(rb.forward().mul(-2))); // down force back
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                        rb.forward().mul(-2)); // down force back
 
             if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
-                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
-                                      rb.transform.position.add(rb.right().mul(2))); // down force right
-                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
-                                      rb.transform.position.add(rb.right().mul(-2))); // up force left
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                        rb.right().mul(2)); // down force right
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.right().mul(-2)); // up force left
 
             } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
-                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
-                                      rb.transform.position.add(rb.right().mul(-2))); // down force left
-                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
-                                      rb.transform.position.add(rb.right().mul(2))); // up force right
-            }*/
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                        rb.right().mul(-2)); // down force left
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.right().mul(2)); // up force right
+            }
 
             if (input.jump() && throttle < 1) { // probably have to cancel leave event but then how do you leave
                 Bukkit.broadcastMessage("jump input is happening");
