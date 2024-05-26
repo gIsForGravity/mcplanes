@@ -195,21 +195,26 @@ public class P51Controller implements PhysicVehicleController {
         ItemDisplay displayVehicle = (ItemDisplay) vehicle;
         Transformation displayTransform = displayVehicle.getTransformation();
 
+
         Vector3f position = transform.position;
-        displayTransform.getLeftRotation().set(transform.rotation);
+        displayTransform.getLeftRotation().set(transform.rotation.normalize());
 
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
         vehicle.teleport(teleportPosition);
 
         // TODO: test this
-        Transformation displayVehicleTransformation = displayVehicle.getTransformation();
+//        Transformation displayVehicleTransformation = displayVehicle.getTransformation();
+//
+//        displayVehicleTransformation.getLeftRotation().set(displayTransform.getLeftRotation().normalize());
+//        displayVehicleTransformation.getTranslation().set(displayTransform.getTranslation());
+//
+//        displayVehicle.setTransformation(displayVehicleTransformation);
 
-        displayVehicleTransformation.getLeftRotation().set(displayTransform.getLeftRotation().normalize());
-        displayVehicleTransformation.getTranslation().set(displayTransform.getTranslation());
+        displayVehicle.setTransformation(displayTransform);
 
-        displayVehicle.setTransformation(displayVehicleTransformation);
-//        displayVehicle.setTransformation(displayTransform);
+        Bukkit.broadcastMessage(ChatColor.GREEN + "display rotation: " + displayTransform.getLeftRotation());
+        Bukkit.broadcastMessage(ChatColor.GREEN + "vehickel rotyaton: " + displayVehicle.getTransformation().getLeftRotation());
 
 
         return true;
@@ -236,15 +241,15 @@ public class P51Controller implements PhysicVehicleController {
     }
 
     private float getAeroForce(AeroSurfaceType type, float deltaTime) {
-        Bukkit.broadcastMessage("getAeroForce()");
-        Bukkit.broadcastMessage("deltaTime: " + deltaTime);
+//        Bukkit.broadcastMessage("getAeroForce()");
+//        Bukkit.broadcastMessage("deltaTime: " + deltaTime);
         Bukkit.broadcastMessage("forward: " + rb.forward());
         Bukkit.broadcastMessage("right: " + rb.right());
         Bukkit.broadcastMessage("velocity: " + rb.velocity);
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
         Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
         float speedSquared = rb.velocity.lengthSquared(); // would be best as the velocity of the surface but this works
-        Bukkit.broadcastMessage("speedSquared: " + speedSquared);
+//        Bukkit.broadcastMessage("speedSquared: " + speedSquared);
 
         return deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * switch (type) {
             case WING -> WING_AREA * defaultAoA;
