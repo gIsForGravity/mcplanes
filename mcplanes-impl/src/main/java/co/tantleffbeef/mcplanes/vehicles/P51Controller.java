@@ -59,9 +59,9 @@ public class P51Controller implements PhysicVehicleController {
     private static final float CONTROL_SURFACE_AREA = 0.2f;
     private static final float STABILIZER_AREA = 0.8f;
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
-    private float throttle = 0f; // normally start at 0 but 1 for testing
+    private float throttle = 0.2f; // normally start at 0 but 1 for testing
 
-    private float timer = 0.1f;
+    private float timer = 0f;
 
     @Override
     public boolean tick(float deltaTime, @Nullable Input input, @NotNull Entity vehicle) {
@@ -127,6 +127,7 @@ public class P51Controller implements PhysicVehicleController {
             // in the future these will apply a torque that is in some way proportional to airspeed
 
             Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
+            // all zero
 
 /*            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
                 rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
@@ -181,9 +182,12 @@ public class P51Controller implements PhysicVehicleController {
         // scale fucks things up so im doing this for now (hopefully just for now)
         // displayVehicle.setTransformation(displayTransform);
         // long ass lines
-        displayVehicle.getTransformation().getTranslation().set(displayVehicle.getTransformation().getTranslation());
-        displayVehicle.getTransformation().getLeftRotation().set(displayVehicle.getTransformation().getLeftRotation());
+        Transformation displayVehicleTransform = displayVehicle.getTransformation();
 
+        displayVehicleTransform.getTranslation().set(displayTransform.getTranslation());
+        displayVehicleTransform.getLeftRotation().set(displayTransform.getLeftRotation());
+
+        displayVehicle.setTransformation(displayVehicleTransform);
 
         return true;
     }
