@@ -133,7 +133,7 @@ public class Rigidbody implements Tickable {
     }
 
     public void addTorque(Quaternionf torque) {
-        angularVelocity.add(torque.mul(inverseMass));
+        angularVelocity.add(torque.mul(1/*inverseMass*/));
     }
 
     public void addForceAtPosition(Vector3f force, Vector3f position) {
