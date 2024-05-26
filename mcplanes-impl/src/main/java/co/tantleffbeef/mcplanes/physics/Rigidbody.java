@@ -139,8 +139,8 @@ public class Rigidbody implements Tickable {
     public void addForceAtPosition(Vector3f force, Vector3f position) {
         addForce(force);
 
-        Vector3f direction = position.sub(transform.position, tempVector); // why does java do this to me
-        addTorque(direction.cross(force));
+        position.sub(transform.position); // why does java do this to me
+        addTorque(position.cross(force));
     }
 
     // TODO: fix this
