@@ -128,6 +128,7 @@ public class P51Controller implements PhysicVehicleController {
         // controls
         // doesnt ever seem to be null
         if (input != null) {
+            Bukkit.broadcastMessage("input: " + input);
 //            Bukkit.broadcastMessage("input is not null");
 
             // in the future these will apply a torque that is in some way proportional to airspeed
