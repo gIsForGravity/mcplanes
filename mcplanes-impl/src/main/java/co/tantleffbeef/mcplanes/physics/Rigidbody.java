@@ -97,8 +97,8 @@ public class Rigidbody implements Tickable {
         Quaternionf rot = transform.rotation;
 
         return new Vector3f(
-                2 * (rot.x * rot.z + rot.w * rot.z),
-                2 * (rot.y * rot.z - rot.w * rot.x),
+                2 * (rot.x * rot.z + rot.w * rot.y),
+                -2 * (rot.y * rot.z - rot.w * rot.x),
                 1 - 2 * (rot.x * rot.x + rot.y * rot.y)
         ).normalize();
     }
