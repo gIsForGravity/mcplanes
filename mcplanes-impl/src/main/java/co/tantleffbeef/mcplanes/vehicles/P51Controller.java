@@ -53,13 +53,13 @@ public class P51Controller implements PhysicVehicleController {
 
     private int tick = 0;
     private static final float MAX_VELOCITY_SQUARED = 100;
-    private static final float THRUST_FORCE = 1;
+    private static final float THRUST_FORCE = 5;
     private static final float AIR_DENSITY = 1.225f;
     private static final float WING_AREA = 3;
     private static final float CONTROL_SURFACE_AREA = 0.2f;
     private static final float STABILIZER_AREA = 0.8f;
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
-    private float throttle = 0.2f; // normally start at 0 but 1 for testing
+    private float throttle = 1f; // normally start at 0 but 1 for testing
 
     private float timer = 0f;
 
@@ -108,13 +108,13 @@ public class P51Controller implements PhysicVehicleController {
 
         // throttle
         if (rb.velocity.lengthSquared() < MAX_VELOCITY_SQUARED)
-            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime));
+            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime * -1));
 
         // lift
         // TODO: optimize by caching aero surface positions
         // this could be done per surface but rn im doing it for all of them
 //
-//        rb.addForce(rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)));
+        rb.addForce(rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)));
 //        // i could do lift forces on stabilizers other than vertical but im not going to
 //        rb.addForceAtPosition(rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
 //                              rb.transform.position.add(rb.forward().mul(-2)));
