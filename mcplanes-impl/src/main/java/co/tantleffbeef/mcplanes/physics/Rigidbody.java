@@ -160,10 +160,9 @@ public class Rigidbody implements Tickable {
 
     public void addForceAtRelativePosition(Vector3f force, Vector3f position) {
         addForce(force);
-        addTorque(position.cross(force));
-
         Bukkit.broadcastMessage(ChatColor.AQUA + "diff: " + position);
 
+        addTorque(position.cross(force));
     }
 
 
