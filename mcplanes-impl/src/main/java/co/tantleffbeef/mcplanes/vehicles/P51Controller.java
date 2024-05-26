@@ -120,38 +120,38 @@ public class P51Controller implements PhysicVehicleController {
 //                              rb.transform.position.add(rb.forward().mul(-2)));
 
         // controls
-//        if (input != null) {
-//
-//            // in the future these will apply a torque that is in some way proportional to airspeed
-//
-//            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
-//                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
-//                                      rb.transform.position.add(rb.forward().mul(-2))); // up force back
-//
-//            else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
-//                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
-//                                      rb.transform.position.add(rb.forward().mul(-2))); // down force back
-//
-//            if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
-//                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
-//                                      rb.transform.position.add(rb.right().mul(2))); // down force right
-//                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
-//                                      rb.transform.position.add(rb.right().mul(-2))); // up force left
-//
-//            } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
-//                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
-//                                      rb.transform.position.add(rb.right().mul(-2))); // down force left
-//                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
-//                                      rb.transform.position.add(rb.right().mul(2))); // up force right
-//            }
-//
-//            if (input.jump() && throttle < 1) // probably have to cancel leave event but then how do you leave
-//                throttle += 0.05f;
-//
-////            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
-////                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
-//
-//        }
+        if (input != null) {
+
+            // in the future these will apply a torque that is in some way proportional to airspeed
+
+/*            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                                      rb.transform.position.add(rb.forward().mul(-2))); // up force back
+
+            else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                                      rb.transform.position.add(rb.forward().mul(-2))); // down force back
+
+            if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                                      rb.transform.position.add(rb.right().mul(2))); // down force right
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                                      rb.transform.position.add(rb.right().mul(-2))); // up force left
+
+            } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                                      rb.transform.position.add(rb.right().mul(-2))); // down force left
+                rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                                      rb.transform.position.add(rb.right().mul(2))); // up force right
+            }*/
+
+            if (input.jump() && throttle < 1) // probably have to cancel leave event but then how do you leave
+                throttle += 0.05f;
+
+//            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
+//                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
+
+        }
 //        if (tick < 100) {
 //            rb.addForce(new Vector3f(0, 0, 1));
 //            tick++;
