@@ -87,12 +87,6 @@ public class P51Controller implements PhysicVehicleController {
             Bukkit.broadcastMessage("position: " + rb.transform.position);
             Bukkit.broadcastMessage("throttle: " + throttle);
             timer = 0;
-
-            rb.addForceAtPosition(
-                    rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-                    rb.forward().mul(0.1f).add(rb.transform.position) // the things i do to avoid mutation
-            );
-
         }
 
 //        if (timer < 1) {
@@ -119,7 +113,10 @@ public class P51Controller implements PhysicVehicleController {
 
         // lift
         // this could be done per surface but rn im doing it for all of them
-//
+        rb.addForceAtPosition(
+                rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
+                rb.forward().mul(0.1f).add(rb.transform.position) // the things i do to avoid mutation
+        );
 
 //        // i could do lift forces on stabilizers other than vertical but im not going to
 //        rb.addForceAtPosition(rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
@@ -128,7 +125,7 @@ public class P51Controller implements PhysicVehicleController {
         // controls
         // doesnt ever seem to be null
         if (input != null) {
-            Bukkit.broadcastMessage("input: " + input);
+//            Bukkit.broadcastMessage("input: " + input);
 //            Bukkit.broadcastMessage("input is not null");
 
             // in the future these will apply a torque that is in some way proportional to airspeed
