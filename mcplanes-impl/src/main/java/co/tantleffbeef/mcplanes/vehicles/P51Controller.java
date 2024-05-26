@@ -88,9 +88,14 @@ public class P51Controller implements PhysicVehicleController {
             Bukkit.broadcastMessage("throttle: " + throttle);
             timer = 0;
 
-            rb.addForceAtPosition(
+//            rb.addForceAtPosition(
+//                    rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
+//                    rb.forward().mul(0.1f).add(rb.transform.position) // the things i do to avoid mutation
+//            );
+
+            rb.addForceAtRelativePosition(
                     rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-                    rb.forward().mul(0.1f).add(rb.transform.position) // the things i do to avoid mutation
+                    rb.forward().mul(0.1f)
             );
         }
 

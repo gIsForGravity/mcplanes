@@ -1,6 +1,7 @@
 package co.tantleffbeef.mcplanes.physics;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -131,18 +132,15 @@ public class Rigidbody implements Tickable {
 
     public void addTorque(Vector3f torque) {
 
-        Bukkit.broadcastMessage("Special dawg - ident: " + tempQuat.identity() + " temp zero: " + tempVector.zero());
-        Bukkit.broadcastMessage("Special dawg2 - ident: " + new Quaternionf().identity() + " new zero: " + new Vector3f());
-        Bukkit.broadcastMessage("schnawg: " + new Quaternionf());
+        Bukkit.broadcastMessage(ChatColor.GOLD + "vector torque: " + torque);
 
         addTorque(new Quaternionf().rotateXYZ(torque.x, torque.y, torque.z));
     }
 
     public void addTorque(Quaternionf torque) {
 
-        Bukkit.broadcastMessage("angualr vel: " + angularVelocity);
-        Bukkit.broadcastMessage("torque: " + torque);
-        Bukkit.broadcastMessage("inverse mass: " + inverseMass);
+        Bukkit.broadcastMessage(ChatColor.YELLOW + "angualr vel: " + angularVelocity);
+        Bukkit.broadcastMessage(ChatColor.YELLOW + "torque: " + torque);
 
         angularVelocity.add(torque.mul(inverseMass));
     }
@@ -151,14 +149,23 @@ public class Rigidbody implements Tickable {
         addForce(force);
         Vector3f difference = new Vector3f(position);
 
-        Bukkit.broadcastMessage("force: " + force + " pos: " + position);
+        Bukkit.broadcastMessage(ChatColor.RED + "force: " + force + " pos: " + position);
 
         difference.sub(transform.position); // why does java do this to me
 
-        Bukkit.broadcastMessage("diff: " + difference + " cross: " + "probably something");
+        Bukkit.broadcastMessage(ChatColor.RED + "diff: " + difference);
 
         addTorque(difference.cross(force));
     }
+
+    public void addForceAtRelativePosition(Vector3f force, Vector3f position) {
+        addForce(force);
+        addTorque(position.cross(force));
+
+        Bukkit.broadcastMessage(ChatColor.AQUA + "diff: " + position);
+
+    }
+
 
     // TODO: fix this
 //    private void resolveCollisions() {
