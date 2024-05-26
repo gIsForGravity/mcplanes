@@ -61,7 +61,7 @@ public class P51Controller implements PhysicVehicleController {
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
     private float throttle = 0f; // normally start at 0 but 1 for testing
 
-    private float timer = 0;
+    private float timer = 0.1f;
 
     @Override
     public boolean tick(float deltaTime, @Nullable Input input, @NotNull Entity vehicle) {
@@ -120,10 +120,13 @@ public class P51Controller implements PhysicVehicleController {
 //                              rb.transform.position.add(rb.forward().mul(-2)));
 
         // controls
+        // doesnt ever seem to be null
         if (input != null) {
             Bukkit.broadcastMessage("input is not null");
 
             // in the future these will apply a torque that is in some way proportional to airspeed
+
+            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
 
 /*            if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
                 rb.addForceAtPosition(rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
