@@ -119,7 +119,7 @@ public class P51Controller implements PhysicVehicleController {
 
         // throttle
         if (rb.velocity.lengthSquared() < MAX_VELOCITY_SQUARED)
-            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime * -1));
+            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime));
 
         rb.addForceAtRelativePosition(
                 rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
