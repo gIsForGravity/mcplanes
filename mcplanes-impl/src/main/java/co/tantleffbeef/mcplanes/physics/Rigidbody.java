@@ -149,14 +149,15 @@ public class Rigidbody implements Tickable {
 
     public void addForceAtPosition(Vector3f force, Vector3f position) {
         addForce(force);
+        Vector3f difference = new Vector3f(position);
 
         Bukkit.broadcastMessage("force: " + force + " pos: " + position);
 
-        position.sub(transform.position); // why does java do this to me
+        difference.sub(transform.position); // why does java do this to me
 
-        Bukkit.broadcastMessage("diff: " + position + " cross: " + position.cross(force));
+        Bukkit.broadcastMessage("diff: " + difference + " cross: " + "probably something");
 
-        addTorque(position.cross(force));
+        addTorque(difference.cross(force));
     }
 
     // TODO: fix this
