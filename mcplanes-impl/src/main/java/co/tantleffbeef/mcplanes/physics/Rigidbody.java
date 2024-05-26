@@ -1,5 +1,6 @@
 package co.tantleffbeef.mcplanes.physics;
 
+import org.bukkit.Bukkit;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -129,17 +130,30 @@ public class Rigidbody implements Tickable {
     }
 
     public void addTorque(Vector3f torque) {
-        addTorque(tempQuat.identity().rotateTo(tempVector.zero(), torque));
+
+        Bukkit.broadcastMessage("Special dawg - ident: " + tempQuat.identity() + " temp zero: " + tempVector.zero());
+        Bukkit.broadcastMessage("Special dawg2 - ident: " + new Quaternionf().identity() + " new zero: " + new Vector3f());
+        Bukkit.broadcastMessage("schnawg: " + new Quaternionf());
+
+        addTorque(new Quaternionf().identity().rotateTo(new Vector3f(), torque));
     }
 
     public void addTorque(Quaternionf torque) {
-        angularVelocity.add(torque.mul(1/*inverseMass*/));
+
+        Bukkit.broadcastMessage("angualr vel: " + angularVelocity);
+
+        angularVelocity.add(torque.mul(inverseMass));
     }
 
     public void addForceAtPosition(Vector3f force, Vector3f position) {
         addForce(force);
 
+        Bukkit.broadcastMessage("force: " + force + " pos: " + position);
+
         position.sub(transform.position); // why does java do this to me
+
+        Bukkit.broadcastMessage("diff: " + position + " cross: " + position.cross(force));
+
         addTorque(position.cross(force));
     }
 
