@@ -5,6 +5,7 @@ import co.tantleffbeef.mcplanes.physics.Rigidbody;
 import co.tantleffbeef.mcplanes.physics.Transform;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -87,6 +88,9 @@ public class P51Controller implements PhysicVehicleController {
             Bukkit.broadcastMessage("position: " + rb.transform.position);
             Bukkit.broadcastMessage("throttle: " + throttle);
             timer = 0;
+
+            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "rotation: " + rb.transform.rotation);
+            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "fw: " + rb.forward() + " ri: " + rb.right() + " up: " + rb.up());
 
 //            rb.addForceAtPosition(
 //                    rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
