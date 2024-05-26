@@ -121,6 +121,7 @@ public class P51Controller implements PhysicVehicleController {
 
         // controls
         if (input != null) {
+            Bukkit.broadcastMessage("input is not null");
 
             // in the future these will apply a torque that is in some way proportional to airspeed
 
@@ -145,8 +146,10 @@ public class P51Controller implements PhysicVehicleController {
                                       rb.transform.position.add(rb.right().mul(2))); // up force right
             }*/
 
-            if (input.jump() && throttle < 1) // probably have to cancel leave event but then how do you leave
+            if (input.jump() && throttle < 1) { // probably have to cancel leave event but then how do you leave
+                Bukkit.broadcastMessage("jump input is happening");
                 throttle += 0.05f;
+            }
 
 //            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
 //                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
