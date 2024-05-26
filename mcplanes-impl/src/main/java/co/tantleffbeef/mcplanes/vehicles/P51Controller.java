@@ -49,7 +49,7 @@ public class P51Controller implements PhysicVehicleController {
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
         this.rb = new Rigidbody(new Transform(new Vector3f(xPos, yPos, zPos)), new Collider(box, new Vector3f(xPos, yPos, zPos),
-                location.getWorld()), 1.0f, 0.5f, 0.1f, false);
+                location.getWorld()), 1.0f, 0.5f, 0.1f, true);
     }
 
     private int tick = 0;
@@ -123,7 +123,7 @@ public class P51Controller implements PhysicVehicleController {
 
         rb.addForceAtRelativePosition(
                 rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-                rb.forward().mul(-0.05f) // wings slightly behind COM
+                rb.forward().mul(-0.1f) // wings slightly behind COM
         );
 
 
