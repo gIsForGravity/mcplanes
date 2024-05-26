@@ -141,6 +141,8 @@ public class Rigidbody implements Tickable {
     public void addTorque(Quaternionf torque) {
 
         Bukkit.broadcastMessage("angualr vel: " + angularVelocity);
+        Bukkit.broadcastMessage("torque: " + torque);
+        Bukkit.broadcastMessage("inverse mass: " + inverseMass);
 
         angularVelocity.add(torque.mul(inverseMass));
     }
