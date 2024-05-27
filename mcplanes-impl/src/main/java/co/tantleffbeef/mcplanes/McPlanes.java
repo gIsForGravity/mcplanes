@@ -500,7 +500,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         final File jarFileLocation = new File(versionsFolder, "client-" + mcVersion + ".jar");
 
         var mkDirsResult = versionsFolder.mkdirs();
-        if (!mkDirsResult) {
+        if (!mkDirsResult && !versionsFolder.exists()) {
             throw new IOException("Unable to create directory " + versionsFolder.getAbsolutePath());
         }
 
