@@ -9,6 +9,7 @@ import co.tantleffbeef.mcplanes.custom.item.VehicleItemType;
 import co.tantleffbeef.mcplanes.listeners.*;
 import co.tantleffbeef.mcplanes.listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.listeners.protocol.ServerboundPlayerInputListener;
+import co.tantleffbeef.mcplanes.physics.AABBCollider;
 import co.tantleffbeef.mcplanes.physics.Collider;
 import co.tantleffbeef.mcplanes.vehicles.P51Controller;
 import co.tantleffbeef.mcplanes.vehicles.PhysicVehicle;
@@ -210,7 +211,7 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
             return true;
         });
 
-        Collider.startTicking(this);
+        AABBCollider.startTicking(this);
     }
 
     public Stack<PhysicVehicle> p51s = new Stack<>();

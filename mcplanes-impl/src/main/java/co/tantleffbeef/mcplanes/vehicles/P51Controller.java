@@ -1,8 +1,6 @@
 package co.tantleffbeef.mcplanes.vehicles;
 
-import co.tantleffbeef.mcplanes.physics.Collider;
-import co.tantleffbeef.mcplanes.physics.Rigidbody;
-import co.tantleffbeef.mcplanes.physics.Transform;
+import co.tantleffbeef.mcplanes.physics.*;
 import co.tantleffbeef.mcplanes.pojo.Input;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,8 +48,12 @@ public class P51Controller implements PhysicVehicleController {
         final var zPos = (float) location.getZ();
         final var box = new BoundingBox(xPos, yPos, zPos, xPos, yPos, zPos);
         box.expand(2.0);
-        this.rb = new Rigidbody(new Transform(new Vector3f(xPos, yPos, zPos)), new Collider(box, new Vector3f(xPos, yPos, zPos),
-                location.getWorld()), 1.0f, 0.5f, 0.1f, true);
+        // TODO: add back box collider
+        // this.rb = new Rigidbody(new Transform(new Vector3f(xPos, yPos, zPos)), new AABBCollider(box, new Vector3f(xPos, yPos, zPos),
+        //        location.getWorld()), 1.0f, 0.5f, 0.1f, true);
+        var transform = new Transform(new Vector3f(xPos, yPos, zPos));
+        var collider = new SuperflatCollider(transform, -60, -1);
+        this.rb = new Rigidbody(transform, collider, 1.0f, 0.5f, 0.1f, true);
     }
 
     private int tick = 0;

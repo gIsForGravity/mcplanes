@@ -5,8 +5,9 @@ import org.bukkit.ChatColor;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class Rigidbody implements Tickable {
+public class Rigidbody {
     public final Transform transform;
+    private final Transform previousTransform;
     public final Vector3f velocity;
     public final Quaternionf angularVelocity;
     private final Collider collider;
@@ -23,6 +24,7 @@ public class Rigidbody implements Tickable {
 
     public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity) {
         this.transform = transform;
+        this.previousTransform = new Transform();
         this.collider = collider;
         this.acceleration = new Vector3f();
         this.tempVector = new Vector3f();
@@ -58,7 +60,6 @@ public class Rigidbody implements Tickable {
      * Called every physics tick (after all the setting of things)
      * @param deltaTime the time since the last tick
      */
-    @Override
     public void tick(float deltaTime) {
         // Tick this object first
 
@@ -69,12 +70,17 @@ public class Rigidbody implements Tickable {
         // Apply acceleration
         velocity.add(acceleration.mul(deltaTime, tempVector));
 
+        // Store previous position
+        previousTransform.set(transform);
+
         // Apply velocity
         transform.position.add(velocity.mul(deltaTime, tempVector));
 
         // Apply rotation velocity
         transform.rotation.add(angularVelocity);
 
+        // Send to collider
+        collider.tick(deltaTime, previousTransform);
         // Call subticks
         // TODO fix this
 //        collider.moveCenter(entity.location());

@@ -19,4 +19,9 @@ public class Transform {
     public Transform() {
         this(new Vector3f(), new Quaternionf());
     }
+
+    public void set(Transform from) {
+        position.set(from.position);
+        rotation.set(from.rotation);
+    }
 }
