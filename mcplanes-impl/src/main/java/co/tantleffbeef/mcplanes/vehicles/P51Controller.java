@@ -197,7 +197,8 @@ public class P51Controller implements PhysicVehicleController {
         Transformation displayTransform = displayVehicle.getTransformation();
 
         displayTransform.getLeftRotation().set(transform.rotation.normalize());
-        displayTransform.getLeftRotation().rotateXYZ(0, (float) Math.PI, (float) Math.PI);
+//        displayTransform.getLeftRotation().rotateXYZ(0, (float) Math.PI, (float) Math.PI);
+        displayTransform.getLeftRotation().rotateY((float) Math.PI);
 
 
         Vector3f position = transform.position;
