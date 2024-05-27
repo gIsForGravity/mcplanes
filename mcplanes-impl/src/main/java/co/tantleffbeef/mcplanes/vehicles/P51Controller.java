@@ -14,6 +14,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class P51Controller implements PhysicVehicleController {
@@ -195,23 +196,17 @@ public class P51Controller implements PhysicVehicleController {
         ItemDisplay displayVehicle = (ItemDisplay) vehicle;
         Transformation displayTransform = displayVehicle.getTransformation();
 
-
         Vector3f position = transform.position;
         displayTransform.getLeftRotation().set(transform.rotation.normalize());
+
+        displayTransform.getLeftRotation().rotateLocalY((float)Math.PI);
 
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
         vehicle.teleport(teleportPosition);
 
-        // TODO: test this
-//        Transformation displayVehicleTransformation = displayVehicle.getTransformation();
-//
-//        displayVehicleTransformation.getLeftRotation().set(displayTransform.getLeftRotation().normalize());
-//        displayVehicleTransformation.getTranslation().set(displayTransform.getTranslation());
-//
-//        displayVehicle.setTransformation(displayVehicleTransformation);
-
         displayVehicle.setTransformation(displayTransform);
+
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "display rotation: " + displayTransform.getLeftRotation());
         Bukkit.broadcastMessage(ChatColor.GREEN + "vehickel rotyaton: " + displayVehicle.getTransformation().getLeftRotation());
