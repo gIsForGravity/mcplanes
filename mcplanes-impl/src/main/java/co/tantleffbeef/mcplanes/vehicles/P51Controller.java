@@ -251,7 +251,9 @@ public class P51Controller implements PhysicVehicleController {
 //        Bukkit.broadcastMessage("deltaTime: " + deltaTime);
         Bukkit.broadcastMessage("forward: " + rb.forward());
         Bukkit.broadcastMessage("right: " + rb.right());
-        Bukkit.broadcastMessage("velocity: " + rb.velocity);
+        Bukkit.broadcastMessage("velocity: " + rb.velocity + " " + rb.velocity.length());
+        Bukkit.broadcastMessage("position: " + rb.transform.position);
+        Bukkit.broadcastMessage("rotation: " + rb.transform.rotation.getEulerAnglesXYZ(new Vector3f()));
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
         Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
         float speedSquared = rb.velocity.lengthSquared(); // would be best as the velocity of the surface but this works
