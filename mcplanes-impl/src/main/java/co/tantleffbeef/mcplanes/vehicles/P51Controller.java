@@ -27,7 +27,7 @@ public class P51Controller implements PhysicVehicleController {
         assert location.getWorld() != null;
 
         final var world = location.getWorld();
-        final var displayModel = world.spawn(location, ItemDisplay.class, vehicle -> {
+        final var displayModel = world.spawn(new Location(world, location.getX(), location.getY(), location.getZ()), ItemDisplay.class, vehicle -> {
             vehicle.setGravity(false);
             vehicle.addScoreboardTag("mcplanes_plane");
             vehicle.addScoreboardTag("mcplanes_p51");
