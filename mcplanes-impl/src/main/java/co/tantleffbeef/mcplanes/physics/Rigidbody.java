@@ -80,7 +80,7 @@ public class Rigidbody {
         transform.rotation.add(angularVelocity);
 
         // Send to collider
-        collider.tick(deltaTime, previousTransform);
+        collider.tick(deltaTime, previousTransform, this);
         // Call subticks
         // TODO fix this
 //        collider.moveCenter(entity.location());

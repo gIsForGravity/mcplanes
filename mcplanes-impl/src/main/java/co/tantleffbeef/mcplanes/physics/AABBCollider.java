@@ -83,7 +83,7 @@ public class AABBCollider implements Collider {
     }
 
     @Override
-    public void tick(float deltaTime, Transform previousTransform) {
+    public void tick(float deltaTime, Transform previousTransform, Rigidbody rb) {
         directions.clear();
 
         directions.up = checkUp();

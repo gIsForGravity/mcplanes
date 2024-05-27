@@ -16,12 +16,13 @@ public class SuperflatCollider implements Collider {
     }
 
     @Override
-    public void tick(float deltaTime, Transform previousTransform) {
+    public void tick(float deltaTime, Transform previousTransform, Rigidbody rb) {
         if (transform.position.y + yOffset >= floorPos)
             return;
 
         transform.position.y = floorPos - yOffset;
         transform.rotation.getEulerAnglesXYZ(tempVector);
+        rb.velocity.y *= -0.1f;
         tempVector.x = 0;
         transform.rotation.identity().rotateXYZ(tempVector.x, tempVector.y, tempVector.z);
     }
