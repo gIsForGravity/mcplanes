@@ -199,7 +199,7 @@ public class P51Controller implements PhysicVehicleController {
         Vector3f position = transform.position;
         displayTransform.getLeftRotation().set(transform.rotation.normalize());
 
-        displayTransform.getLeftRotation().rotateLocalY((float)Math.PI);
+        displayTransform.getLeftRotation().invert();
 
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
