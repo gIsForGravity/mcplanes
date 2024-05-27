@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
@@ -204,12 +205,23 @@ public class P51Controller implements PhysicVehicleController {
         Vector3f position = transform.position;
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
-        vehicle.teleport(teleportPosition);
+        teleportVehicle(vehicle, teleportPosition);
 
         displayVehicle.setTransformation(displayTransform);
 
 
         return true;
+    }
+
+    /**
+     * Uses nms to teleport the vehicle to the new position while also moving rider
+     * @param vehicle the entity to teleport
+     * @param position where to teleport it to
+     */
+    private static void teleportVehicle(@NotNull Entity vehicle, @NotNull Location position) {
+        var craftVehicle = (CraftEntity) vehicle;
+        var nmsEntity = craftVehicle.getHandle();
+        nmsEntity.moveTo(position.getX(), position.getY(), position.getZ(), position.getYaw(), position.getPitch());
     }
 
     @Override
