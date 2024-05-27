@@ -1,9 +1,8 @@
 package co.tantleffbeef.mcplanes;
 
-import com.sun.net.httpserver.HttpServer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-//import com.sun.net.httpserver.SimpleFileServer;
+import org.eclipse.jetty.util.resource.ResourceFactory;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -39,7 +38,7 @@ public class WebServer {
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirAllowed(false);
-        resourceHandler.setResourceBase(webserverDirectory.getAbsolutePath());
+        resourceHandler.setBaseResource(ResourceFactory.of(resourceHandler).newResource(webserverDirectory.getAbsolutePath()));
 
         server.setHandler(resourceHandler);
     }
