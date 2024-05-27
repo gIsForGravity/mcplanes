@@ -196,20 +196,16 @@ public class P51Controller implements PhysicVehicleController {
         ItemDisplay displayVehicle = (ItemDisplay) vehicle;
         Transformation displayTransform = displayVehicle.getTransformation();
 
+        displayTransform.getLeftRotation().set(transform.rotation.normalize());
+        displayTransform.getLeftRotation().rotateXYZ((float) Math.PI, (float) Math.PI, (float) Math.PI);
+
+
         Vector3f position = transform.position;
-        displayTransform.getRightRotation().set(transform.rotation.normalize());
-
-//        displayTransform.getLeftRotation().invert();
-
         Location teleportPosition = new Location(world, position.x, position.y, position.z);
 
         vehicle.teleport(teleportPosition);
 
         displayVehicle.setTransformation(displayTransform);
-
-
-        Bukkit.broadcastMessage(ChatColor.GREEN + "display rotation: " + displayTransform.getRightRotation());
-        Bukkit.broadcastMessage(ChatColor.GREEN + "vehickel rotyaton: " + displayVehicle.getTransformation().getRightRotation());
 
 
         return true;
