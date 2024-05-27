@@ -38,7 +38,9 @@ public class PhysicVehicle {
      */
     public void setRider(@Nullable Player rider, @NotNull VehicleManager manager) {
         if (rider == null) {
-            manager.setRiderVehicle(this.rider, null);
+            if (this.rider != null) {
+                manager.setRiderVehicle(this.rider, null);
+            }
         } else {
             manager.setRiderVehicle(rider, this);
         }
