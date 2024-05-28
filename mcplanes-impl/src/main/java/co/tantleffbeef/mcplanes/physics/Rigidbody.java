@@ -99,6 +99,7 @@ public class Rigidbody {
 
     // https://www.gamedev.net/forums/topic/56471-extracting-direction-vectors-from-quaternion/
     // probably should be calced avery tick and this should just return that vector
+    // also maybe the rotation matrix thing is faster
     public Vector3f forward() {
         Quaternionf rot = transform.rotation;
 
@@ -138,15 +139,15 @@ public class Rigidbody {
 
     public void addTorque(Vector3f torque) {
 
-        Bukkit.broadcastMessage(ChatColor.GOLD + "vector torque: " + torque);
+//        Bukkit.broadcastMessage(ChatColor.GOLD + "vector torque: " + torque);
 
         addTorque(new Quaternionf().rotateXYZ(torque.x, torque.y, torque.z));
     }
 
     public void addTorque(Quaternionf torque) {
 
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "angualr vel: " + angularVelocity);
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "torque: " + torque);
+//        Bukkit.broadcastMessage(ChatColor.YELLOW + "angualr vel: " + angularVelocity);
+//        Bukkit.broadcastMessage(ChatColor.YELLOW + "torque: " + torque);
 
         angularVelocity.add(torque.mul(inverseMass));
     }
@@ -155,18 +156,18 @@ public class Rigidbody {
         addForce(force);
         Vector3f difference = new Vector3f(position);
 
-        Bukkit.broadcastMessage(ChatColor.RED + "force: " + force + " pos: " + position);
+//        Bukkit.broadcastMessage(ChatColor.RED + "force: " + force + " pos: " + position);
 
         difference.sub(transform.position); // why does java do this to me
 
-        Bukkit.broadcastMessage(ChatColor.RED + "diff: " + difference);
+//        Bukkit.broadcastMessage(ChatColor.RED + "diff: " + difference);
 
         addTorque(difference.cross(force));
     }
 
     public void addForceAtRelativePosition(Vector3f force, Vector3f position) {
         addForce(force);
-        Bukkit.broadcastMessage(ChatColor.AQUA + "diff: " + position);
+        Bukkit.broadcastMessage(ChatColor.AQUA + "diff: " + position.length());
 
         addTorque(position.cross(force));
     }

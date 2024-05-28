@@ -251,12 +251,21 @@ public class P51Controller implements PhysicVehicleController {
         Bukkit.broadcastMessage("forward: " + rb.forward());
         Bukkit.broadcastMessage("right: " + rb.right());
         Bukkit.broadcastMessage("velocity: " + rb.velocity + " " + rb.velocity.length());
-        Bukkit.broadcastMessage("position: " + rb.transform.position);
-        Bukkit.broadcastMessage("rotation: " + rb.transform.rotation.getEulerAnglesXYZ(new Vector3f()));
+//        Bukkit.broadcastMessage("position: " + rb.transform.position);
+//        Bukkit.broadcastMessage("rotation: " + rb.transform.rotation.getEulerAnglesXYZ(new Vector3f()));
         float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
         Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
         float speedSquared = rb.velocity.lengthSquared(); // would be best as the velocity of the surface but this works
 //        Bukkit.broadcastMessage("speedSquared: " + speedSquared);
+
+        if (type == AeroSurfaceType.CONTROL_SURFACE_DOWN)
+            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Down deflection of aoa " + (defaultAoA - CONTROL_SURFACE_DEFLECT) +
+                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * CONTROL_SURFACE_AREA * (defaultAoA - CONTROL_SURFACE_DEFLECT))
+                    + " should be positive?");
+        if (type == AeroSurfaceType.CONTROL_SURFACE_UP)
+            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Up deflection of aoa " + (defaultAoA - CONTROL_SURFACE_DEFLECT) +
+                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT))
+                    + " should be negative?");
 
         return deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * switch (type) {
             case WING -> WING_AREA * defaultAoA;
