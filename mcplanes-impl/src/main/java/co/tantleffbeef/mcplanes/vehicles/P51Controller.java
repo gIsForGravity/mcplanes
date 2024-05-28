@@ -57,11 +57,11 @@ public class P51Controller implements PhysicVehicleController {
     }
 
     private int tick = 0;
-    private static final float MAX_VELOCITY_SQUARED = 400;
-    private static final float THRUST_FORCE = 5;
+    private static final float MAX_VELOCITY_SQUARED = 500;
+    private static final float THRUST_FORCE = 30;
     private static final float AIR_DENSITY = 1.225f;
     private static final float WING_AREA = 3;
-    private static final float CONTROL_SURFACE_AREA = 0.8f;
+    private static final float CONTROL_SURFACE_AREA = 1f;
     private static final float STABILIZER_AREA = 0.8f;
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
     private float throttle = 1f; // normally start at 0 but 1 for testing
@@ -152,28 +152,28 @@ public class P51Controller implements PhysicVehicleController {
 
             if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
                         rb.forward().mul(-2)); // up force back
 
             else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
                         rb.forward().mul(-2)); // down force back
 
             if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
                         rb.right().mul(2)); // down force right
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
                         rb.right().mul(-2)); // up force left
 
             } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
                         rb.right().mul(-2)); // down force left
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
                         rb.right().mul(2)); // up force right
             }
 
