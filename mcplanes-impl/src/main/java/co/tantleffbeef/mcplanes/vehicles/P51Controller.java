@@ -62,7 +62,7 @@ public class P51Controller implements PhysicVehicleController {
     private static final float AIR_DENSITY = 1.225f;
     private static final float WING_AREA = 4;
     private static final float CONTROL_SURFACE_AREA = 1.5f;
-    private static final float STABILIZER_AREA = 0.8f;
+    private static final float STABILIZER_AREA = 1.8f;
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
     private static final float TAIL_OFFSET = -4;
     private static final float WINGTIP_OFFSET = 5;
@@ -137,20 +137,16 @@ public class P51Controller implements PhysicVehicleController {
         // this could be done per surface but rn im doing it for all of them
 
 
-//        // i could do lift forces on stabilizers other than vertical but im not going to
-//        rb.addForceAtPosition(rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
-//                              rb.transform.position.add(rb.forward().mul(-2)));
+        // i could do lift forces on stabilizers other than vertical but im not going to
+        rb.addForceAtRelativePosition(
+                rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
+                rb.forward().mul(TAIL_OFFSET)
+        );
 
         // controls
         // doesnt ever seem to be null
         if (input != null) {
-//            Bukkit.broadcastMessage("input: " + input);
-//            Bukkit.broadcastMessage("input is not null");
-
-            // in the future these will apply a torque that is in some way proportional to airspeed
-
 //            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
-            // all zero
 
             if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
                 rb.addForceAtRelativePosition(
@@ -179,7 +175,7 @@ public class P51Controller implements PhysicVehicleController {
                         rb.right().mul(WINGTIP_OFFSET)); // up force right
             }
 
-            if (input.jump() && throttle < 1) { // probably have to cancel leave event but then how do you leave
+            if (input.jump() && throttle < 1) {
                 Bukkit.broadcastMessage("jump input is happening");
                 throttle += 0.05f;
             }
@@ -188,10 +184,7 @@ public class P51Controller implements PhysicVehicleController {
 //                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
 
         }
-//        if (tick < 100) {
-//            rb.addForce(new Vector3f(0, 0, 1));
-//            tick++;
-//        }
+
 
         rb.tick(deltaTime);
 
@@ -265,7 +258,7 @@ public class P51Controller implements PhysicVehicleController {
                     " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * CONTROL_SURFACE_AREA * (defaultAoA - CONTROL_SURFACE_DEFLECT))
                     + " should be positive?");
         if (type == AeroSurfaceType.CONTROL_SURFACE_UP)
-            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Up deflection of aoa " + (defaultAoA - CONTROL_SURFACE_DEFLECT) +
+            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Up deflection of aoa " + (defaultAoA + CONTROL_SURFACE_DEFLECT) +
                     " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT))
                     + " should be negative?");
 
