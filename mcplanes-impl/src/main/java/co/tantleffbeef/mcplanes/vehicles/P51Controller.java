@@ -61,7 +61,7 @@ public class P51Controller implements PhysicVehicleController {
     private static final float THRUST_FORCE = 5;
     private static final float AIR_DENSITY = 1.225f;
     private static final float WING_AREA = 3;
-    private static final float CONTROL_SURFACE_AREA = 0.2f;
+    private static final float CONTROL_SURFACE_AREA = 0.8f;
     private static final float STABILIZER_AREA = 0.8f;
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
     private float throttle = 1f; // normally start at 0 but 1 for testing
@@ -127,7 +127,7 @@ public class P51Controller implements PhysicVehicleController {
 
         rb.addForceAtRelativePosition(
                 rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-                rb.forward().mul(-0.1f) // wings slightly behind COM
+                rb.forward().mul(-0.05f) // wings slightly behind COM
         );
 
 
