@@ -157,12 +157,12 @@ public class P51Controller implements PhysicVehicleController {
 
             else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                         rb.forward().mul(-2)); // down force back
 
             if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                         rb.right().mul(2)); // down force right
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
@@ -170,7 +170,7 @@ public class P51Controller implements PhysicVehicleController {
 
             } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
                 rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(CONTROL_SURFACE_DEFLECT),
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
                         rb.right().mul(-2)); // down force left
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)).rotateX(-CONTROL_SURFACE_DEFLECT),
