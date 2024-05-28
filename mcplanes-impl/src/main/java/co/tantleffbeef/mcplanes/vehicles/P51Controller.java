@@ -60,10 +60,12 @@ public class P51Controller implements PhysicVehicleController {
     private static final float MAX_VELOCITY_SQUARED = 500;
     private static final float THRUST_FORCE = 30;
     private static final float AIR_DENSITY = 1.225f;
-    private static final float WING_AREA = 3;
-    private static final float CONTROL_SURFACE_AREA = 1f;
+    private static final float WING_AREA = 4;
+    private static final float CONTROL_SURFACE_AREA = 1.5f;
     private static final float STABILIZER_AREA = 0.8f;
     private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
+    private static final float TAIL_OFFSET = -4;
+    private static final float WINGTIP_OFFSET = 5;
     private float throttle = 1f; // normally start at 0 but 1 for testing
 
     private float timer = 0f;
@@ -153,28 +155,28 @@ public class P51Controller implements PhysicVehicleController {
             if (input.forward() > 0.1f) // rotation.rotateAxis(-0.1f, right);
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.forward().mul(-2)); // up force back
+                        rb.forward().mul(TAIL_OFFSET)); // up force back
 
             else if (input.forward() < -0.1f) // rotation.rotateAxis(0.1f, right);
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.forward().mul(-2)); // down force back
+                        rb.forward().mul(TAIL_OFFSET)); // down force back
 
             if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.right().mul(2)); // down force right
+                        rb.right().mul(WINGTIP_OFFSET)); // down force right
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.right().mul(-2)); // up force left
+                        rb.right().mul(-WINGTIP_OFFSET)); // up force left
 
             } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.right().mul(-2)); // down force left
+                        rb.right().mul(-WINGTIP_OFFSET)); // down force left
                 rb.addForceAtRelativePosition(
                         rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.right().mul(2)); // up force right
+                        rb.right().mul(WINGTIP_OFFSET)); // up force right
             }
 
             if (input.jump() && throttle < 1) { // probably have to cancel leave event but then how do you leave
