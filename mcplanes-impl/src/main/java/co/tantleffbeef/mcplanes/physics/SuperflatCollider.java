@@ -22,7 +22,7 @@ public class SuperflatCollider implements Collider {
 
         transform.position.y = floorPos - yOffset;
         transform.rotation.getEulerAnglesXYZ(tempVector);
-        rb.velocity.y *= -0.1f;
+        rb.velocity.y *= -100f;
         tempVector.x = 0;
         transform.rotation.identity().rotateXYZ(tempVector.x, tempVector.y, tempVector.z);
     }
