@@ -57,9 +57,9 @@ public class P51Controller implements PhysicVehicleController {
         var transform = new Transform(new Vector3f(xPos, yPos, zPos));
         var collider = new SuperflatCollider(transform, -60, -3);
 
-        final float mass = 1.0f;
-        final float radius = 0.5f;
-        final float length = 9f;
+        final float mass = 2.0f;
+        final float radius = 0.2f;
+        final float length = 7f;
 
         final float yawMoment = ( mass * radius * radius / 4 ) + ( mass* length * length / 12 );
         final float pitchRollMoment = ( 3 * mass * radius * radius / 8 ) + ( mass * length * length / 24);

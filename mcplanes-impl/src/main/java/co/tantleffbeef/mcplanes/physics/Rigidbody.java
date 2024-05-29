@@ -155,11 +155,11 @@ public class Rigidbody {
 //    }
 
     public void addTorque(Vector3f torque) {
-        Vector3f dω = new Vector3f();
+        Vector3f dw = new Vector3f();
 
-        inertiaTensorInverse.transform(torque, dω);
+        inertiaTensorInverse.transform(torque, dw);
 
-        angularVelocity.add(new Quaternionf().rotateXYZ(dω.x, dω.y, dω.z));
+        angularVelocity.add(new Quaternionf().rotateXYZ(dw.x, dw.y, dw.z));
     }
 
     public void addForceAtPosition(Vector3f force, Vector3f position) {
