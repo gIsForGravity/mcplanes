@@ -13,6 +13,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -55,7 +56,17 @@ public class P51Controller implements PhysicVehicleController {
         //        location.getWorld()), 1.0f, 0.5f, 0.1f, true);
         var transform = new Transform(new Vector3f(xPos, yPos, zPos));
         var collider = new SuperflatCollider(transform, -60, -3);
-        this.rb = new Rigidbody(transform, collider, 1.0f, 0.5f, 0.1f, true);
+
+        final float mass = 1.0f;
+        final float radius = 0.5f;
+        final float length = 9f;
+
+        final float yawMoment = ( mass * radius * radius / 4 ) + ( mass* length * length / 12 );
+        final float pitchRollMoment = ( 3 * mass * radius * radius / 8 ) + ( mass * length * length / 24);
+
+        final Matrix3f inertiaTensor = new Matrix3f().m00(pitchRollMoment).m11(yawMoment).m22(pitchRollMoment);
+
+        this.rb = new Rigidbody(transform, collider, mass, 0.5f, 0.1f, true, inertiaTensor);
     }
 
     private int tick = 0;
@@ -76,21 +87,8 @@ public class P51Controller implements PhysicVehicleController {
     public boolean tick(float deltaTime, @Nullable Input input, @NotNull Entity vehicle) {
         timer += deltaTime;
 
-        // If the entity has been killed, then destroy all of the objects
-        /*if (entity.isDead()) {
-            entity.remove();
-            model.remove();
-
-            return false;
-        }*/
-
         rb.pretick();
 
-//        Bukkit.broadcastMessage("aero forces:");
-//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
-//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime));
-//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.WING, deltaTime));
-//        Bukkit.broadcastMessage("force down" + getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime));
         if (timer > 5f) {
             Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
             Bukkit.broadcastMessage("position: " + rb.transform.position);
@@ -100,43 +98,19 @@ public class P51Controller implements PhysicVehicleController {
             Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "rotation: " + rb.transform.rotation);
             Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "fw: " + rb.forward() + " ri: " + rb.right() + " up: " + rb.up());
 
-//            rb.addForceAtPosition(
-//                    rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-//                    rb.forward().mul(0.1f).add(rb.transform.position) // the things i do to avoid mutation
-//            );
-
-
         }
 
-//        if (timer < 1) {
-//            Bukkit.broadcastMessage("throttle: " + throttle + " position: " + rb.getLocation().toString() + " vel: " + rb.velocity().toString() + " dt: " + deltaTime);
-//            Bukkit.broadcastMessage(ChatColor.GOLD + "forward: " + rb.forward().toString() + " right: " + rb.right().toString() + " up: " + rb.up().toString());
-//            Bukkit.broadcastMessage(ChatColor.AQUA + "rotation: " + rb.currentRotation().toString());
-//            // results in nans up the wazoo
-//            timer += deltaTime;
-//        }
-
-
-
-//        Quaternionf rotation = rb.currentRotation();
-//        Vector3f location = rb.getLocation();
-
-//        Vector3f forward = rb.forward();
-//        Vector3f up = rb.up();
-//        Vector3f right = rb.right();
 
         // throttle
         if (rb.velocity.lengthSquared() < MAX_VELOCITY_SQUARED)
             rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime));
 
+
+        // lift
         rb.addForceAtRelativePosition(
                 rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
                 rb.forward().mul(-0.05f) // wings slightly behind COM
         );
-
-
-        // lift
-        // this could be done per surface but rn im doing it for all of them
 
 
         // i could do lift forces on stabilizers other than vertical but im not going to

@@ -2,6 +2,7 @@ package co.tantleffbeef.mcplanes.physics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -15,6 +16,8 @@ public class Rigidbody {
     // We store the inverse mass so we can
     // multiply by that instead of dividing by mass
     private float inverseMass;
+    private final Matrix3f inertiaTensor;
+    private final Matrix3f inertiaTensorInverse;
     public final Vector3f acceleration;
     private final float drag;
     private final float angularDrag;
@@ -22,7 +25,7 @@ public class Rigidbody {
     private final Quaternionf tempQuat;
     private final boolean hasGravity;
 
-    public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity) {
+    public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity, Matrix3f inertiaTensor) {
         this.transform = transform;
         this.previousTransform = new Transform();
         this.collider = collider;
@@ -34,12 +37,19 @@ public class Rigidbody {
         this.drag = drag;
         this.angularDrag = angularDrag;
         this.hasGravity = hasGravity;
+        this.inertiaTensor = inertiaTensor;
+        this.inertiaTensorInverse = new Matrix3f(inertiaTensor).invert();
         setMass(mass);
+    }
+
+    public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag, boolean hasGravity) {
+        this(transform, collider, mass, drag, angularDrag, hasGravity, new Matrix3f());
     }
 
     public Rigidbody(Transform transform, Collider collider, float mass, float drag, float angularDrag) {
         this(transform, collider, mass, drag, angularDrag, true);
     }
+
 
     public Rigidbody(Transform transform, Collider collider, float mass) {
         this(transform, collider, mass, 0, 0);
@@ -77,7 +87,7 @@ public class Rigidbody {
         transform.position.add(velocity.mul(deltaTime, tempVector));
 
         // Apply rotation velocity
-        transform.rotation.add(angularVelocity);
+        transform.rotation.add(angularVelocity.mul(deltaTime, tempQuat));
 
         // Send to collider
         collider.tick(deltaTime, previousTransform, this);
@@ -137,19 +147,19 @@ public class Rigidbody {
         acceleration.add(force);
     }
 
+//    public void addTorque(Vector3f torque) {
+//
+////        Bukkit.broadcastMessage(ChatColor.GOLD + "vector torque: " + torque);
+//
+//        addTorque(new Quaternionf().rotateXYZ(torque.x, torque.y, torque.z));
+//    }
+
     public void addTorque(Vector3f torque) {
+        Vector3f dω = new Vector3f();
 
-//        Bukkit.broadcastMessage(ChatColor.GOLD + "vector torque: " + torque);
+        inertiaTensorInverse.transform(torque, dω);
 
-        addTorque(new Quaternionf().rotateXYZ(torque.x, torque.y, torque.z));
-    }
-
-    public void addTorque(Quaternionf torque) {
-
-//        Bukkit.broadcastMessage(ChatColor.YELLOW + "angualr vel: " + angularVelocity);
-//        Bukkit.broadcastMessage(ChatColor.YELLOW + "torque: " + torque);
-
-        angularVelocity.add(torque.mul(inverseMass));
+        angularVelocity.add(new Quaternionf().rotateXYZ(dω.x, dω.y, dω.z));
     }
 
     public void addForceAtPosition(Vector3f force, Vector3f position) {
