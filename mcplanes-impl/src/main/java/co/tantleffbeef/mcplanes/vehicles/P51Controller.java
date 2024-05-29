@@ -36,6 +36,8 @@ public class P51Controller implements PhysicVehicleController {
             transformation.getScale().set(5f, 5f, 5f);
             vehicle.setTransformation(transformation);
             vehicle.setItemStack(displayItem);
+            vehicle.setInterpolationDuration(1);
+            vehicle.setTeleportDuration(1);
         });
 
         // TODO: refactor this and make it not bad
