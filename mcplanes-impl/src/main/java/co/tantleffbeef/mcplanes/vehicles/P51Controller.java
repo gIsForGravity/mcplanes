@@ -135,20 +135,22 @@ public class P51Controller implements PhysicVehicleController {
                         rb.forward().mul(TAIL_OFFSET)); // down force back
 
             if (input.right() > 0.1f) { // rotation.rotateAxis(0.1f, forward);
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.right().mul(WINGTIP_OFFSET)); // down force right
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.right().mul(-WINGTIP_OFFSET)); // up force left
+                rb.addTorque(new Vector3f(0, 0, 20));
+//                rb.addForceAtRelativePosition(
+//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+//                        rb.right().mul(-WINGTIP_OFFSET)); // up force left
+//                rb.addForceAtRelativePosition(
+//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+//                        rb.right().mul(WINGTIP_OFFSET)); // down force right
 
             } else if (input.right() < -0.1f) { // rotation.rotateAxis(-0.1f, forward);
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.right().mul(-WINGTIP_OFFSET)); // down force left
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.right().mul(WINGTIP_OFFSET)); // up force right
+                rb.addTorque(new Vector3f(0, 0, -20));
+//                rb.addForceAtRelativePosition(
+//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+//                        rb.right().mul(-WINGTIP_OFFSET)); // down force left
+//                rb.addForceAtRelativePosition(
+//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+//                        rb.right().mul(WINGTIP_OFFSET)); // up force right
             }
 
             if (input.jump() && throttle < 1) {
