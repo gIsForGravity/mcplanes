@@ -109,7 +109,7 @@ public class Rigidbody {
 
     // https://www.gamedev.net/forums/topic/56471-extracting-direction-vectors-from-quaternion/
     // probably should be calced avery tick and this should just return that vector
-    // also maybe the rotation matrix thing is faster sigma
+    // also maybe the rotation matrix thing is faster
     public Vector3f forward() {
         Quaternionf rot = transform.rotation;
 
