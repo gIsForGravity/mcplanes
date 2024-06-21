@@ -119,7 +119,7 @@ public class P51Controller implements PhysicVehicleController {
                 rb.forward().mul(TAIL_OFFSET)
         );
 
-        // balls
+
         // controls
         // doesnt ever seem to be null
         if (input != null) {

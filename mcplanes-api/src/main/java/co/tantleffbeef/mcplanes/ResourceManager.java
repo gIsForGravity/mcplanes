@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.*;
 import java.util.jar.JarFile;
 
@@ -71,4 +72,6 @@ public interface ResourceManager {
      * @return a byte array representing the resource pack hash
      */
     byte[] getResourcePackHash();
+
+    void addSpecificFileAtSpecificPlace(File input, String directoryInPackOrWhatever);
 }

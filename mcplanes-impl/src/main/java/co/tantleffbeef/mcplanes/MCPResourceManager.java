@@ -4,6 +4,7 @@ import co.tantleffbeef.mcplanes.custom.item.CustomItemType;
 import co.tantleffbeef.mcplanes.pojo.serialize.CustomItemNbt;
 import com.google.gson.*;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -358,6 +359,15 @@ public final class MCPResourceManager implements ResourceManager {
         //   hash resource pack so clients can know if the resource pack has
         // changed since the last time they joined the server
         return hashResourcePack(resourcePackFile);
+    }
+
+    @Override
+    public void addSpecificFileAtSpecificPlace(File input, String directoryInPackOrWhatever) {
+        try {
+            FileUtils.copyFile(input, new File(tempFolder, directoryInPackOrWhatever));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
