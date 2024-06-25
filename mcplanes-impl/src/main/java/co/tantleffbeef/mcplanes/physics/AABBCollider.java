@@ -74,7 +74,8 @@ public class AABBCollider implements Collider {
 
         for (double i = 0; i <= 1.0; i += 0.5) {
             final var pos = pos1.lerp(pos2, i, tempVector);
-            world.spawnParticle(Particle.SPELL_INSTANT, pos.x, pos.y, pos.z, 1);
+            // TODO: get particle working again
+//            world.spawnParticle(Particle.SPELL_INSTANT, pos.x, pos.y, pos.z, 1);
         }
     }
 
@@ -105,16 +106,17 @@ public class AABBCollider implements Collider {
                 for (double iz = minZ; iz <= maxZ; iz++) {
                     final var blockLoc = new Location(world, ix, iy, iz);
                     final var block = blockLoc.getBlock();
-                    final var type = block.getType();
+//                    final var type = block.getType();
 
                     if (showDebugBox) {
                         renderBounds(BoundingBox.of(block), world);
                     }
 
-                    if (type == Material.AIR
+                    // TODO: MATERIAL DOESN'T WORK FOR SOME REASON
+                    if (/*type == Material.AIR
                             || type == Material.CAVE_AIR
                             || type == Material.VOID_AIR
-                            || type == Material.STRUCTURE_VOID)
+                            || type == Material.STRUCTURE_VOID*/false)
                         continue;
 
                     final var blockBoundingBox = BoundingBox.of(block);

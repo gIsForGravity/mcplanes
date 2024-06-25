@@ -2,11 +2,11 @@ package co.tantleffbeef.mcplanes.vehicles;
 
 import co.tantleffbeef.mcplanes.physics.*;
 import co.tantleffbeef.mcplanes.pojo.Input;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
