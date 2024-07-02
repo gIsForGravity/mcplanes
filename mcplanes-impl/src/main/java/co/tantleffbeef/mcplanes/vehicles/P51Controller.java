@@ -224,32 +224,23 @@ public class P51Controller implements PhysicVehicleController {
     }
 
     private float getAeroForce(AeroSurfaceType type, float deltaTime) {
-//        Bukkit.broadcastMessage("getAeroForce()");
-//        Bukkit.broadcastMessage("deltaTime: " + deltaTime);
-        Bukkit.broadcastMessage("forward: " + rb.forward());
-        Bukkit.broadcastMessage("right: " + rb.right());
-        Bukkit.broadcastMessage("velocity: " + rb.velocity + " " + rb.velocity.length());
-//        Bukkit.broadcastMessage("position: " + rb.transform.position);
-//        Bukkit.broadcastMessage("rotation: " + rb.transform.rotation.getEulerAnglesXYZ(new Vector3f()));
-        float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
-        Bukkit.broadcastMessage("defaultAoA: " + defaultAoA);
-        float speedSquared = rb.velocity.lengthSquared(); // would be best as the velocity of the surface but this works
-//        Bukkit.broadcastMessage("speedSquared: " + speedSquared);
 
-        if (type == AeroSurfaceType.CONTROL_SURFACE_DOWN)
-            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Down deflection of aoa " + (defaultAoA - CONTROL_SURFACE_DEFLECT) +
-                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float) PI * CONTROL_SURFACE_AREA * (defaultAoA - CONTROL_SURFACE_DEFLECT))
-                    + " should be positive?");
-        if (type == AeroSurfaceType.CONTROL_SURFACE_UP)
-            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Up deflection of aoa " + (defaultAoA + CONTROL_SURFACE_DEFLECT) +
-                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float) PI * CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT))
-                    + " should be negative?");
+        float defaultAoA = rb.forward().angleSigned(rb.velocity, rb.right());
+        float speedSquared = rb.velocity.lengthSquared(); // would be best as the velocity of the surface but this works
 
         if (defaultAoA > PI/2)
             defaultAoA = (float) PI - defaultAoA;
         else if (defaultAoA < -PI/2)
             defaultAoA = -(float)PI - defaultAoA;
 
+        if (defaultAoA > PI/2 || defaultAoA < -PI/2)
+            Bukkit.broadcastMessage(ChatColor.RED + "that is not too good!!");
+
+        if (type == AeroSurfaceType.CONTROL_SURFACE_UP && defaultAoA + CONTROL_SURFACE_DEFLECT > PI/2)
+            Bukkit.broadcastMessage(ChatColor.RED + "bad angle on ctrl surf up");
+
+        if (type == AeroSurfaceType.CONTROL_SURFACE_DOWN && defaultAoA - CONTROL_SURFACE_DEFLECT < -PI/2)
+            Bukkit.broadcastMessage(ChatColor.RED + "bad angle on ctrl surf down");
 
         return deltaTime * AIR_DENSITY * speedSquared * (float) PI * switch (type) {
             case WING -> WING_AREA * defaultAoA;
