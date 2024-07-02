@@ -92,13 +92,13 @@ public class P51Controller implements PhysicVehicleController {
         rb.pretick();
 
         if (timer > 5f) {
-            Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
-            Bukkit.broadcastMessage("position: " + rb.transform.position);
-            Bukkit.broadcastMessage("throttle: " + throttle);
+//            Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
+//            Bukkit.broadcastMessage("position: " + rb.transform.position);
+//            Bukkit.broadcastMessage("throttle: " + throttle);
             timer = 0;
 
-            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "rotation: " + rb.transform.rotation);
-            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "fw: " + rb.forward() + " ri: " + rb.right() + " up: " + rb.up());
+//            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "rotation: " + rb.transform.rotation);
+//            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "fw: " + rb.forward() + " ri: " + rb.right() + " up: " + rb.up());
 
         }
 

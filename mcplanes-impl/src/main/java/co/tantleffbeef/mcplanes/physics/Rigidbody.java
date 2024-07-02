@@ -177,7 +177,7 @@ public class Rigidbody {
 
     public void addForceAtRelativePosition(Vector3f force, Vector3f position) {
         addForce(force);
-        Bukkit.broadcastMessage(ChatColor.AQUA + "diff: " + position.length());
+//        Bukkit.broadcastMessage(ChatColor.AQUA + "diff: " + position.length());
 
         addTorque(position.cross(force));
     }
