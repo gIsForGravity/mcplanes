@@ -17,6 +17,8 @@ import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import static java.lang.Math.PI;
+
 public class P51Controller implements PhysicVehicleController {
     public final Rigidbody rb;
 
@@ -72,11 +74,11 @@ public class P51Controller implements PhysicVehicleController {
     private int tick = 0;
     private static final float MAX_VELOCITY_SQUARED = 500;
     private static final float THRUST_FORCE = 30;
-    private static final float AIR_DENSITY = 1.225f;
-    private static final float WING_AREA = 4;
+    private static final float AIR_DENSITY = 2f;
+    private static final float WING_AREA = 5;
     private static final float CONTROL_SURFACE_AREA = 1.5f;
-    private static final float STABILIZER_AREA = 1.8f;
-    private static final float CONTROL_SURFACE_DEFLECT = (float)Math.PI/6;
+    private static final float STABILIZER_AREA = 2f;
+    private static final float CONTROL_SURFACE_DEFLECT = (float) PI/6;
     private static final float TAIL_OFFSET = -4;
     private static final float WINGTIP_OFFSET = 5;
     private float throttle = 1f; // normally start at 0 but 1 for testing
@@ -126,34 +128,34 @@ public class P51Controller implements PhysicVehicleController {
 //            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
 
             if (input.forward() > 0.1f)
-//                rb.addForceAtRelativePosition(
-//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-//                        rb.forward().mul(TAIL_OFFSET)); // up force back
-                rb.addTorque(new Vector3f(10, 0, 0));
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+                        rb.forward().mul(TAIL_OFFSET)); // up force back
+//                rb.addTorque(new Vector3f(10, 0, 0));
 
             else if (input.forward() < -0.1f)
-//                rb.addForceAtRelativePosition(
-//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-//                        rb.forward().mul(TAIL_OFFSET)); // down force back
-                rb.addTorque(new Vector3f(-10, 0, 0));
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+                        rb.forward().mul(TAIL_OFFSET)); // down force back
+//                rb.addTorque(new Vector3f(-10, 0, 0));
 
             if (input.right() > 0.1f) {
-//                rb.addForceAtRelativePosition(
-//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-//                        rb.right().mul(WINGTIP_OFFSET)); // down force right
-//                rb.addForceAtRelativePosition(
-//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-//                        rb.right().mul(-WINGTIP_OFFSET)); // up force left
-                rb.addTorque(new Vector3f(0, 0, 10));
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+                        rb.right().mul(WINGTIP_OFFSET)); // down force right
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+                        rb.right().mul(-WINGTIP_OFFSET)); // up force left
+//                rb.addTorque(new Vector3f(0, 0, 10));
 
             } else if (input.right() < -0.1f) {
-//                rb.addForceAtRelativePosition(
-//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-//                        rb.right().mul(-WINGTIP_OFFSET)); // down force left
-//                rb.addForceAtRelativePosition(
-//                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-//                        rb.right().mul(WINGTIP_OFFSET)); // up force right
-                rb.addTorque(new Vector3f(0, 0, -10));
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+                        rb.right().mul(-WINGTIP_OFFSET)); // down force left
+                rb.addForceAtRelativePosition(
+                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+                        rb.right().mul(WINGTIP_OFFSET)); // up force right
+//                rb.addTorque(new Vector3f(0, 0, -10));
             }
 
             if (input.jump() && throttle < 1) {
@@ -176,7 +178,7 @@ public class P51Controller implements PhysicVehicleController {
         Transformation displayTransform = displayVehicle.getTransformation();
 
         displayTransform.getLeftRotation().set(transform.rotation.normalize());
-        displayTransform.getLeftRotation().rotateY((float) Math.PI);
+        displayTransform.getLeftRotation().rotateY((float) PI);
 
 
         Vector3f position = transform.position;
@@ -236,14 +238,20 @@ public class P51Controller implements PhysicVehicleController {
 
         if (type == AeroSurfaceType.CONTROL_SURFACE_DOWN)
             Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Down deflection of aoa " + (defaultAoA - CONTROL_SURFACE_DEFLECT) +
-                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * CONTROL_SURFACE_AREA * (defaultAoA - CONTROL_SURFACE_DEFLECT))
+                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float) PI * CONTROL_SURFACE_AREA * (defaultAoA - CONTROL_SURFACE_DEFLECT))
                     + " should be positive?");
         if (type == AeroSurfaceType.CONTROL_SURFACE_UP)
             Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Up deflection of aoa " + (defaultAoA + CONTROL_SURFACE_DEFLECT) +
-                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT))
+                    " with force of " + (deltaTime * AIR_DENSITY * speedSquared * (float) PI * CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT))
                     + " should be negative?");
 
-        return deltaTime * AIR_DENSITY * speedSquared * (float)Math.PI * switch (type) {
+        if (defaultAoA > PI/2)
+            defaultAoA = (float) PI - defaultAoA;
+        else if (defaultAoA < -PI/2)
+            defaultAoA = -(float)PI - defaultAoA;
+
+
+        return deltaTime * AIR_DENSITY * speedSquared * (float) PI * switch (type) {
             case WING -> WING_AREA * defaultAoA;
 
             case CONTROL_SURFACE_UP -> CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT);
