@@ -246,7 +246,7 @@ public class P51Controller implements PhysicVehicleController {
             case VERTICAL_STABILIZER -> STABILIZER_AREA * (rb.forward().angleSigned(rb.velocity, rb.up()));
         };
 
-        if (magnitude > 100) {
+        if (magnitude > 50) {
             Bukkit.broadcastMessage(ChatColor.AQUA + "excessive force: " + magnitude
                     + " AOA: " + defaultAoA + " (" + defaultAoA * 180 / (float) PI
                     + " degrees) velocity: " + rb.velocity);
