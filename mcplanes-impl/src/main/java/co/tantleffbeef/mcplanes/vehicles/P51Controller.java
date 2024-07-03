@@ -233,16 +233,9 @@ public class P51Controller implements PhysicVehicleController {
         else if (defaultAoA < -PI/2)
             defaultAoA = -(float)PI - defaultAoA;
 
-        if (defaultAoA > PI/2 || defaultAoA < -PI/2)
-            Bukkit.broadcastMessage(ChatColor.RED + "that is not too good!!");
 
-        if (type == AeroSurfaceType.CONTROL_SURFACE_UP && defaultAoA + CONTROL_SURFACE_DEFLECT > PI/2)
-            Bukkit.broadcastMessage(ChatColor.RED + "bad angle on ctrl surf up");
 
-        if (type == AeroSurfaceType.CONTROL_SURFACE_DOWN && defaultAoA - CONTROL_SURFACE_DEFLECT < -PI/2)
-            Bukkit.broadcastMessage(ChatColor.RED + "bad angle on ctrl surf down");
-
-        return deltaTime * AIR_DENSITY * speedSquared * (float) PI * switch (type) {
+        float magnitude = deltaTime * AIR_DENSITY * speedSquared * (float) PI * switch (type) {
             case WING -> WING_AREA * defaultAoA;
 
             case CONTROL_SURFACE_UP -> CONTROL_SURFACE_AREA * (defaultAoA + CONTROL_SURFACE_DEFLECT);
@@ -252,5 +245,14 @@ public class P51Controller implements PhysicVehicleController {
             // might have to do tangential velocity which i dont want to do
             case VERTICAL_STABILIZER -> STABILIZER_AREA * (rb.forward().angleSigned(rb.velocity, rb.up()));
         };
+
+        if (magnitude > 100) {
+            Bukkit.broadcastMessage(ChatColor.AQUA + "excessive force: " + magnitude
+                    + " AOA: " + defaultAoA + " (" + defaultAoA * 180 / (float) PI
+                    + " degrees) velocity: " + rb.velocity);
+            return 0;
+        }
+
+        return magnitude;
     }
 }
