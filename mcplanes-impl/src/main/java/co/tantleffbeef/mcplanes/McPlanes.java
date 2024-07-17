@@ -10,7 +10,6 @@ import co.tantleffbeef.mcplanes.listeners.*;
 import co.tantleffbeef.mcplanes.listeners.protocol.CustomBlockDigListener;
 import co.tantleffbeef.mcplanes.listeners.protocol.ServerboundPlayerInputListener;
 import co.tantleffbeef.mcplanes.physics.AABBCollider;
-import co.tantleffbeef.mcplanes.physics.Collider;
 import co.tantleffbeef.mcplanes.vehicles.P51Controller;
 import co.tantleffbeef.mcplanes.vehicles.PhysicVehicle;
 import co.tantleffbeef.mcplanes.vehicles.VehicleKey;
@@ -141,13 +140,15 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         // Commands!
         registerCommands();
 
-        // Maybe setup resources would've been a better name, but maybe I'm lazy - gavint
-        setupTextures();
-        // Registers the directory "vehicles" in the assets/namespace/textures folder
-        resourceManager.registerItemTextureAtlasDirectory("vehicles");
+        if (getConfig().getBoolean("mcplanes-items")) {
+            // Maybe setup resources would've been a better name, but maybe I'm lazy - gavint
+            setupTextures();
+            // Registers the directory "vehicles" in the assets/namespace/textures folder
+            resourceManager.registerItemTextureAtlasDirectory("vehicles");
 
-        registerItems();
-        registerRecipes();
+            registerItems();
+            registerRecipes();
+        }
 
         // Allow everyone to register items and stuff in enable. On the first tick, resources will be compiled
         getServer().getScheduler().runTask(this, () -> resourceManager.compileResourcesAsync(getServer().getScheduler()));

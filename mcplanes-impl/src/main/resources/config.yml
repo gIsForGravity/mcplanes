@@ -9,6 +9,9 @@ webserver-url: "127.0.0.1"
 
 webserver-port: 8467
 
+# whether to include and register mcplanes items
+mcplanes-items: true
+
 crafting:
   allow-crafting: true
   unlock-recipes: true
