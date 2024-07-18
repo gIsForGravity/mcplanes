@@ -456,6 +456,9 @@ public class McPlanes extends JavaPlugin implements ResourceApi {
         getConfig().addDefault("crafting.allow-crafting", true);
         getConfig().addDefault("crafting.unlock-recipes", true);
 
+        getConfig().addDefault("resource-pack", true);
+        getConfig().addDefault("mcplanes-items", true);
+
         getConfig().options().copyDefaults(true);
 
         saveConfig();
