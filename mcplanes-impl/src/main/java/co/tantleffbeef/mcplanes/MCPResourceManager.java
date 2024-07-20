@@ -387,12 +387,14 @@ public final class MCPResourceManager implements ResourceManager {
         logger.info("Saving resource pack to zip file");
         // make zip file
         try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(outputFile))) {
-            if (compressZip)
+            if (compressZip) {
                 // Tell zip stream to deflate (compress) zip file
                 zip.setMethod(ZipOutputStream.DEFLATED);
-            else
+                zip.setLevel(9);
+            } else {
                 // Tell zip stream to just store files as is
                 zip.setMethod(ZipOutputStream.STORED);
+            }
 
             // Buffer to hold data as it's transferred from file to zip file
             final byte[] buffer = new byte[Tools.FILE_BUFFER_SIZE];
