@@ -172,7 +172,7 @@ public class P51Controller implements PhysicVehicleController {
             }
 
 
-            rb.tick(deltaTime);
+            rb.tick(deltaTime / SUBTICK_COUNT);
 
             // update entity position to match transform
             // it should not have to be allat
