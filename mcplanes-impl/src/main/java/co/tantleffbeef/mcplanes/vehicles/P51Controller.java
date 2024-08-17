@@ -85,109 +85,113 @@ public class P51Controller implements PhysicVehicleController {
 
     private float timer = 0f;
 
+    private static final int SUBTICK_COUNT = 8;
+
     @Override
     public boolean tick(float deltaTime, @Nullable Input input, @NotNull Entity vehicle) {
-        timer += deltaTime;
+        for (int i = 0; i < SUBTICK_COUNT; i++){
+            timer += deltaTime;
 
-        rb.pretick();
+            rb.pretick();
 
-        if (timer > 5f) {
+            if (timer > 5f) {
 //            Bukkit.broadcastMessage("down getAeroForce: " + getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime));
 //            Bukkit.broadcastMessage("position: " + rb.transform.position);
 //            Bukkit.broadcastMessage("throttle: " + throttle);
-            timer = 0;
+                timer = 0;
 
 //            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "rotation: " + rb.transform.rotation);
 //            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "fw: " + rb.forward() + " ri: " + rb.right() + " up: " + rb.up());
 
-        }
+            }
 
 
-        // throttle
-        if (rb.velocity.lengthSquared() < MAX_VELOCITY_SQUARED)
-            rb.addForce(rb.forward().mul(THRUST_FORCE * throttle * deltaTime));
+            // throttle
+            if (rb.velocity.lengthSquared() < MAX_VELOCITY_SQUARED)
+                rb.addForce(rb.forward().mul((THRUST_FORCE * throttle * deltaTime) / SUBTICK_COUNT));
 
 
-        // lift
-        rb.addForceAtRelativePosition(
-                rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
-                rb.forward().mul(-0.05f) // wings slightly behind COM
-        );
+            // lift
+            rb.addForceAtRelativePosition(
+                    rb.up().mul(getAeroForce(AeroSurfaceType.WING, deltaTime)),
+                    rb.forward().mul(-0.05f) // wings slightly behind COM
+            );
 
 
-        // i could do lift forces on stabilizers other than vertical but im not going to
-        rb.addForceAtRelativePosition(
-                rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
-                rb.forward().mul(TAIL_OFFSET)
-        );
+            // i could do lift forces on stabilizers other than vertical but im not going to
+            rb.addForceAtRelativePosition(
+                    rb.right().mul(getAeroForce(AeroSurfaceType.VERTICAL_STABILIZER, deltaTime)),
+                    rb.forward().mul(TAIL_OFFSET)
+            );
 
 
-        // controls
-        // doesnt ever seem to be null
-        if (input != null) {
+            // controls
+            // doesnt ever seem to be null
+            if (input != null) {
 //            Bukkit.broadcastMessage("fw: " + input.forward() + " rt: " + input.right() + " jm: " + input.jump());
 
-            if (input.forward() > 0.1f)
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.forward().mul(TAIL_OFFSET)); // up force back
+                if (input.forward() > 0.1f)
+                    rb.addForceAtRelativePosition(
+                            rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+                            rb.forward().mul(TAIL_OFFSET)); // up force back
 //                rb.addTorque(new Vector3f(10, 0, 0));
 
-            else if (input.forward() < -0.1f)
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.forward().mul(TAIL_OFFSET)); // down force back
+                else if (input.forward() < -0.1f)
+                    rb.addForceAtRelativePosition(
+                            rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+                            rb.forward().mul(TAIL_OFFSET)); // down force back
 //                rb.addTorque(new Vector3f(-10, 0, 0));
 
-            if (input.right() > 0.1f) {
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.right().mul(WINGTIP_OFFSET)); // down force right
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.right().mul(-WINGTIP_OFFSET)); // up force left
+                if (input.right() > 0.1f) {
+                    rb.addForceAtRelativePosition(
+                            rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+                            rb.right().mul(WINGTIP_OFFSET)); // down force right
+                    rb.addForceAtRelativePosition(
+                            rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+                            rb.right().mul(-WINGTIP_OFFSET)); // up force left
 //                rb.addTorque(new Vector3f(0, 0, 10));
 
-            } else if (input.right() < -0.1f) {
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
-                        rb.right().mul(-WINGTIP_OFFSET)); // down force left
-                rb.addForceAtRelativePosition(
-                        rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
-                        rb.right().mul(WINGTIP_OFFSET)); // up force right
+                } else if (input.right() < -0.1f) {
+                    rb.addForceAtRelativePosition(
+                            rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_UP, deltaTime)),
+                            rb.right().mul(-WINGTIP_OFFSET)); // down force left
+                    rb.addForceAtRelativePosition(
+                            rb.up().mul(getAeroForce(AeroSurfaceType.CONTROL_SURFACE_DOWN, deltaTime)),
+                            rb.right().mul(WINGTIP_OFFSET)); // up force right
 //                rb.addTorque(new Vector3f(0, 0, -10));
-            }
+                }
 
-            if (input.jump() && throttle < 1) {
-                Bukkit.broadcastMessage("jump input is happening");
-                throttle += 0.05f;
-            }
+                if (input.jump() && throttle < 1) {
+                    Bukkit.broadcastMessage("jump input is happening");
+                    throttle += 0.05f;
+                }
 
 //            if (input.crouch() && throttle < 1) // probably have to cancel leave event but then how do you leave
 //                throttle += 0.05f; // idk how you would throttle down (maybe something like this should be a hotbar thing)
 
+            }
+
+
+            rb.tick(deltaTime);
+
+            // update entity position to match transform
+            // it should not have to be allat
+            Transform transform = rb.transform;
+            World world = vehicle.getWorld();
+            ItemDisplay displayVehicle = (ItemDisplay) vehicle;
+            Transformation displayTransform = displayVehicle.getTransformation();
+
+            displayTransform.getLeftRotation().set(transform.rotation.normalize());
+            displayTransform.getLeftRotation().rotateY((float) PI);
+
+
+            Vector3f position = transform.position;
+            Location teleportPosition = new Location(world, position.x, position.y, position.z);
+
+            teleportVehicle(vehicle, teleportPosition);
+
+            displayVehicle.setTransformation(displayTransform);
         }
-
-
-        rb.tick(deltaTime);
-
-        // update entity position to match transform
-        Transform transform = rb.transform;
-        World world = vehicle.getWorld();
-        ItemDisplay displayVehicle = (ItemDisplay) vehicle;
-        Transformation displayTransform = displayVehicle.getTransformation();
-
-        displayTransform.getLeftRotation().set(transform.rotation.normalize());
-        displayTransform.getLeftRotation().rotateY((float) PI);
-
-
-        Vector3f position = transform.position;
-        Location teleportPosition = new Location(world, position.x, position.y, position.z);
-
-        teleportVehicle(vehicle, teleportPosition);
-
-        displayVehicle.setTransformation(displayTransform);
-
 
         return true;
     }
@@ -246,13 +250,13 @@ public class P51Controller implements PhysicVehicleController {
             case VERTICAL_STABILIZER -> STABILIZER_AREA * (rb.forward().angleSigned(rb.velocity, rb.up()));
         };
 
-        if (magnitude > 50) {
-            Bukkit.broadcastMessage(ChatColor.AQUA + "excessive force: " + magnitude
-                    + " AOA: " + defaultAoA + " (" + defaultAoA * 180 / (float) PI
-                    + " degrees) velocity: " + rb.velocity);
-            return 0;
-        }
+//        if (magnitude > 50) {
+//            Bukkit.broadcastMessage(ChatColor.AQUA + "excessive force: " + magnitude
+//                    + " AOA: " + defaultAoA + " (" + defaultAoA * 180 / (float) PI
+//                    + " degrees) velocity: " + rb.velocity);
+//            return 0;
+//        }
 
-        return magnitude;
+        return magnitude / SUBTICK_COUNT;
     }
 }
